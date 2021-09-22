@@ -1,80 +1,213 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'category_page.dart';
 import 'cart_page.dart';
 import 'member_page.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../provide/currentIndex.dart';
+
+import 'package:provider/provider.dart';
+
+
+
+
+
 
 
 class IndexPage extends StatelessWidget {
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.home),
-      title:Text('首页')
+        icon:Icon(CupertinoIcons.home),
+        title:Text('首页')
     ),
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.search),
-      title:Text('分类')
+        icon:Icon(CupertinoIcons.search),
+        title:Text('分类')
     ),
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.shopping_cart),
-      title:Text('购物车')
+        icon:Icon(CupertinoIcons.shopping_cart),
+        title:Text('购物车')
     ),
-     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.profile_circled),
-      title:Text('会员中心')
+    BottomNavigationBarItem(
+        icon:Icon(CupertinoIcons.profile_circled),
+        title:Text('会员中心')
     ),
   ];
 
-   final List<Widget> tabBodies = [
-      HomePage(),
-      CategoryPage(),
-      CartPage(),
-      MemberPage()
-   ];
+  final List<Widget> tabBodies = [
+    HomePage(),
+    CategoryPage(),
+    CartPage(),
+    MemberPage()
+  ];
+
+  // @override
+  // Widget build(BuildContext context) {
+  //
+  //   ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+  //   // var scope1 = ProviderScope("1");
+  //
+  //   return
+  //     Scaffold(
+  //     appBar: AppBar(
+  //       title: Text('Flutter Demo Home Page'),
+  //     ),
+  //     body: Center(
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           Text('You have pushed the button this many times:'),
+  //           //scope: "1",
+  //           Consumer<CurrentIndexProvide>(
+  //           builder: (context,CurrentIndexProvide model,child)=> Text(
+  //               '${model.value}',
+  //               // style: Theme.of(context).textTheme.display1,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     floatingActionButton: FloatingActionButton(
+  //      // onPressed: () => Provide.value<Counter>(context).increment(),
+  //       tooltip: 'Increment',
+  //       child: Icon(Icons.add),
+  //     ),
+  //   );
+  // }
+
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
-    return Provide<CurrentIndexProvide>(
 
-      builder: (context,child,val){
-        int currentIndex= Provide.value<CurrentIndexProvide>(context).currentIndex;
-        return Scaffold(
+    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+    // context
+   // Container()
+    return
+
+      Consumer<CurrentIndexProvide>(
+        //           builder:
+
+        builder: (context,CurrentIndexProvide model, child){
+
+          int currentIndex = Provider.of<CurrentIndexProvide>(context, listen: false).currentIndex;
+
+          //int currentIndex= Provide.value<CurrentIndexProvide>(context).currentIndex;
+
+          print(currentIndex);
+          debugPrint("test");
+
+
+          return Scaffold(
             backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
             bottomNavigationBar: BottomNavigationBar(
               type:BottomNavigationBarType.fixed,
               currentIndex: currentIndex,
               items:bottomTabs,
               onTap: (index){
-                Provide.value<CurrentIndexProvide>(context).changeIndex(index);
+                Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(index);
               },
             ),
-             body: IndexedStack(
-                    index: currentIndex,
-                    children: tabBodies
-                  ),
-        ); 
-      }
+            body: IndexedStack(
+                index: currentIndex,
+                children: tabBodies
+            ),
+          );
+        }
     );
-     
   }
+
+
 }
 
 
-// class IndexPage extends StatefulWidget {
-  
-//   _IndexPageState createState() => _IndexPageState();
+
+
+
+
+
+
+
+//
+//
+// class IndexPage extends StatelessWidget {
+//   final List<BottomNavigationBarItem> bottomTabs = [
+//     BottomNavigationBarItem(
+//       icon:Icon(CupertinoIcons.home),
+//       title:Text('首页')
+//     ),
+//     BottomNavigationBarItem(
+//       icon:Icon(CupertinoIcons.search),
+//       title:Text('分类')
+//     ),
+//     BottomNavigationBarItem(
+//       icon:Icon(CupertinoIcons.shopping_cart),
+//       title:Text('购物车')
+//     ),
+//      BottomNavigationBarItem(
+//       icon:Icon(CupertinoIcons.profile_circled),
+//       title:Text('会员中心')
+//     ),
+//   ];
+//
+//    final List<Widget> tabBodies = [
+//       HomePage(),
+//       CategoryPage(),
+//       CartPage(),
+//       MemberPage()
+//    ];
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+//
+//    // context.
+//
+//     return Provide<CurrentIndexProvide>(
+//
+//       builder: (context,child,val){
+//         int currentIndex= Provide.value<CurrentIndexProvide>(context).currentIndex;
+//         print(currentIndex);
+//         debugPrint("test");
+//
+//
+//         return Scaffold(
+//             backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
+//             bottomNavigationBar: BottomNavigationBar(
+//               type:BottomNavigationBarType.fixed,
+//               currentIndex: currentIndex,
+//               items:bottomTabs,
+//               onTap: (index){
+//                 Provide.value<CurrentIndexProvide>(context).changeIndex(index);
+//               },
+//             ),
+//              body: IndexedStack(
+//                     index: currentIndex,
+//                     children: tabBodies
+//                   ),
+//         );
+//       }
+//     );
+//
+//   }
 // }
 
+
+// class IndexPage extends StatefulWidget {
+//
+//   _IndexPageState createState() => _IndexPageState();
+// }
+//
 // class _IndexPageState extends State<IndexPage>{
-
+//
 //    PageController _pageController;
-
-
+//
+//
 //   final List<BottomNavigationBarItem> bottomTabs = [
 //     BottomNavigationBarItem(
 //       icon:Icon(CupertinoIcons.home),
@@ -126,20 +259,20 @@ class IndexPage extends StatelessWidget {
 //         onTap: (index){
 //           setState(() {
 //           //  currentIndex=index;
-//           //   currentPage =tabBodies[currentIndex]; 
+//           //   currentPage =tabBodies[currentIndex];
 //           });
-           
+//
 //         },
 //       ),
 //       body:Provide<CurrentIndexProvide>(
 //         builder: (context,child,val){
-
+//
 //           return IndexedStack(
 //               index: 0,
 //               children: tabBodies
 //             );
 //         },
-//       ) 
+//       )
 //     );
 //   }
 // }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../provide/details_info.dart';
 import './details_page/details_top_area.dart';
 import './details_page/details_explain.dart';
 import './details_page/details_tabBar.dart';
 import './details_page/details_web.dart';
 import './details_page/details_bottom.dart';
+
+import 'package:provider/provider.dart';
 
 
 class DetailsPage extends StatelessWidget {
@@ -62,7 +64,8 @@ class DetailsPage extends StatelessWidget {
   }
 
   Future _getBackInfo(BuildContext context )async{
-      await  Provide.value<DetailsInfoProvide>(context).getGoodsInfo(goodsId);
+
+      await  Provider.of<DetailsInfoProvide>(context, listen: false).getGoodsInfo(goodsId);
       return '完成加载';
   }
 

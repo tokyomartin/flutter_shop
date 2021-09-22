@@ -8,11 +8,16 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../routers/application.dart';
 
 //--------
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
+
 import '../provide/child_category.dart';
 import '../provide/currentIndex.dart';
 import '../model/category.dart';
 
+import 'package:provider/provider.dart';
+
+
+import 'package:common_utils/common_utils.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -32,11 +37,21 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     super.initState();
      
   }
-  GlobalKey<EasyRefreshState> _easyRefreshKey =new GlobalKey<EasyRefreshState>();
-  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
 
-      
-     
+  EasyRefreshController _controller = EasyRefreshController();
+
+  // GlobalKey<EasyRefreshState> _easyRefreshKey =new GlobalKey<EasyRefreshState>();
+  // GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+
+  //Todo change FormState
+   // GlobalKey _footerKey = GlobalKey();
+  GlobalKey<FormState> _footerKey = GlobalKey<FormState>();
+
+//   //初始化设置 LogUtil
+//   LogUtil.init(true);
+// //输出日志
+//   LogUtil.v("test");
+
 
     
       
@@ -70,19 +85,24 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             
 
             return EasyRefresh(
-                
-              
-                refreshFooter: ClassicsFooter(
-                  key:_footerKey,
-                  bgColor:Colors.white,
-                  textColor: Colors.pink,
-                  moreInfoColor: Colors.pink,
-                  showMore: true,
-                  noMoreText: '',
-                  moreInfo: '加载中',
-                  loadReadyText:'上拉加载....'
+              key:_footerKey,
+              controller: _controller,
+              firstRefresh: true,
 
-                ),
+
+
+                // refreshFooter: ClassicsFooter(
+                //   key:_footerKey,
+                //   bgColor:Colors.white,
+                //   textColor: Colors.pink,
+                //   moreInfoColor: Colors.pink,
+                //   showMore: true,
+                //   noMoreText: '',
+                //   moreInfo: '加载中',
+                //   loadReadyText:'上拉加载....'
+                //
+                // ),
+
                 child: ListView(
                   children: <Widget>[
                       SwiperDiy(swiperDataList:swiperDataList ),   //页面顶部轮播组件
@@ -100,7 +120,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                       
                     ],
               ) ,
-              loadMore: ()async{
+
+              // loadMore
+              onRefresh: ()async{
                  print('开始加载更多');
                   var formPage={'page': page};
                   await  request('homePageBelowConten',formData:formPage).then((val){
@@ -289,9 +311,15 @@ class TopNavigator extends StatelessWidget {
       var data = json.decode(val.toString());
       CategoryModel category = CategoryModel.fromJson(data);
       List   list = category.data;
-      Provide.value<ChildCategory>(context).changeCategory(categroyId,index);
-      Provide.value<ChildCategory>(context).getChildCategory( list[index].bxMallSubDto,categroyId);
-      Provide.value<CurrentIndexProvide>(context).changeIndex(1);
+
+      Provider.of<ChildCategory>(context, listen: false).changeCategory(categroyId,index);
+      Provider.of<ChildCategory>(context, listen: false).getChildCategory( list[index].bxMallSubDto,categroyId);
+      Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(1);
+
+      // Provide.value<ChildCategory>(context).changeCategory(categroyId,index);
+      // Provide.value<ChildCategory>(context).getChildCategory( list[index].bxMallSubDto,categroyId);
+      // Provide.value<CurrentIndexProvide>(context).changeIndex(1);
+
     });
   }
 

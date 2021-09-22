@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
+
 import '../../provide/cart.dart';
+
+
+import 'package:provider/provider.dart';
+
 
 class CartBottom extends StatelessWidget {
   @override
@@ -10,8 +15,8 @@ class CartBottom extends StatelessWidget {
       margin: EdgeInsets.all(5.0),
       color: Colors.white,
       width: ScreenUtil().setWidth(750),
-      child: Provide<CartProvide>(
-        builder: (context,child,childCategory){
+      child: Consumer<CartProvide>(
+        builder: (context, CartProvide childCategory, child){
           return  Row(
             children: <Widget>[
               selectAllBtn(context),
@@ -26,7 +31,7 @@ class CartBottom extends StatelessWidget {
 
   //全选按钮
   Widget selectAllBtn(context){
-    bool isAllCheck = Provide.value<CartProvide>(context).isAllCheck;
+    bool isAllCheck = Provider.of<CartProvide>(context, listen: false).isAllCheck;
     return Container(
       child: Row(
         children: <Widget>[
@@ -34,7 +39,7 @@ class CartBottom extends StatelessWidget {
             value: isAllCheck,
             activeColor: Colors.pink,
             onChanged: (bool val){
-              Provide.value<CartProvide>(context).changeAllCheckBtnState(val);
+              Provider.of<CartProvide>(context, listen: false).changeAllCheckBtnState(val);
             },
           ),
           Text('全选')
@@ -45,7 +50,7 @@ class CartBottom extends StatelessWidget {
 
   // 合计区域
   Widget allPriceArea(context){
-    double allPrice = Provide.value<CartProvide>(context).allPrice;
+    double allPrice = Provider.of<CartProvide>(context, listen: false).allPrice;
    
     return Container(
       width: ScreenUtil().setWidth(430),
@@ -100,7 +105,7 @@ class CartBottom extends StatelessWidget {
 
   //结算按钮
   Widget goButton(context){
-    int allGoodsCount =  Provide.value<CartProvide>(context).allGoodsCount;
+    int allGoodsCount =  Provider.of<CartProvide>(context, listen: false).allGoodsCount;
     return Container(
       width: ScreenUtil().setWidth(160),
       padding: EdgeInsets.only(left: 10),

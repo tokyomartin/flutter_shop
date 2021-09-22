@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../../provide/cart.dart';
 import '../../provide/details_info.dart';
 import '../../provide/currentIndex.dart';
 
+import 'package:provider/provider.dart';
 
 class DetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     var goodsInfo=Provide.value<DetailsInfoProvide>(context).goodsInfo.data.goodInfo;
+     var goodsInfo= Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo;
      
     
     var goodsID= goodsInfo.goodsId;
@@ -28,7 +29,7 @@ class DetailsBottom extends StatelessWidget {
              children: <Widget>[
                InkWell(
                   onTap: (){
-                      Provide.value<CurrentIndexProvide>(context).changeIndex(2);
+                    Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
                       Navigator.pop(context);
                   },
                   child: Container(
@@ -41,9 +42,9 @@ class DetailsBottom extends StatelessWidget {
                           ), 
                     ) ,
                 ),
-                Provide<CartProvide>(
-                  builder: (context,child,val){
-                    int  goodsCount = Provide.value<CartProvide>(context).allGoodsCount;
+                  Consumer<CartProvide>(
+                  builder: (context, CartProvide val, child){
+                    int  goodsCount = Provider.of<CartProvide>(context, listen: false).allGoodsCount;
                     return  Positioned(
                         top:0,
                         right: 10,
@@ -71,7 +72,7 @@ class DetailsBottom extends StatelessWidget {
           
            InkWell(
             onTap: ()async {
-              await Provide.value<CartProvide>(context).save(goodsID,goodsName,count,price,images);
+              await Provider.of<CartProvide>(context, listen: false).save(goodsID,goodsName,count,price,images);
             
             },
              child: Container(
@@ -87,7 +88,7 @@ class DetailsBottom extends StatelessWidget {
            ),
            InkWell(
              onTap: ()async{
-                await Provide.value<CartProvide>(context).remove();
+                await Provider.of<CartProvide>(context, listen: false).remove();
              },
              child: Container(
                alignment: Alignment.center,

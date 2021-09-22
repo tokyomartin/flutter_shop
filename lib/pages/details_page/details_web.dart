@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../../provide/details_info.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:provider/provider.dart';
 
 class DetailsWeb extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    var goodsDetail=Provide.value<DetailsInfoProvide>(context).goodsInfo.data.goodInfo.goodsDetail;
-    
+
+
+    var goodsDetail = Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo.goodsDetail;
+
+    //Provider.of<DetailsInfoProvide>(context, listen: false)
+
    
-      return  Provide<DetailsInfoProvide>(
-        
-        builder: (context,child,val){
-           var isLeft = Provide.value<DetailsInfoProvide>(context).isLeft;
+      return Consumer<DetailsInfoProvide>(
+        builder: (context,DetailsInfoProvide val, child){
+           var isLeft = Provider.of<DetailsInfoProvide>(context, listen: false).isLeft;
            if(isLeft){
              return  Container(
                   child: Html(

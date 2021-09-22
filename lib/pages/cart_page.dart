@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../provide/cart.dart';
 import './cart_page/cart_item.dart';
 import './cart_page/cart_bottom.dart';
 
-
+import 'package:provider/provider.dart';
 
 
 class CartPage extends StatelessWidget {
@@ -18,14 +18,15 @@ class CartPage extends StatelessWidget {
       body: FutureBuilder(
         future:_getCartInfo(context),
         builder: (context,snapshot){
-          List cartList=Provide.value<CartProvide>(context).cartList;
+          List cartList= Provider.of<CartProvide>(context, listen: false) .cartList;
           if(snapshot.hasData && cartList!=null){
               return Stack(
                 children: <Widget>[
-                  Provide<CartProvide>(
+
+                  Consumer<CartProvide>(
                    
-                    builder: (context,child,childCategory){
-                       cartList= Provide.value<CartProvide>(context).cartList;
+                    builder: (context, CartProvide childCategory, child){
+                      cartList = Provider.of<CartProvide>(context, listen: false).cartList;
                       print(cartList);
                       return ListView.builder(
                         itemCount: cartList.length,
@@ -53,7 +54,7 @@ class CartPage extends StatelessWidget {
   }
 
   Future<String> _getCartInfo(BuildContext context) async{
-     await Provide.value<CartProvide>(context).getCartInfo();
+     await Provider.of<CartProvide>(context, listen: false).getCartInfo();
      return 'end';
   }
 

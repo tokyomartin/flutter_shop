@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
+// import 'package:provide/provide.dart';
 import '../../provide/details_info.dart';
+import 'package:provider/provider.dart';
+
 
 class DetailsTabBar extends StatelessWidget {
   
     Widget build(BuildContext context) {
-    return Provide<DetailsInfoProvide>(
-      builder: (context,child,val){
-        var isLeft= Provide.value<DetailsInfoProvide>(context).isLeft;
-        var isRight =Provide.value<DetailsInfoProvide>(context).isRight;
+    return
+      Consumer<DetailsInfoProvide>(
+
+      builder: (context,DetailsInfoProvide val, child){
+
+        var isLeft= Provider.of<DetailsInfoProvide>(context, listen: false).isLeft;
+        var isRight =Provider.of<DetailsInfoProvide>(context, listen: false).isRight;
        
         return Container(
           margin: EdgeInsets.only(top: 15.0),
@@ -35,8 +40,8 @@ class DetailsTabBar extends StatelessWidget {
   Widget _myTabBarLeft(BuildContext context,bool isLeft){
     return InkWell(
       onTap: (){
-      
-        Provide.value<DetailsInfoProvide>(context).changeLeftAndRight('left');
+
+        Provider.of<DetailsInfoProvide>(context, listen: false).changeLeftAndRight('left');
       },
       child: Container(
        
@@ -64,8 +69,8 @@ class DetailsTabBar extends StatelessWidget {
   Widget _myTabBarRight(BuildContext context,bool isRight){
     return InkWell(
       onTap: (){
-      
-        Provide.value<DetailsInfoProvide>(context).changeLeftAndRight('right');
+
+        Provider.of<DetailsInfoProvide>(context, listen: false).changeLeftAndRight('right');
       },
       child: Container(
          
