@@ -33,8 +33,10 @@ class CartCount extends StatelessWidget {
   Widget _reduceBtn(context){
     return InkWell(
       onTap: (){
+        //TODO 调用远程接口 减数量
         //Provider.of<CartProvide>(context, listen: false)
-        Provider.of<CartProvide>(context, listen: false).addOrReduceAction(item,'reduce');
+        debugPrint("-------_reduceBtn--addOrReduceAction---------");
+         Provider.of<CartProvide>(context, listen: false).addOrReduceAction(  context , item,'reduce');
       },
       child: Container(
         width: ScreenUtil().setWidth(45),
@@ -42,12 +44,12 @@ class CartCount extends StatelessWidget {
         alignment: Alignment.center,
        
         decoration: BoxDecoration(
-          color: item.count>1?Colors.white:Colors.black12,
+          color: item.quantity>1?Colors.white:Colors.black12,
           border:Border(
             right:BorderSide(width:1,color:Colors.black12)
           )
         ),
-        child:item.count>1? Text('-'):Text(' '),
+        child:item.quantity>1? Text('-'):Text(' '),
       ),
     );
   }
@@ -56,7 +58,10 @@ class CartCount extends StatelessWidget {
   Widget _addBtn(context){
     return InkWell(
       onTap: (){
-        Provider.of<CartProvide>(context, listen: false).addOrReduceAction(item,'add');
+        debugPrint("-------_addBtn--addOrReduceAction---------");
+          Provider.of<CartProvide>(context, listen: false).addOrReduceAction(  context, item,'add');
+        //TODO 调用远程接口 加数量
+
       },
       child: Container(
         width: ScreenUtil().setWidth(45),
@@ -81,7 +86,7 @@ class CartCount extends StatelessWidget {
       height: ScreenUtil().setHeight(45),
       alignment: Alignment.center,
       color: Colors.white,
-       child: Text('${item.count}'),
+       child: Text('${item.quantity}'),
     );
   }
 

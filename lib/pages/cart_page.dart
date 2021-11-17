@@ -13,7 +13,7 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('购物车'),
+        title: Text('购物车页面'),
       ),
       body: FutureBuilder(
         future:_getCartInfo(context),
@@ -27,6 +27,7 @@ class CartPage extends StatelessWidget {
                    
                     builder: (context, CartProvide childCategory, child){
                       cartList = Provider.of<CartProvide>(context, listen: false).cartList;
+                      debugPrint("---------初始化购物车---------");
                       print(cartList);
                       return ListView.builder(
                         itemCount: cartList.length,
@@ -54,7 +55,9 @@ class CartPage extends StatelessWidget {
   }
 
   Future<String> _getCartInfo(BuildContext context) async{
-     await Provider.of<CartProvide>(context, listen: false).getCartInfo();
+
+    debugPrint("-----------进入购物车页面----------");
+      await Provider.of<CartProvide>(context, listen: false).getCartInfo(context);
      return 'end';
   }
 

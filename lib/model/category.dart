@@ -1,7 +1,7 @@
 class CategoryModel {
   String code;
   String message;
-  List<Data> data;
+  List<Category> data;
 
   CategoryModel({this.code, this.message, this.data});
 
@@ -9,9 +9,9 @@ class CategoryModel {
     code = json['code'];
     message = json['message'];
     if (json['data'] != null) {
-      data = new List<Data>();
+      data = new List<Category>();
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new Category.fromJson(v));
       });
     }
   }
@@ -27,42 +27,49 @@ class CategoryModel {
   }
 }
 
-class Data {
-  String mallCategoryId;
-  String mallCategoryName;
+class Category {
+  int cate_id;
+  String parent_id;
+  String shop_id;
+  String cate_name;
+  String cate_field_name;
   List<BxMallSubDto> bxMallSubDto;
-  Null comments;
-  String image;
+  // String image;
 
-  Data(
-      {this.mallCategoryId,
-      this.mallCategoryName,
+  Category(
+      {this.cate_id,
+      this.parent_id,
+        this.shop_id,
+        this.cate_name,
+        this.cate_field_name,
       this.bxMallSubDto,
-      this.comments,
-      this.image});
+      // this.comments,
+      // this.image
+      });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    mallCategoryId = json['mallCategoryId'];
-    mallCategoryName = json['mallCategoryName'];
+  Category.fromJson(Map<String, dynamic> json) {
+    cate_id = json['cate_id'];
+    cate_name = json['cate_name'];
     if (json['bxMallSubDto'] != null) {
       bxMallSubDto = new List<BxMallSubDto>();
       json['bxMallSubDto'].forEach((v) {
         bxMallSubDto.add(new BxMallSubDto.fromJson(v));
       });
     }
-    comments = json['comments'];
-    image = json['image'];
+    // comments = json['comments'];
+    // image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['mallCategoryId'] = this.mallCategoryId;
-    data['mallCategoryName'] = this.mallCategoryName;
+    data['cate_id'] = this.cate_id;
+    data['cate_name'] = this.cate_name;
     if (this.bxMallSubDto != null) {
       data['bxMallSubDto'] = this.bxMallSubDto.map((v) => v.toJson()).toList();
     }
-    data['comments'] = this.comments;
-    data['image'] = this.image;
+    // data['comments'] = this.comments;
+    // data['image'] = this.image;
+
     return data;
   }
 }

@@ -12,7 +12,8 @@ class DetailsWeb extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    var goodsDetail = Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo.goodsDetail;
+    // var goodsDetail = Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo.goodsDetail;
+    var discription = Provider.of<DetailsInfoProvide>(context, listen: false).detailResult.data.product.discription;
 
     //Provider.of<DetailsInfoProvide>(context, listen: false)
 
@@ -23,7 +24,7 @@ class DetailsWeb extends StatelessWidget {
            if(isLeft){
              return  Container(
                   child: Html(
-                    data:goodsDetail
+                    data:discription
                   ),
               );
            }else{

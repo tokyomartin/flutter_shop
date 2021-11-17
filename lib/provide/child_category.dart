@@ -39,7 +39,7 @@ class ChildCategory with ChangeNotifier{
       all.mallSubName = '全部';
       all.comments = 'null';
       childCategoryList=[all];
-      childCategoryList.addAll(list);   
+      // childCategoryList.addAll(list);
       notifyListeners();
     }
     //改变子类索引 ,

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/model/user_detail.dart';
+import 'package:flutter_shop/pages/PopViewPage.dart';
+import 'package:flutter_shop/provide/province.dart';
+import 'package:flutter_shop/provide/user.dart';
+import 'package:flutter_shop/provide/user_detail.dart';
 import './pages/index_page.dart';
 
 import './provide/child_category.dart';
 import './provide/category_goods_list.dart';
 import './provide/details_info.dart';
 import './provide/cart.dart';
+import './provide/delivery_addr.dart';
+import './provide/pay_method.dart';
 import './provide/currentIndex.dart';
+
 import 'package:fluro/fluro.dart';
 import './routers/routes.dart';
 import './routers/application.dart';
@@ -26,9 +34,14 @@ void main(){
   var cartProvide  = CartProvide();
   var currentIndexProvide  = CurrentIndexProvide();
   var counter = Counter();
+  var deliveryAddrProvide = DeliveryAddrProvide();
+  var payMethodProvide = PayMethodProvide();
+  var provinceProvide = ProvinceProvide();
+  var userDetailProvide =  UserDetailProvide();
+
+  var userProvide =  UserProvider();
 
   // var providers = Providers();
-  //
   // var scope1 = ProviderScope("1");
   // var scope2 = ProviderScope("2");
   //
@@ -49,12 +62,15 @@ void main(){
       providers: [
         ChangeNotifierProvider<ChildCategory>(create: (context) => childCategory),
         ChangeNotifierProvider<CategoryGoodsListProvide>(create: (context) => categoryGoodsListProvide),
-        ChangeNotifierProvider<DetailsInfoProvide>(create: (context) => DetailsInfoProvide()),
-        ChangeNotifierProvider<CartProvide>(create: (context) => CartProvide()),
+        ChangeNotifierProvider<DetailsInfoProvide>(create: (context) => detailsInfoProvide),
+        ChangeNotifierProvider<CartProvide>(create: (context) => cartProvide),
+        ChangeNotifierProvider<DeliveryAddrProvide>(create: (context) => deliveryAddrProvide),
+        ChangeNotifierProvider<PayMethodProvide>(create: (context) => payMethodProvide),
+        ChangeNotifierProvider<ProvinceProvide>(create: (context) => provinceProvide),
+        ChangeNotifierProvider<UserDetailProvide>(create: (context) => userDetailProvide),
+        ChangeNotifierProvider<UserProvider>(create: (context) => userProvide),
         ChangeNotifierProvider<CurrentIndexProvide>(create: (context) => CurrentIndexProvide()),
         ChangeNotifierProvider<Counter>(create: (context) => Counter()),
-
-
         // ChangeNotifierProvider.value(value: Counter()),
         // //ChangeNotifierProvider(builder: (_) => Counter()),
       ],
@@ -77,13 +93,17 @@ class MyApp extends StatelessWidget {
     return Container(
       
       child: MaterialApp(
-        title:'百姓生活+',
+        title:'华人超市+',
         debugShowCheckedModeBanner: false,
         onGenerateRoute: Application.router.generator,
         theme: ThemeData(
           primaryColor:Colors.pink,
         ),
-        home:IndexPage()
+
+          //Normal Index
+            home:IndexPage()
+          //TODO for TEST
+          // home: PopViewPage()
 
       ),
     );

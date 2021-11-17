@@ -25,10 +25,11 @@ class CartItem extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            _cartCheckBt(context,item),
+           _cartCheckBt(context,item),
             _cartImage(item),
             _cartGoodsName(item),
-            _cartPrice(context,item)
+            // TODO
+             _cartPrice(context,item)
           ],
         ),
       );
@@ -37,11 +38,12 @@ class CartItem extends StatelessWidget {
   Widget _cartCheckBt(context,item){
     return Container(
       child: Checkbox(
-        value: item.isCheck,
+        value: item.checked,
         activeColor:Colors.pink,
         onChanged: (bool val){
-          item.isCheck=val;
-          Provider.of<CartProvide>(context, listen: false).changeCheckState(item);
+          item.checked=val;
+          debugPrint("---------_cartCheckBt---------");
+          Provider.of<CartProvide>(context, listen: false).changeCheckState(  context, item);
         },
       ),
     );
@@ -55,7 +57,15 @@ class CartItem extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(width: 1,color:Colors.black12)
       ),
-      child: Image.network(item.images),
+      child:
+      Image.network(
+          item.small_pic,
+          // item.images,
+          //item.img,
+          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+            return Text('Your error widget...');
+          }
+          ),
     );
   }
   //商品名称
@@ -66,8 +76,8 @@ class CartItem extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: Column(
         children: <Widget>[
-          Text(item.goodsName),
-          CartCount(item)
+          Text(item.product_name),
+           CartCount(item)
         ],
       ),
     );
@@ -86,7 +96,8 @@ class CartItem extends StatelessWidget {
             Container(
               child: InkWell(
                 onTap: (){
-                  Provider.of<CartProvide>(context, listen: false).deleteOneGoods(item.goodsId);
+                  debugPrint("---------deleteOneGoods---------");
+                  Provider.of<CartProvide>(context, listen: false).deleteOneGoods(  context, item.product_id);
                 },
                 child: Icon(
                   Icons.delete_forever,

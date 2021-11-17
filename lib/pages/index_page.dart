@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../login.dart';
 import 'home_page.dart';
 import 'category_page.dart';
 import 'cart_page.dart';
@@ -16,10 +18,30 @@ import 'package:provider/provider.dart';
 
 
 
+class IndexPage extends StatefulWidget {
+  @override
+  _IndexPageState createState() => _IndexPageState();
+}
 
 
+class _IndexPageState extends State<IndexPage>  {
 
-class IndexPage extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getString("access_token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
+    }
+
+
+  }
+
+
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
         icon:Icon(CupertinoIcons.home),
@@ -45,6 +67,10 @@ class IndexPage extends StatelessWidget {
     CartPage(),
     MemberPage()
   ];
+
+
+
+
 
   // @override
   // Widget build(BuildContext context) {

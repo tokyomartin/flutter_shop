@@ -23,15 +23,15 @@ class DetailsModel {
 }
 
 class DetailsGoodsData {
-  GoodInfo goodInfo;
+  Product product;
   List<GoodComments> goodComments;
   AdvertesPicture advertesPicture;
 
-  DetailsGoodsData({this.goodInfo, this.goodComments, this.advertesPicture});
+  DetailsGoodsData({this.product, this.goodComments, this.advertesPicture});
 
   DetailsGoodsData.fromJson(Map<String, dynamic> json) {
-    goodInfo = json['goodInfo'] != null
-        ? new GoodInfo.fromJson(json['goodInfo'])
+    product = json['product'] != null
+        ? new Product.fromJson(json['product'])
         : null;
     if (json['goodComments'] != null) {
       goodComments = new List<GoodComments>();
@@ -46,8 +46,8 @@ class DetailsGoodsData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.goodInfo != null) {
-      data['goodInfo'] = this.goodInfo.toJson();
+    if (this.product != null) {
+      data['product'] = this.product.toJson();
     }
     if (this.goodComments != null) {
       data['goodComments'] = this.goodComments.map((v) => v.toJson()).toList();
@@ -59,79 +59,107 @@ class DetailsGoodsData {
   }
 }
 
-class GoodInfo {
-  String image5;
-  int amount;
-  String image3;
-  String image4;
-  String goodsId;
-  String isOnline;
-  String image1;
-  String image2;
-  String goodsSerialNumber;
-  double oriPrice;
-  double presentPrice;
-  String comPic;
-  int state;
-  String shopId;
-  String goodsName;
-  String goodsDetail;
+class Product {
 
-  GoodInfo(
-      {this.image5,
-      this.amount,
-      this.image3,
-      this.image4,
-      this.goodsId,
-      this.isOnline,
-      this.image1,
-      this.image2,
-      this.goodsSerialNumber,
-      this.oriPrice,
-      this.presentPrice,
-      this.comPic,
-      this.state,
-      this.shopId,
-      this.goodsName,
-      this.goodsDetail});
+  int id;
+  String distributor_id;
+  String product_name;
+  int general_price;
+  int current_price;
+  String small_img_url;
+  String image_url_1;
+  String image_url_2;
+  String image_url_3;
+  String image_url_4;
+  String image_url_5;
+  String product_code;
+  String jan_code;
 
-  GoodInfo.fromJson(Map<String, dynamic> json) {
-    image5 = json['image5'];
-    amount = json['amount'];
-    image3 = json['image3'];
-    image4 = json['image4'];
-    goodsId = json['goodsId'];
-    isOnline = json['isOnline'];
-    image1 = json['image1'];
-    image2 = json['image2'];
-    goodsSerialNumber = json['goodsSerialNumber'];
-    oriPrice = json['oriPrice'];
-    presentPrice = json['presentPrice'];
-    comPic = json['comPic'];
-    state = json['state'];
-    shopId = json['shopId'];
-    goodsName = json['goodsName'];
-    goodsDetail = json['goodsDetail'];
+  int sub_category_id;
+  int product_total_amount;
+  int product_sold_total_amount;
+
+  String discription;
+
+
+  // String image5;
+  // int amount;
+  // String image3;
+  // String image4;
+  // String goodsId;
+  // String isOnline;
+  // String image1;
+  // String image2;
+  // String goodsSerialNumber;
+  // double oriPrice;
+  // double presentPrice;
+  // String comPic;
+  // int state;
+  // String shopId;
+  // String goodsName;
+  // String goodsDetail;
+
+  Product(
+      {
+        this.id,
+        this.distributor_id,
+        this.product_name,
+        this.general_price,
+        this.current_price,
+        this.small_img_url,
+        this.image_url_1,
+        this.image_url_2,
+        this.image_url_3,
+        this.image_url_4,
+        this.image_url_5,
+        this.product_code,
+        this.jan_code,
+
+        this.sub_category_id,
+        this.product_total_amount,
+        this.product_sold_total_amount,
+        this.discription
+      });
+
+  Product.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    distributor_id = json['distributor_id'];
+    product_name = json['product_name'];
+    general_price = json['general_price'];
+    current_price = json['current_price'];
+    small_img_url = json['small_img_url'];
+    image_url_1 = json['image_url_1'];
+    image_url_2 = json['image_url_2'];
+    image_url_3 = json['image_url_3'];
+    image_url_4 = json['image_url_4'];
+    image_url_5 = json['image_url_5'];
+    product_code = json['product_code'];
+    jan_code = json['jan_code'];
+    sub_category_id = json['sub_category_id'];
+    product_total_amount = json['product_total_amount'];
+    product_sold_total_amount = json['product_sold_total_amount'];
+    discription = json['discription'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['image5'] = this.image5;
-    data['amount'] = this.amount;
-    data['image3'] = this.image3;
-    data['image4'] = this.image4;
-    data['goodsId'] = this.goodsId;
-    data['isOnline'] = this.isOnline;
-    data['image1'] = this.image1;
-    data['image2'] = this.image2;
-    data['goodsSerialNumber'] = this.goodsSerialNumber;
-    data['oriPrice'] = this.oriPrice;
-    data['presentPrice'] = this.presentPrice;
-    data['comPic'] = this.comPic;
-    data['state'] = this.state;
-    data['shopId'] = this.shopId;
-    data['goodsName'] = this.goodsName;
-    data['goodsDetail'] = this.goodsDetail;
+    data['id'] = this.id;
+    data['distributor_id'] = this.distributor_id;
+    data['product_name'] = this.product_name;
+    data['general_price'] = this.general_price;
+    data['current_price'] = this.current_price;
+    data['small_img_url'] = this.small_img_url;
+    data['image_url_1'] = this.image_url_1;
+    data['image_url_2'] = this.image_url_2;
+    data['image_url_3'] = this.image_url_3;
+    data['image_url_4'] = this.image_url_4;
+    data['image_url_5'] = this.image_url_5;
+    data['product_code'] = this.product_code;
+    data['jan_code'] = this.jan_code;
+    data['sub_category_id'] = this.sub_category_id;
+    data['product_total_amount'] = this.product_total_amount;
+    data['product_sold_total_amount'] = this.product_sold_total_amount;
+    data['discription'] = this.discription;
     return data;
   }
 }

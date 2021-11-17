@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/config/api_service.dart';
+import 'package:flutter_shop/util/m_net.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -58,6 +60,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
   @override
   void initState() {
+
+    debugPrint("2.1");
     _getCategory();
     
    
@@ -83,7 +87,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
             child: ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) {
-                return _leftInkWel(index);
+                //subcategory
+                //return _leftInkWel(index);
               },
             ),
           );
@@ -127,13 +132,44 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
   //得到后台大类数据
   void _getCategory() async {
-    await request('getCategory').then((val) {
-      var data = json.decode(val.toString());
 
-      CategoryModel category = CategoryModel.fromJson(data);
+    debugPrint("2.2");
+
+    //getCategory
+    // await request('homePageCategory')
+    await MNet.getData(ApiService.category_url).then((val) {
+
+      //var data = val;
+
+      //var data = json.decode(val.toString());
+
+      // var strData = '''
+      //              {"mallSubId":"402880e86016d1b5016016e171cc0012","mallCategoryId":"3","mallSubName":"洋酒","comments":""}],
+      //        "comments":null,"image":"http://images.baixingliangfan.cn/firstCategoryPicture/20190103/20190103103506_4829.png"},{"mallCategoryId":"5","mallCategoryName":"保健酒",
+      //        "bxMallSubDto":[{"mallSubId":"2c9f6c94609a62be0160a02d1dc20021","mallCategoryId":"5","mallSubName":"黄酒","comments":""},{"mallSubId":"2c9f6c94648837980164883ff6980000","mallCategoryId":"5","mallSubName":"药酒","comments":""}],
+      //        "comments":null,"image":"http://images.baixingliangfan.cn/firstCategoryPicture/20190103/20190103103457_2958.png"},{"mallCategoryId":"2c9f6c946449ea7e01647ccd76a6001b","mallCategoryName":"预调酒",
+      //        "bxMallSubDto":[{"mallSubId":"2c9f6c946449ea7e01647d02f6250026","mallCategoryId":"2c9f6c946449ea7e01647ccd76a6001b","mallSubName":"果酒","comments":""},{"mallSubId":"2c9f6c946449ea7e01647d031bae0027",
+      //        "mallCategoryId":"2c9f6c946449ea7e01647ccd76a6001b","mallSubName":"鸡尾酒","comments":""},{"mallSubId":"2c9f6c946449ea7e01647d03428f0028","mallCategoryId":"2c9f6c946449ea7e01647ccd76a6001b","mallSubName":"米酒","comments":""}],
+      //        "comments":null,"image":"http://images.baixingliangfan.cn/firstCategoryPicture/20190103/20190103103446_3237.png"},{"mallCategoryId":"2c9f6c946449ea7e01647ccf3b97001d","mallCategoryName":"下酒小菜",
+      //        "bxMallSubDto":[{"mallSubId":"2c9f6c946449ea7e01647dc18e610035","mallCategoryId":"2c9f6c946449ea7e01647ccf3b97001d","mallSubName":"熟食","comments":""},{"mallSubId":"2c9f6c946449ea7e01647dc1d9070036","mallCategoryId":"2c9f6c946449ea7e01647ccf3b97001d",
+      //        "mallSubName":"火腿","comments":""},{"mallSubId":"2c9f6c946449ea7e01647dc1fc3e0037","mallCategoryId":"2c9f6c946449ea7e01647ccf3b97001d","mallSubName":"速冻食品","comments":""}],
+      //        "comments":null,"image":"http://images.baixingliangfan.cn/firstCategoryPicture/20190103/20190103103436_4308.png"},{"mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallCategoryName":"饮料",
+      //        "bxMallSubDto":[{"mallSubId":"2c9f6c946449ea7e01647d09cbf6002d","mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallSubName":"茶饮","comments":""},
+      //        {"mallSubId":"2c9f6c946449ea7e01647d09f7e8002e","mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallSubName":"水饮","comments":""},{"mallSubId":"2c9f6c946449ea7e01647d0a27e1002f","mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c",
+      //        "mallSubName":"功能饮料","comments":""},{"mallSubId":"2c9f6c946449ea7e01647d0b1d4d0030","mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallSubName":"果汁","comments":""},
+      //        {"mallSubId":"2c9f6c946449ea7e01647d14192b0031","mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallSubName":"含乳饮料","comments":""},{"mallSubId":"2c9f6c946449ea7e01647d24d9600032",
+      //        "mallCategoryId":"2c9f6c946449ea7e01647ccdb0e0001c","mallSubName":"碳酸饮料","comments":""}],"comments":null,"image":"http://images.baixingliangfan.cn/firstCategoryPicture/20190103/20190103103426_4549.png"},
+      // ''';
+
+
+      // var data = json.decode(strData);
+      var data = val;
+
+      // CategoryModel categoryModel = val;
+       CategoryModel categoryModel = CategoryModel.fromJson(data);
 
       setState(() {
-        list = category.data;
+        list = categoryModel.data;
       });
 
       Provider.of<ChildCategory>(context, listen: false).getChildCategory( list[0].bxMallSubDto,'4');
@@ -156,15 +192,18 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       'page':1
     };
 
+    // request('getMallGoods',formData:data )
 
-    
-    request('getMallGoods',formData:data ).then((val){
-        var  data = json.decode(val.toString());
-        CategoryGoodsListModel goodsList=  CategoryGoodsListModel.fromJson(data);
+      MNet.getData(ApiService.category_url)
+    .then((val){
+
+       // var  data = json.decode(val.toString());
+      data = val;
+
+       // CategoryGoodsListModel goodsList=  CategoryGoodsListModel.fromJson(data);
         // Provide.value<CategoryGoodsList>(context).getGoodsList(goodsList.data);
 
-        Provider.of<CategoryGoodsListProvide>(context, listen: false).getGoodsList(goodsList.data);
-
+        // Provider.of<CategoryGoodsListProvide>(context, listen: false).getGoodsList(goodsList.data);
         // Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodsList.data);
        
     });
@@ -294,7 +333,9 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
         builder: (context, CategoryGoodsListProvide data, child){
           try{
             if( Provider.of<ChildCategory>(context, listen: false).page==1){
-              scrollController.jumpTo(0.0);
+
+              //TODO
+              //scrollController.jumpTo(0.0);
             }
           }catch(e){
             print('进入页面第一次初始化：${e}');
@@ -336,7 +377,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                             msg: "已经到底了",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
-                            timeInSecForIos: 1,
+                            //timeInSecForIos: 1,
                             backgroundColor: Colors.pink,
                             textColor: Colors.white,
                             fontSize: 16.0
@@ -427,7 +468,12 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
     return  Container(
       width: ScreenUtil().setWidth(200),
-      child: Image.network(newList[index].image),
+      child: Image.network(newList[index].small_pic
+          ,
+          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+            return Text('Your error widget...');
+          }
+      ),
     );
 
   }

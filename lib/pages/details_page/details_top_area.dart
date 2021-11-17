@@ -15,20 +15,35 @@ class DetailsTopArea extends StatelessWidget {
       builder:(context, DetailsInfoProvide val, child){
 
 
-        var goodsInfo=Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo;
+        var product=Provider.of<DetailsInfoProvide>(context, listen: false).detailResult.data.product;
 
-        if(goodsInfo != null){
+        debugPrint(product.toString());
+
+        var image_base_url = "https://skm-php.s3.us-west-1.amazonaws.com/product_images/1001/";
+
+
+        if(product != null){
+
+          var tempImage = image_base_url + product.small_img_url;
+          debugPrint("商品详情页图片");
+          debugPrint(tempImage);
 
            return Container(
                  color: Colors.white,
                 padding: EdgeInsets.all(2.0),
                 child: Column(
                   children: <Widget>[
-                      _goodsImage( goodsInfo.image1),
-                      _goodsName( goodsInfo.goodsName ),  
-                      _goodsNum(goodsInfo.goodsSerialNumber),
-                      _goodsPrice(goodsInfo.presentPrice,goodsInfo.oriPrice),
-                    
+                      // _goodsImage( goodsInfo.image1),
+                      // _goodsName( goodsInfo.goodsName ),
+                      // _goodsNum(goodsInfo.goodsSerialNumber),
+                      // _goodsPrice(goodsInfo.presentPrice,goodsInfo.oriPrice),
+
+                    _goodsImage( image_base_url + product.small_img_url),
+
+                    _goodsName( product.product_name ),
+                    _goodsNum(product.jan_code),
+                    _goodsPrice(product.general_price,product.general_price),
+
                   ],
                 ),
               );
@@ -42,9 +57,15 @@ class DetailsTopArea extends StatelessWidget {
 
   //商品图片
   Widget _goodsImage(url){
+
+
+
     return  Image.network(
         url,
-        width:ScreenUtil().setWidth(740) 
+        width:ScreenUtil().setWidth(740) ,
+        errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+      return Text('Your error widget...');
+    }
     );
 
   }
