@@ -55,7 +55,8 @@ class UserDetailProvide with ChangeNotifier{
     var jsonResponse = null;
     // var response = await http.post("http://subicjobs.digitappstudio.com/api/login", body: data);
 
-    var response = await http.post(ApiService.google_signup_url, body: data);
+    var url = Uri.parse(ApiService.google_signup_url);
+    var response = await http.post(url, body: data);
     // ?email=testshen3@dg006.com&password=blcu1234
 
     debugPrint(response.statusCode.toString() );

@@ -181,27 +181,28 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                             // FloorTitle(picture_address:floor3Title),
                             // FloorContent(floorGoodsList:floor3),
                             //_getHotGoodsList(),
-                            _hotGoodsWidget("零食（更多...）",35),
-                            _hotGoodsWidget("熟食（更多...）",23),
-                         //   _hotGoodsWidget("肉类（更多...）",24),
-                         //   _hotGoodsWidget("新品（更多...）",25),
+
+                          //  _hotGoodsWidget("熟食（更多...）",23),
+                            _hotGoodsWidget("肉类（更多...）",24),
+                        //    _hotGoodsWidget("新品（更多...）",25),
                             _hotGoodsWidget("爆品（更多...）",26),
                             _hotGoodsWidget("瓜果蔬菜（更多...）",27),
                        //     _hotGoodsWidget("腐乳（更多...）",28),
                        //      _hotGoodsWidget("输入酒（更多...）",29),
-                            _hotGoodsWidget("饮料（更多...）",30),
+                      //      _hotGoodsWidget("饮料（更多...）",30),
                      //       _hotGoodsWidget("腌制品(皮蛋酸菜类)（更多...）",31),
                      //       _hotGoodsWidget("干货（更多...）",32),
                             _hotGoodsWidget("面类（更多...）",33),
                      //      _hotGoodsWidget(" 点心（更多...）",34),
-                     //       _hotGoodsWidget("海鲜（更多...）",36),
+                            _hotGoodsWidget("零食（更多...）",35),
+                            _hotGoodsWidget("海鲜（更多...）",36),
                       //      _hotGoodsWidget("食材（原材料）（更多...）",37),
-                            _hotGoodsWidget("辣条（更多...）",38),
+                      //      _hotGoodsWidget("辣条（更多...）",38),
                             // _hotGoodsWidget("冻品（更多...）",39),
                             // _hotGoodsWidget("罐头（更多...）",40),
                             // _hotGoodsWidget("冲调类（更多...）",41),
-                            _hotGoodsWidget("调料（更多...）",42),
-                            _hotGoodsWidget("火锅（更多...）",43),
+                       //     _hotGoodsWidget("调料（更多...）",42),
+                      //      _hotGoodsWidget("火锅（更多...）",43),
 
                           ],
                         ) ,
@@ -254,8 +255,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
     _getHotGoodsList() async{
 
-     await _getHotGoods(23, this.page_size, 1);
-     // await _getHotGoods(24, this.page_size, 1); //肉类
+   //  await _getHotGoods(23, this.page_size, 1); //熟食
+     await _getHotGoods(24, this.page_size, 1); //肉类
     // await _getHotGoods(25, this.page_size, 1);  //新品
      await _getHotGoods(26, this.page_size, 1);    //爆品
      await _getHotGoods(27, this.page_size, 1);    //瓜果蔬菜
@@ -263,20 +264,20 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
      //输入酒
   //    await _getHotGoods(29, this.page_size, 1);
-     await _getHotGoods(30, this.page_size, 1);   //饮料
+  //   await _getHotGoods(30, this.page_size, 1);   //饮料
    //  await _getHotGoods(31, this.page_size, 1);
     // await _getHotGoods(32, this.page_size, 1);
      await _getHotGoods(33, this.page_size, 1);  //面类
     // await _getHotGoods(34, this.page_size, 1);
      await _getHotGoods(35, this.page_size, 1); //零食
-   //  await _getHotGoods(36, this.page_size, 1);
+     await _getHotGoods(36, this.page_size, 1);  //海鲜
     // await _getHotGoods(37, this.page_size, 1);
-     await _getHotGoods(38, this.page_size, 1);  //辣条
+   //  await _getHotGoods(38, this.page_size, 1);  //辣条
   //   await _getHotGoods(39, this.page_size, 1);
    //  await _getHotGoods(40, this.page_size, 1);
    //  await _getHotGoods(41, this.page_size, 1);
-     await _getHotGoods(42, this.page_size, 1);   //调料
-     await _getHotGoods(43, this.page_size, 1);   //火锅
+   //  await _getHotGoods(42, this.page_size, 1);   //调料
+   //  await _getHotGoods(43, this.page_size, 1);   //火锅
 
      return true;
 
