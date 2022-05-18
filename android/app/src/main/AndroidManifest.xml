@@ -17,6 +17,14 @@
 	
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- GPS 定位信息 需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<!--    如果您还想在后台访问用户的位置，请在访问后台位置之前使用该API，并在清单文件中添加后台权限-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <!-- END  GPS 定位信息 -->
+
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide

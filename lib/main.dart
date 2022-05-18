@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/user_detail.dart';
 import 'package:flutter_shop/pages/PopViewPage.dart';
 import 'package:flutter_shop/provide/province.dart';
+import 'package:flutter_shop/provide/location.dart'; // 定位服务
 import 'package:flutter_shop/provide/user.dart';
 import 'package:flutter_shop/provide/user_detail.dart';
+import 'package:geocode/geocode.dart';
+import 'package:location/location.dart';
 import './pages/index_page.dart';
 
 import './provide/child_category.dart';
@@ -38,8 +41,10 @@ void main(){
   var payMethodProvide = PayMethodProvide();
   var provinceProvide = ProvinceProvide();
   var userDetailProvide =  UserDetailProvide();
+  var locationProvide =  LocationProvide();
 
   var userProvide =  UserProvider();
+
 
   // var providers = Providers();
   // var scope1 = ProviderScope("1");
@@ -68,6 +73,7 @@ void main(){
         ChangeNotifierProvider<PayMethodProvide>(create: (context) => payMethodProvide),
         ChangeNotifierProvider<ProvinceProvide>(create: (context) => provinceProvide),
         ChangeNotifierProvider<UserDetailProvide>(create: (context) => userDetailProvide),
+        ChangeNotifierProvider<LocationProvide>(create: (context) => locationProvide),
         ChangeNotifierProvider<UserProvider>(create: (context) => userProvide),
         ChangeNotifierProvider<CurrentIndexProvide>(create: (context) => CurrentIndexProvide()),
         ChangeNotifierProvider<Counter>(create: (context) => Counter()),
@@ -82,13 +88,41 @@ void main(){
 }
 
 class MyApp extends StatelessWidget {
+
+  // 地理定位信息
+  LocationData currentLocation;
+  String address = "";
+
+
+
   @override
   Widget build(BuildContext context) {
 
     final router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router=router;
-    
+
+
+    getGpsLocation().then((value) {
+      LocationData location = value;
+      _getAddress(location.latitude, location.longitude)
+          .then((value) {
+
+        currentLocation = location;
+        address = value;
+        debugPrint("GPS信息 latitude:" + location.latitude.toString()  );
+        debugPrint("GPS信息 longitude:" + location.longitude.toString()  );
+        debugPrint("地址信息:" + value);
+
+
+        // setState(() {
+        //   currentLocation = location;
+        //   address = value;
+        // });
+
+      });
+    });
+
 
     return Container(
       
@@ -108,4 +142,46 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+  Future<LocationData>  getGpsLocation() async {
+
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.DENIED) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.GRANTED) {
+        return null;
+      }
+    }
+
+    LocationData _locationData;
+    _locationData = await location.getLocation();
+    return _locationData;
+  }
+
+
+  Future<String> _getAddress(double lat, double lang) async {
+    if (lat == null || lang == null) return "";
+    GeoCode geoCode = GeoCode();
+    Address address =
+    await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+
+    return "${address.streetAddress}, ${address.city}, ${address.countryName}, ${address.postal}";
+
+  }
+
+
+
 }

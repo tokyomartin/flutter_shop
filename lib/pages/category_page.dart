@@ -19,6 +19,8 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
+// 商品分类  商品分类的列表
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
