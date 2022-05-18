@@ -145,7 +145,8 @@ class _LoginState extends State<Login> {
     var jsonResponse = null;
     // var response = await http.post("http://subicjobs.digitappstudio.com/api/login", body: data);
 
-    var response = await http.post(ApiService.login_url, body: data);
+    var url = Uri.parse(ApiService.login_url);
+    var response = await http.post(url, body: data);
     // ?email=testshen3@dg006.com&password=blcu1234
     
      debugPrint(response.statusCode.toString() );
@@ -160,7 +161,7 @@ class _LoginState extends State<Login> {
 
         debugPrint("--------1.3 signin----------");
         debugPrint(jsonResponse['access_token']);
-        debugPrint("--------1.4 signin----------");
+        debugPrint("--------1.4 signin member_id----------");
         debugPrint(jsonResponse['member_id'].toString());
         debugPrint("--------1.5 signin----------");
         debugPrint(jsonResponse['user'].toString());

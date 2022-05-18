@@ -29,8 +29,8 @@ class UserProvider with ChangeNotifier{
     debugPrint("--------1.1 UserProvider  ---------");
 
     this.userModel = new UserModel(
-        email:  email,
-        password:  password,
+        email: email,
+        password: password,
         password_confirmation: password_confirmation
     );
     debugPrint("--------1.2 UserProvider ---------");
@@ -46,7 +46,8 @@ class UserProvider with ChangeNotifier{
     var jsonResponse = null;
     // var response = await http.post("http://subicjobs.digitappstudio.com/api/login", body: data);
 
-    var response = await http.post(ApiService.user_signup_url, body: data);
+    var url = Uri.parse(ApiService.user_signup_url);
+    var response = await http.post(url, body: data);
     // ?email=testshen3@dg006.com&password=blcu1234
 
     debugPrint(response.statusCode.toString() );
@@ -63,8 +64,10 @@ class UserProvider with ChangeNotifier{
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
         sharedPreferences.setString("oauth_type", '');
-        // sharedPreferences.setString("access_token", jsonResponse['access_token']);
-        sharedPreferences.setString("member_id", jsonResponse['userId'].toString());
+
+        sharedPreferences.setString("access_token", jsonResponse['access_token']);
+        //sharedPreferences.setString("member_id", jsonResponse['userId'].toString());
+        sharedPreferences.setString("user_id", jsonResponse['userId'].toString());
 
         debugPrint("--------1.4 member_id----------");
 

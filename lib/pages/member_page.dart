@@ -3,11 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/pages/cart_to_confirm_page.dart';
 // import 'package:flutter_shop/pages/cart_confirm_page.dart';
 import 'package:flutter_shop/pages/delivery_addr_page.dart';
+import 'package:flutter_shop/util/share_pref.dart';
 import 'package:flutter_shop/pages/lbs_shop_list_page.dart';
 
 import '../login.dart';
 import 'category_list_page.dart';
-import 'location_page.dart';
 
 
 class MemberPage extends StatelessWidget {
@@ -358,6 +358,36 @@ class MemberPage extends StatelessWidget {
   }
 
 
+  // 登录
+  Widget _myListLogout(BuildContext context, String title){
+
+    return InkWell(
+      onTap: (){
+
+        debugPrint("--退出");
+        SharePref.logout(context);
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom:BorderSide(width: 1,color:Colors.black12)
+            )
+        ),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.arrow_right),
+        ),
+      ),
+
+    );
+
+  }
+
+
+
 
   Widget _actionList(BuildContext context){
     return Container(
@@ -372,6 +402,7 @@ class MemberPage extends StatelessWidget {
           _myListLocationPage(context, '附近店铺1'),
            _myLbsShopsListPage(context, '附近店铺2'),
           _myListLogin(context, '登录'),
+          _myListLogout(context, '退出'),
             // _myListTile(context, '客服电话'),
             // _myListTile(context, '关于我们'),
         ],

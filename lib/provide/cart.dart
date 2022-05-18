@@ -115,20 +115,12 @@ class CartProvide with ChangeNotifier{
     //  //获得购物车中的商品,这时候是一个字符
     var member_id = "";
     final Map<String, dynamic> params = new Map<String, dynamic>();
-    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // if(sharedPreferences.getString("member_id") != null) {
-    //   // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-    //   member_id =   sharedPreferences.getString("member_id");
-    // }else{
-    //    debugPrint("购物车列表接口");
-    // }
-    // debugPrint("1.1 getCartInfo购物车列表member_id");
-    // debugPrint(member_id);
-    //
-    // params['member_id'] = member_id.toString();
 
+    debugPrint("购物车列表接口");
+    debugPrint("1.1 getCartInfo购物车列表member_id");
     member_id = await SharePref.getSharePrefMemberId(context);
     params['member_id'] = member_id.toString();
+
 
     cartList = [];
     //oauthPost
@@ -171,12 +163,19 @@ class CartProvide with ChangeNotifier{
 
      final Map<String, dynamic> params = new Map<String, dynamic>();
      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-     if(sharedPreferences.getString("member_id") != null) {
-       // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-       params['member_id'] =  sharedPreferences.getString("member_id");
-     }else{
-       debugPrint("购物车删除接口");
-     }
+
+     var member_id =  await SharePref.getSharePrefMemberId(context);
+     params['member_id'] = member_id;
+     debugPrint("购物车删除接口");
+
+     // if(sharedPreferences.getString("user_id") != null) {
+     //   // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
+     //   params['user_id'] =  sharedPreferences.getString("user_id");
+     // }else{
+     //   debugPrint("购物车删除接口");
+     // }
+
+
      debugPrint("--------1.1 deleteOneGoods ");
      debugPrint(params['member_id']);
      params['product_id']= product_id;
@@ -261,13 +260,12 @@ class CartProvide with ChangeNotifier{
 
   addOrReduceAction(BuildContext context, var cartItem, String todo )async{
       final Map<String, dynamic> params = new Map<String, dynamic>();
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      if(sharedPreferences.getString("member_id") != null) {
-        // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-        params['member_id'] =  sharedPreferences.getString("member_id");
-      }else{
-        debugPrint("addOrReduceAction");
-      }
+
+
+      var member_id =  await SharePref.getSharePrefMemberId(context);
+      params['member_id'] = member_id;
+
+
       debugPrint("--------1.1 addOrReduceAction ");
 
       var product_id = cartItem.product_id;

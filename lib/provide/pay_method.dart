@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/api_service.dart';
 import 'package:flutter_shop/util/m_net.dart';
+import 'package:flutter_shop/util/share_pref.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../login.dart';
@@ -72,14 +73,12 @@ class PayMethodProvide with ChangeNotifier{
   //得到购物车中的商品
   getListInfo(BuildContext context) async {
 
-     SharedPreferences prefs = await SharedPreferences.getInstance();
+     // SharedPreferences prefs = await SharedPreferences.getInstance();
      final Map<String, dynamic> data = new Map<String, dynamic>();
-     if(prefs.getString("member_id") != null) {
-       // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-       data['member_id'] =  prefs.getString("member_id");
-     }else{
-       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
-     }
+
+     data['member_id'] = await SharePref.getSharePrefMemberId(context);
+
+
 
 
      myDataList = [];

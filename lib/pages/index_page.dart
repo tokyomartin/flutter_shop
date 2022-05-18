@@ -29,7 +29,11 @@ class _IndexPageState extends State<IndexPage>  {
   @override
   void initState() {
     super.initState();
-    checkLoginStatus();
+
+    // 苹果app上线时
+    // 首页可以不用登录
+    // checkLoginStatus();
+
   }
 
   checkLoginStatus() async {
@@ -37,7 +41,6 @@ class _IndexPageState extends State<IndexPage>  {
     if(sharedPreferences.getString("access_token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
     }
-
 
   }
 
