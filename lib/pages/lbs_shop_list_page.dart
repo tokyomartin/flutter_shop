@@ -21,19 +21,19 @@ import 'package:provider/provider.dart';
 import 'package:common_utils/common_utils.dart';
 
 // 类目商品列表   显示该类别下面的商品的列表
-class CategoryListPage extends StatefulWidget {
+class LbsShopListPage extends StatefulWidget {
 
   int page_size = 4;
-  int category_id;
+  int category_id = 1;
 
 
-   CategoryListPage({Key key, @required this.category_id}) : super(key: key);
+  LbsShopListPage({Key key}) : super(key: key);
 
-  _CategoryListPageState createState() => _CategoryListPageState();
+  _LbsShopListPageState createState() => _LbsShopListPageState();
 
 }
 
-class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepAliveClientMixin {
+class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAliveClientMixin {
 
   // _CategoryListPageState({Key key, @required this.category_id});
 
@@ -55,13 +55,13 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
   @override
   void initState() {
 
-    debugPrint("-------CategoryListPage state");
+    debugPrint("-------LbsShopListPage state");
     debugPrint(widget.category_id.toString());
     super.initState();
 
     //TODO for test
     // _goodsListFuture = _getHotGoods(25, 8, 1);
-     _goodsListFuture = _getHotGoodsList(widget.category_id, widget.page_size);
+     _goodsListFuture = _getShopList(widget.category_id, widget.page_size);
 
   }
 
@@ -114,7 +114,7 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
 
     return  Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      appBar: AppBar(title: Text('类目商品'),),
+      appBar: AppBar(title: Text('附近商店'),),
       body:
        FutureBuilder(
 
@@ -279,7 +279,7 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
 //   });
 // },
 
-    _getHotGoodsList(category_id, page_size) async{
+    _getShopList(category_id, page_size) async{
 
      await _getHotGoods(category_id, page_size, 1);
      myPage++;
@@ -301,13 +301,13 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
     var formPage={'categoryId': category_id, 'num': num, 'page': page};
 
      // request('homePageBelowConten',formData:formPage)
-     String strUrl = ApiService.mall_goods_top_url + 'category_id=${category_id}&num=${num}&page=${page}';
+     String strUrl = ApiService.shop_list_by_geohash_url + 'category_id=${category_id}&num=${num}&page=${page}';
 
 
      var data = await MNet.getData(strUrl);
 
        //var data=json.decode(val.toString());
-       debugPrint("首页HOT GOODS商品列表");
+       debugPrint("店铺列表");
        debugPrint(data.toString());
 
        List<Map> newGoodsList = (data['data'] as List ).cast();
@@ -320,10 +320,10 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
   _getMoreGoods(category_id, num, page) async{
 
     var formPage={'categoryId': category_id, 'num': num, 'page': page};
-    String strUrl = ApiService.mall_goods_top_url + 'category_id=${category_id}&num=${num}&page=${page}';
+    String strUrl = ApiService.shop_list_by_geohash_url + 'category_id=${category_id}&num=${num}&page=${page}';
     var data = await MNet.getData(strUrl);
     //var data=json.decode(val.toString());
-    debugPrint("category list商品列表");
+    debugPrint("店铺列表");
     debugPrint(data.toString());
     List<Map> newGoodsList = (data['data'] as List ).cast();
     // goodsList[category_id] = newGoodsList;
@@ -390,7 +390,7 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
                   // Image.network("http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg" ,width: ScreenUtil().setWidth(375),),
                   Text(
                    // val['name'],
-                    val['product_name'],
+                    val['company_name'],
                     // "test_name1",
                     maxLines: 1,
                     overflow:TextOverflow.ellipsis ,
@@ -399,7 +399,7 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
                   Row(
                     children: <Widget>[
                      // Text('￥${val['mallPrice']}'),
-                      Text('￥${val['general_price']}'),
+                      Text('${val['address1']}'),
                       // Text('￥100'),
                       // Text( '￥${val['price']}',style: TextStyle(color:Colors.black26,decoration: TextDecoration.lineThrough),  )
                       Text( '￥',style: TextStyle(color:Colors.black26,decoration: TextDecoration.lineThrough),

@@ -8,9 +8,9 @@ class ApiService {
 
   //PRODUCTION
 
-  static const base_path = 'https://www.dg006.com/api/';
+ // static const base_path = 'https://www.dg006.com/api/';
   //TEST
-  // static const base_path = 'http://yueapps.com/api/';
+static const base_path = 'http://yueapps.com/api/';
 
   static const base_url = '${base_path}v1/';
 
@@ -74,7 +74,8 @@ class ApiService {
   static const mall_province_list_url = '${base_url}province/getList';
 
 
-
+///*****  通过地理位置获取附近商家列表  ***/
+  static const shop_list_by_geohash_url = '${base_url}location/getList';
 
   //获取播放列表video_list.json?mediaId=1&pageNum=1&pageSize=10
   static const feed_url = '${base_url}video_list.json?mediaId=1&pageNum=';

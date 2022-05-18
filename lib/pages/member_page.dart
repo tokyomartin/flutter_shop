@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/pages/cart_to_confirm_page.dart';
 // import 'package:flutter_shop/pages/cart_confirm_page.dart';
 import 'package:flutter_shop/pages/delivery_addr_page.dart';
+import 'package:flutter_shop/pages/lbs_shop_list_page.dart';
 
 import '../login.dart';
 import 'category_list_page.dart';
+import 'location_page.dart';
 
 
 class MemberPage extends StatelessWidget {
@@ -252,6 +254,75 @@ class MemberPage extends StatelessWidget {
     //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
   }
 
+  // CategoryListPage
+  Widget _myListLocationPage(BuildContext context, String title){
+
+    return InkWell(
+      onTap: (){
+
+        debugPrint("--订单确认页");
+        // Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
+        // Navigator.pop(context);
+        // 打开的是购物车确认页
+        // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
+        // 打开的是地址管理页
+        //return LocationPage(category_id: 25);
+        Navigator.push(context, MaterialPageRoute(builder: (context){ return LocationPage();}));
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom:BorderSide(width: 1,color:Colors.black12)
+            )
+        ),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.arrow_right),
+        ),
+      ),
+
+    );
+    //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
+  }
+
+
+  // CategoryListPage
+  Widget _myLbsShopsListPage(BuildContext context, String title){
+
+    return InkWell(
+      onTap: (){
+
+        debugPrint("--订单确认页");
+        // Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
+        // Navigator.pop(context);
+        // 打开的是购物车确认页
+        // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
+        // 打开的是地址管理页
+        //return LocationPage(category_id: 25);
+        Navigator.push(context, MaterialPageRoute(builder: (context){ return LbsShopListPage();}));
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom:BorderSide(width: 1,color:Colors.black12)
+            )
+        ),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.arrow_right),
+        ),
+      ),
+
+    );
+    //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
+  }
+
 
   // CategoryListPage
   Widget _myListLogin(BuildContext context, String title){
@@ -298,6 +369,8 @@ class MemberPage extends StatelessWidget {
             _myListTile(context, '地址管理'),
             _myListConfirm(context, '订单确认页'),
            _myListCategory(context, '类目商品'),
+          _myListLocationPage(context, '附近店铺1'),
+           _myLbsShopsListPage(context, '附近店铺2'),
           _myListLogin(context, '登录'),
             // _myListTile(context, '客服电话'),
             // _myListTile(context, '关于我们'),

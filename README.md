@@ -50,6 +50,13 @@
 ## 知识架构图
 
 
+测试的时候  可以设置DEBUG = true
+
+class SharePref {
+
+  static bool DEBUG = true;
+
+
 
 
 
