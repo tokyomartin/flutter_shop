@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/config/api_service.dart';
 // import 'package:provide/provide.dart';
 import '../provide/cart.dart';
 import './cart_page/cart_item.dart';
@@ -13,6 +14,15 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon:Icon(Icons.arrow_back),
+          onPressed: (){
+            print('返回上一页');
+            //Navigator.pop(context);
+            // Navigator.popAndPushNamed(context, "HomePage");
+            Navigator.popAndPushNamed(context, "/");
+          },
+        ),
         title: Text('购物车页面'),
       ),
       body: FutureBuilder(

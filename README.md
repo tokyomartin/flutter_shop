@@ -57,6 +57,25 @@ class SharePref {
   static bool DEBUG = true;
 
 
+开发时需要注意main。dart中
+      //ios
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return null;
+        }
+      }
+      // android
+      // _permissionGranted = await location.hasPermission();
+      // if (_permissionGranted == PermissionStatus.DENIED) {
+      //   _permissionGranted = await location.requestPermission();
+      //   if (_permissionGranted != PermissionStatus.GRANTED) {
+      //     return null;
+      //   }
+      // }
+
+
 
 
 

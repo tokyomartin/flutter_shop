@@ -8,9 +8,11 @@ class ApiService {
 
   //PRODUCTION
 
- // static const base_path = 'https://www.dg006.com/api/';
+ static const base_path = 'https://www.dg006.com/api/';
   //TEST
-static const base_path = 'http://yueapps.com/api/';
+//static const base_path = 'http://192.168.3.6/api/';
+//  static const base_path = 'http://192.168.0.71/api/';
+ // static const base_path = 'http://yueapps.com/api/';
 
   static const base_url = '${base_path}v1/';
 
@@ -42,7 +44,7 @@ static const base_path = 'http://yueapps.com/api/';
   static const mall_goods_url = '${base_url}productList?category_id=25&num=5';
 
   //TODO 商品详细信息列表
-  static const mall_good_detail_url = '${base_url}productDetail?product_id=';
+  static const mall_good_detail_url = '${base_url}product_detail?product_id=';
 
   //TODO 商城首页热卖商品拉取
   static const mall_goods_top_url = '${base_url}productList?';
@@ -75,7 +77,10 @@ static const base_path = 'http://yueapps.com/api/';
 
 
 ///*****  通过地理位置获取附近商家列表  ***/
-  static const shop_list_by_geohash_url = '${base_url}location/getList';
+  static const shop_list_by_geohash_url = '${base_url}location/getList?';
+  ////**** TODO 商城首页热卖商品拉取 ****/
+  static const shop_productlist_url = '${base_url}productList/getByShopId?';
+
 
   //获取播放列表video_list.json?mediaId=1&pageNum=1&pageSize=10
   static const feed_url = '${base_url}video_list.json?mediaId=1&pageNum=';

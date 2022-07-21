@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/api_service.dart';
+import 'package:flutter_shop/pages/shop_product_list_page.dart';
 import 'package:flutter_shop/util/m_net.dart';
 // import '../service/service_method.dart';
 
@@ -23,8 +24,12 @@ import 'package:common_utils/common_utils.dart';
 // 类目商品列表   显示该类别下面的商品的列表
 class LbsShopListPage extends StatefulWidget {
 
-  int page_size = 4;
-  int category_id = 1;
+  int pageSize = 2; //请求的数量
+  // int category_id = 1;
+
+  int shopId = 1001; //暂时是请求数据的列表数组下标  暂时不是店铺ID
+  double lat = 100;
+  double long = 200;
 
 
   LbsShopListPage({Key key}) : super(key: key);
@@ -44,7 +49,7 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
 
   Future _goodsListFuture;
 
-  int myPage = 1;
+  int myPage = 1; // 显示第几页
 
 
 
@@ -56,12 +61,15 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
   void initState() {
 
     debugPrint("-------LbsShopListPage state");
-    debugPrint(widget.category_id.toString());
+    // debugPrint(widget.categoryId.toString());
+    debugPrint(widget.shopId.toString());
+    debugPrint("-------LbsShopListPage lat: " + widget.lat.toString());
+    debugPrint("-------LbsShopListPage long: " + widget.long.toString());
     super.initState();
 
     //TODO for test
     // _goodsListFuture = _getHotGoods(25, 8, 1);
-     _goodsListFuture = _getShopList(widget.category_id, widget.page_size);
+     _goodsListFuture = _getShopList(widget.shopId, widget.pageSize);
 
   }
 
@@ -190,7 +198,8 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
                             // FloorContent(floorGoodsList:floor3),
                             //_getHotGoodsList(),
                             // _hotGoodsWidget("火爆专区",25),
-                            _hotGoodsWidget("火爆专区", widget.category_id),
+                            _hotGoodsWidget("火爆专区", widget.shopId),
+                            // _hotGoodsWidget("火爆专区", widget.category_id),
                            // _hotGoodsWidget("精品专区",26),
 
                           ],
@@ -288,20 +297,21 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
   }
      _getMoreList() async{
 
-       debugPrint("_getMoreGoods call");
-      await _getMoreGoods(widget.category_id, widget.page_size, myPage);
+       debugPrint("_getMoreShop call");
+      // await _getMoreGoods(widget.category_id, widget.page_size, myPage);
+       await _getMoreGoods(widget.shopId, widget.pageSize, myPage);
 
       return true;
 
     }
 
   //火爆商品接口
-   _getHotGoods(category_id, num, page) async{
+   _getHotGoods(shopId, pageSize, pageNo) async{
 
-    var formPage={'categoryId': category_id, 'num': num, 'page': page};
+    // var formPage={'shopId': shopId, 'num': num, 'page': page};
 
      // request('homePageBelowConten',formData:formPage)
-     String strUrl = ApiService.shop_list_by_geohash_url + 'category_id=${category_id}&num=${num}&page=${page}';
+     String strUrl = ApiService.shop_list_by_geohash_url + 'shopId=${shopId}&lat=${widget.lat}&long=${widget.long}&page_size=${pageSize}&page_no=${pageNo}';
 
 
      var data = await MNet.getData(strUrl);
@@ -311,16 +321,17 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
        debugPrint(data.toString());
 
        List<Map> newGoodsList = (data['data'] as List ).cast();
-       goodsList[category_id] = newGoodsList;
+       goodsList[shopId] = newGoodsList;
        myPage = 1;
          // goodsList[category_id].addAll(newGoodsList);
   }
 
   //火爆商品接口
-  _getMoreGoods(category_id, num, page) async{
+  _getMoreGoods(shopId, pageSize, pageNo) async{
 
-    var formPage={'categoryId': category_id, 'num': num, 'page': page};
-    String strUrl = ApiService.shop_list_by_geohash_url + 'category_id=${category_id}&num=${num}&page=${page}';
+    // var formPage={'shopId': shopId, 'num': num, 'page': page};
+
+    String strUrl = ApiService.shop_list_by_geohash_url + 'shopId=${shopId}&lat=${widget.lat}&long=${widget.long}&page_size=${pageSize}&page_no=${pageNo}';
     var data = await MNet.getData(strUrl);
     //var data=json.decode(val.toString());
     debugPrint("店铺列表");
@@ -328,7 +339,7 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
     List<Map> newGoodsList = (data['data'] as List ).cast();
     // goodsList[category_id] = newGoodsList;
     setState(() {
-          goodsList[category_id].addAll(newGoodsList);
+          goodsList[shopId].addAll(newGoodsList);
           myPage++;
        });
   }
@@ -353,25 +364,31 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
 
   }
 
-  getHotGoodsList(category_id){
-    return goodsList[category_id];
+  getHotGoodsList(shopId){
+    return goodsList[shopId];
   }
 
   //火爆专区子项
-  Widget _wrapList(category_id){
+  Widget _wrapList(shopId){
 
-    List<Map> hotGoodsListItem = goodsList[category_id];
+    List<Map> hotGoodsListItem = goodsList[shopId];
 
     if(hotGoodsListItem!= null && hotGoodsListItem.length!=0){
 
       List<Widget> listWidget = hotGoodsListItem.map((val){
           
           return InkWell(
-            onTap:(){
+              onTap:(){
+                debugPrint("首页 hotTitle----ShopProductListPage");
+                // Application.router.navigateTo(context,"/detail?id=${val['id']}");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context){
+                      return ShopProductListPage(shopId: val['id']);
+                    }
+                    )
+                );
+              },
 
-              // Application.router.navigateTo(context,"/detail?id=${val['goodsId']}");
-              Application.router.navigateTo(context,"/detail?id=${val['id']}");
-            },
             child: 
             Container(
               width: ScreenUtil().setWidth(372),
@@ -391,6 +408,14 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
                   Text(
                    // val['name'],
                     val['company_name'],
+                    // "test_name1",
+                    maxLines: 1,
+                    overflow:TextOverflow.ellipsis ,
+                    style: TextStyle(color:Colors.pink,fontSize: ScreenUtil().setSp(26)),
+                  ),
+                  Text(
+                    // val['name'],
+                    "(" + val['distKm'] + "公里)" ,
                     // "test_name1",
                     maxLines: 1,
                     overflow:TextOverflow.ellipsis ,

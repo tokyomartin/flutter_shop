@@ -133,8 +133,9 @@ class DetailsBottom extends StatelessWidget {
            InkWell(
              onTap: ()async{
                  // await Provider.of<CartProvide>(context, listen: false).remove();
-
-               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => CartPage()), (Route<dynamic> route) => false);
+               //销毁当前页面 只剩下后面的画面
+               //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => CartPage()), (Route<dynamic> route) => false);
+               Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => CartPage()));
 
              },
              child: Container(

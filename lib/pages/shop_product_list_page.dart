@@ -6,6 +6,7 @@ import 'package:flutter_shop/util/m_net.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../routers/application.dart';
@@ -16,27 +17,35 @@ import '../routers/application.dart';
 import '../provide/child_category.dart';
 import '../provide/currentIndex.dart';
 import '../model/category.dart';
-
 import 'package:provider/provider.dart';
-
-
 import 'package:common_utils/common_utils.dart';
 
-import 'category_list_page.dart';
+// from category_list_page
+// 类目商品列表   显示该类别下面的商品的列表
+class ShopProductListPage extends StatefulWidget {
 
-class HomePage extends StatefulWidget {
-  _HomePageState createState() => _HomePageState();
+  int page_size = 4;
+  int shopId;
+
+
+  ShopProductListPage({Key key, @required this.shopId}) : super(key: key);
+
+  _ShopProductListPageState createState() => _ShopProductListPageState();
 
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _ShopProductListPageState extends State<ShopProductListPage> with AutomaticKeepAliveClientMixin {
 
-  int page_size = 4;
-  int page = 1;
+  // _CategoryListPageState({Key key, @required this.category_id});
+
+  // int category_id = 25;
+
   // List<Map> hotGoodsList =[];
-  Map hotGoodsList ={};
+  Map goodsList ={};
 
   Future _goodsListFuture;
+
+  int myPage = 1;
 
 
 
@@ -46,12 +55,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   @override
   void initState() {
-    debugPrint("START----HomePage");
+
+    debugPrint("-------CategoryListPage state");
+    debugPrint(widget.shopId.toString());
     super.initState();
 
     //TODO for test
     // _goodsListFuture = _getHotGoods(25, 8, 1);
-     _goodsListFuture = _getHotGoodsList();
+     _goodsListFuture = _getHotGoodsList(widget.shopId, widget.page_size);
 
   }
 
@@ -63,6 +74,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   //Todo change FormState
    // GlobalKey _footerKey = GlobalKey();
   GlobalKey<FormState> _footerKey = GlobalKey<FormState>();
+
 
 //   //初始化设置 LogUtil
 //   LogUtil.init(true);
@@ -78,20 +90,32 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   Widget build(BuildContext context) {
 
     super.build(context);
-    var formData = {'lon':'115.02932','lat':'35.76189'};
 
+    //获取路由参数
+    var args = ModalRoute.of(context).settings.arguments;
+
+    debugPrint("------arguments:" + args.toString());
+
+
+    // var formData = {'lon':'115.02932','lat':'35.76189'};
     // Future<dynamic> futureEntry =  MNet.getData(ApiService.homepage_url);
+    //
     // futureEntry.then((dynamic result) {}
+    //
     // );
+
 
     Future _gerData() async {
       var response = MNet.getResponse(ApiService.homepage_url);
       return response;
     }
 
+
+
+
     return  Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      appBar: AppBar(title: Text('华人超市+'),),
+      appBar: AppBar(title: Text('类目下的商品列表'),),
       body:
        FutureBuilder(
 
@@ -103,7 +127,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
            future :   _goodsListFuture,
         builder: (context,snapshot){
 
-          debugPrint("------------homePageCategory");
+          debugPrint("------------CategoryListPage");
           debugPrint(snapshot.toString());
           debugPrint(snapshot.connectionState.toString());
           debugPrint(snapshot.data.toString());
@@ -123,28 +147,11 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
                     var myData= snapshot.data.toString();
 
-                    debugPrint("HomePageData:" + myData.toString());
+                    debugPrint("Data:" + myData.toString());
 
                    // _getHotGoods(25, 8, 1);
                    //  _getHotGoods(26, 8, 1);
-                   //     var strData = '''
-                   //  ''';
-                   //
-                   //     var data =json.decode(strData);
-                    // debugPrint("1.3 加载首页数据");
-                    //
-                    // List<Map> swiperDataList = (data['data']['slides'] as List).cast(); // 顶部轮播组件数
-                    // List<Map> navigatorList =(data['data']['category'] as List).cast(); //类别列表
-                    // String advertesPicture = data['data']['advertesPicture']['PICTURE_ADDRESS']; //广告图片
-                    // String  leaderImage= data['data']['shopInfo']['leaderImage'];  //店长图片
-                    // String  leaderPhone = data['data']['shopInfo']['leaderPhone']; //店长电话
-                    // List<Map> recommendList = (data['data']['recommend'] as List).cast(); // 商品推荐
-                    // String floor1Title =data['data']['floor1Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
-                    // String floor2Title =data['data']['floor2Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
-                    // String floor3Title =data['data']['floor3Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
-                    // List<Map> floor1 = (data['data']['floor1'] as List).cast(); //楼层1商品和图片
-                    // List<Map> floor2 = (data['data']['floor2'] as List).cast(); //楼层1商品和图片
-                    // List<Map> floor3 = (data['data']['floor3'] as List).cast(); //楼层1商品和图片
+
 
                     debugPrint("1.4 加载首页数据END");
 
@@ -152,6 +159,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                         key:_footerKey,
                         controller: _controller,
                         firstRefresh: true,
+
+
 
                         // refreshFooter: ClassicsFooter(
                         //   key:_footerKey,
@@ -170,7 +179,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                             // SwiperDiy(swiperDataList:swiperDataList ),   //页面顶部轮播组件
                             // TopNavigator(navigatorList:navigatorList),   //导航组件
 
-                            // AdBanner(advertesPicture:advertesPicture), //广告图片
+                            // AdBanner(advertesPicture:advertesPicture), //广 b    告图片
                             // LeaderPhone(leaderImage:leaderImage,leaderPhone: leaderPhone),  //广告组件
                             // Recommend(recommendList:recommendList),
                             // FloorTitle(picture_address:floor1Title),
@@ -181,31 +190,49 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                             // FloorTitle(picture_address:floor3Title),
                             // FloorContent(floorGoodsList:floor3),
                             //_getHotGoodsList(),
-
-                          //  _hotGoodsWidget("熟食（更多...）",23),
-                            _hotGoodsWidget("肉类（更多...）",24),
-                        //    _hotGoodsWidget("新品（更多...）",25),
-                            _hotGoodsWidget("爆品（更多...）",26),
-                            _hotGoodsWidget("瓜果蔬菜（更多...）",27),
-                       //     _hotGoodsWidget("腐乳（更多...）",28),
-                       //      _hotGoodsWidget("输入酒（更多...）",29),
-                      //      _hotGoodsWidget("饮料（更多...）",30),
-                     //       _hotGoodsWidget("腌制品(皮蛋酸菜类)（更多...）",31),
-                     //       _hotGoodsWidget("干货（更多...）",32),
-                            _hotGoodsWidget("面类（更多...）",33),
-                     //      _hotGoodsWidget(" 点心（更多...）",34),
-                            _hotGoodsWidget("零食（更多...）",35),
-                            _hotGoodsWidget("海鲜（更多...）",36),
-                      //      _hotGoodsWidget("食材（原材料）（更多...）",37),
-                      //      _hotGoodsWidget("辣条（更多...）",38),
-                            // _hotGoodsWidget("冻品（更多...）",39),
-                            // _hotGoodsWidget("罐头（更多...）",40),
-                            // _hotGoodsWidget("冲调类（更多...）",41),
-                       //     _hotGoodsWidget("调料（更多...）",42),
-                      //      _hotGoodsWidget("火锅（更多...）",43),
+                            // _hotGoodsWidget("火爆专区",25),
+                            _hotGoodsWidget("火爆专区", widget.shopId),
+                           // _hotGoodsWidget("精品专区",26),
 
                           ],
                         ) ,
+
+                      //loadMore
+                      // onRefresh: ()async{
+                      //   if(Provider.of<ChildCategory>(context, listen: false).noMoreText=='没有更多了'){
+                      //     Fluttertoast.showToast(
+                      //         msg: "已经到底了",
+                      //         toastLength: Toast.LENGTH_SHORT,
+                      //         gravity: ToastGravity.CENTER,
+                      //         //timeInSecForIos: 1,
+                      //         backgroundColor: Colors.pink,
+                      //         textColor: Colors.white,
+                      //         fontSize: 16.0
+                      //     );
+                      //   }else{
+                      //
+                      //     _getMoreList();
+                      //   }
+                      // },
+                        onLoad: () async {
+                          await Future.delayed(Duration(seconds: 1), () {
+                            if(Provider.of<ChildCategory>(context, listen: false).noMoreText=='没有更多了'){
+                              Fluttertoast.showToast(
+                                  msg: "已经到底了",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  //timeInSecForIos: 1,
+                                  backgroundColor: Colors.pink,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
+                            }else{
+
+                              _getMoreList();
+                            }
+                          });
+                        },
+
 
                         // loadMore
                         // onRefresh: _getHotGoodsList
@@ -253,43 +280,29 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 //   });
 // },
 
-    _getHotGoodsList() async{
+    _getHotGoodsList(category_id, page_size) async{
 
-   //  await _getHotGoods(23, this.page_size, 1); //熟食
-     await _getHotGoods(24, this.page_size, 1); //肉类
-    // await _getHotGoods(25, this.page_size, 1);  //新品
-     await _getHotGoods(26, this.page_size, 1);    //爆品
-     await _getHotGoods(27, this.page_size, 1);    //瓜果蔬菜
-  //   await _getHotGoods(28, this.page_size, 1);
-
-     //输入酒
-  //    await _getHotGoods(29, this.page_size, 1);
-  //   await _getHotGoods(30, this.page_size, 1);   //饮料
-   //  await _getHotGoods(31, this.page_size, 1);
-    // await _getHotGoods(32, this.page_size, 1);
-     await _getHotGoods(33, this.page_size, 1);  //面类
-    // await _getHotGoods(34, this.page_size, 1);
-     await _getHotGoods(35, this.page_size, 1); //零食
-     await _getHotGoods(36, this.page_size, 1);  //海鲜
-    // await _getHotGoods(37, this.page_size, 1);
-   //  await _getHotGoods(38, this.page_size, 1);  //辣条
-  //   await _getHotGoods(39, this.page_size, 1);
-   //  await _getHotGoods(40, this.page_size, 1);
-   //  await _getHotGoods(41, this.page_size, 1);
-   //  await _getHotGoods(42, this.page_size, 1);   //调料
-   //  await _getHotGoods(43, this.page_size, 1);   //火锅
-
+     await _getHotGoods(category_id, page_size, 1);
+     myPage++;
      return true;
 
   }
+     _getMoreList() async{
+
+       debugPrint("_getMoreGoods call");
+      await _getMoreGoods(widget.shopId, widget.page_size, myPage);
+
+      return true;
+
+    }
 
   //火爆商品接口
-   _getHotGoods(category_id, num, page) async{
+   _getHotGoods(shopId, num, page) async{
 
-    var formPage={'categoryId': category_id, 'num': num, 'page': page};
+    // var formPage={'shopId': shopId, 'num': num, 'page': page};
 
      // request('homePageBelowConten',formData:formPage)
-     String strUrl = ApiService.mall_goods_top_url + 'category_id=${category_id}&num=${num}&page=${page}';
+     String strUrl = ApiService.shop_productlist_url + 'shopId=${shopId}&num=${num}&page=${page}';
 
 
      var data = await MNet.getData(strUrl);
@@ -299,80 +312,56 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
        debugPrint(data.toString());
 
        List<Map> newGoodsList = (data['data'] as List ).cast();
-       hotGoodsList[category_id] = newGoodsList;
+       goodsList[shopId] = newGoodsList;
+       myPage = 1;
+         // goodsList[category_id].addAll(newGoodsList);
+  }
 
+  //火爆商品接口
+  _getMoreGoods(shopId, num, page) async{
 
-    // setState(() {
-    //      //hotGoodsList[1] = newGoodsList;
-    //      hotGoodsList[category_id] = newGoodsList;
-    //      // hotGoodsList.addAll(newGoodsList);
-    //      // page++;
-    //    });
-
+    // var formPage={'shopId': shopId, 'num': num, 'page': page};
+    String strUrl = ApiService.shop_productlist_url + 'shopId=${shopId}&num=${num}&page=${page}';
+    var data = await MNet.getData(strUrl);
+    //var data=json.decode(val.toString());
+    debugPrint("category list商品列表");
+    debugPrint(data.toString());
+    List<Map> newGoodsList = (data['data'] as List ).cast();
+    // goodsList[category_id] = newGoodsList;
+    setState(() {
+          goodsList[shopId].addAll(newGoodsList);
+          myPage++;
+       });
   }
 
   //火爆专区标题
-  Widget hotTitle(title, category_id){
+  Widget hotTitle(title){
 
-    return InkWell(
-        onTap:(){
-          debugPrint("首页 hotTitle----CategoryListPage");
-          // Application.router.navigateTo(context,"/detail?id=${val['goodsId']}");
-          // Application.router.navigateTo(context,"/detail?id=${val['id']}");
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context){
-                return CategoryListPage(category_id: category_id);
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
 
-                // settings: RouteSettings(
-                //   arguments: todos[index],
-                // ),
-          }
+      padding:EdgeInsets.all(5.0),
+      alignment:Alignment.center,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border:Border(
+              bottom: BorderSide(width:0.5 ,color:Colors.black12)
           )
-          );
-
-        },
-        child:
-        Container(
-          margin: EdgeInsets.only(top: 10.0),
-
-          padding:EdgeInsets.all(5.0),
-          alignment:Alignment.center,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border:Border(
-                  bottom: BorderSide(width:0.5 ,color:Colors.black12)
-              )
-          ),
-          //'火爆专区'
-          child: Text(title),
-        )
-
+      ),
+      //'火爆专区'
+      child: Text(title),
     );
-
-    // return Container(
-    //   margin: EdgeInsets.only(top: 10.0),
-    //   padding:EdgeInsets.all(5.0),
-    //   alignment:Alignment.center,
-    //   decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       border:Border(
-    //           bottom: BorderSide(width:0.5 ,color:Colors.black12)
-    //       )
-    //   ),
-    //   //'火爆专区'
-    //   child: Text(title),
-    // );
 
   }
 
-  getHotGoodsList(category_id){
-    return hotGoodsList[category_id];
+  getHotGoodsList(shopId){
+    return goodsList[shopId];
   }
 
   //火爆专区子项
-  Widget _wrapList(category_id){
+  Widget _wrapList(shopId){
 
-    List<Map> hotGoodsListItem = hotGoodsList[category_id];
+    List<Map> hotGoodsListItem = goodsList[shopId];
 
     if(hotGoodsListItem!= null && hotGoodsListItem.length!=0){
 
@@ -384,7 +373,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               // Application.router.navigateTo(context,"/detail?id=${val['goodsId']}");
               Application.router.navigateTo(context,"/detail?id=${val['id']}");
             },
-            child: 
+              child:
             Container(
               width: ScreenUtil().setWidth(372),
               color:Colors.white,
@@ -433,7 +422,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         children: listWidget,
       );
     }else{
-      return Text(' ');
+      return Text('数据为空');
     }
   }
 
@@ -444,7 +433,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           
           child:Column(
             children: <Widget>[
-              hotTitle(title, category_id),
+              hotTitle(title),
                _wrapList(category_id),
             ],
           )   

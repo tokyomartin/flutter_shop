@@ -11,3 +11,12 @@ Handler detailsHandler =Handler(
 
   }
 );
+
+Handler productListHandler =Handler(
+    handlerFunc: (BuildContext context,Map<String,List<String>> params){
+      String shopId = params['shop_id'].first;
+      print('index>productList SHOP ID is ${shopId}');
+      return DetailsPage(shopId);
+
+    }
+);

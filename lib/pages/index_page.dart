@@ -16,7 +16,9 @@ import '../provide/currentIndex.dart';
 import 'package:provider/provider.dart';
 
 
-
+// 框架布局页面
+// 可以设置操作，下面的动作按钮
+// 首页  -- 分类 -- 购物车 -- 会员中心
 
 class IndexPage extends StatefulWidget {
   @override

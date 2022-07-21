@@ -267,7 +267,7 @@ class MemberPage extends StatelessWidget {
         // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
         // 打开的是地址管理页
         //return LocationPage(category_id: 25);
-        Navigator.push(context, MaterialPageRoute(builder: (context){ return LocationPage();}));
+        //Navigator.push(context, MaterialPageRoute(builder: (context){ return LocationPage();}));
 
       },
       child: Container(

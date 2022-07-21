@@ -114,7 +114,7 @@ class _CategoryListPageState extends State<CategoryListPage> with AutomaticKeepA
 
     return  Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      appBar: AppBar(title: Text('类目商品'),),
+      appBar: AppBar(title: Text('类目下的商品列表'),),
       body:
        FutureBuilder(
 

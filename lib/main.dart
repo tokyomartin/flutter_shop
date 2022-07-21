@@ -158,13 +158,22 @@ class MyApp extends StatelessWidget {
       }
     }
 
+    //ios
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.DENIED) {
+    if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.GRANTED) {
+      if (_permissionGranted != PermissionStatus.granted) {
         return null;
       }
     }
+    // android
+    // _permissionGranted = await location.hasPermission();
+    // if (_permissionGranted == PermissionStatus.DENIED) {
+    //   _permissionGranted = await location.requestPermission();
+    //   if (_permissionGranted != PermissionStatus.GRANTED) {
+    //     return null;
+    //   }
+    // }
 
     LocationData _locationData;
     _locationData = await location.getLocation();

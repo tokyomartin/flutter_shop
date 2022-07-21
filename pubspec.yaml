@@ -101,6 +101,7 @@ dependencies:
   #  location: ^4.3.0
   location: any
   geocode: any
+  flutter_map: any
 
 dev_dependencies:
   flutter_test:
