@@ -215,7 +215,14 @@ class _PopViewPageState extends State<PopViewPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("PopViewPage"),
+          leading: IconButton(
+            icon:Icon(Icons.arrow_back),
+            onPressed: (){
+              debugPrint('返回上一页');
+              Navigator.popAndPushNamed(context, "/");
+            },
+          ),
+          title: Text("新建送货地址"),
           actions: <Widget>[
             // _NormalPopMenu(),
             // _DividerPopMenu(),

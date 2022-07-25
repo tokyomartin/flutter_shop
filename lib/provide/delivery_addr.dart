@@ -173,7 +173,7 @@ class DeliveryAddrProvide with ChangeNotifier{
       if(val['result'] == 'true'){
 
         Fluttertoast.showToast(
-            msg: "提交成功！",
+            msg: "设置默认邮寄地址成功！",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,

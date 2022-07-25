@@ -7,6 +7,8 @@ import './cart_page/cart_bottom.dart';
 import 'package:provider/provider.dart';
 
 
+//TODO @deprecated 不使用  可以删掉
+
 class CartConfirmPage extends StatelessWidget {
 
   @override

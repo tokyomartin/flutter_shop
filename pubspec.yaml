@@ -96,11 +96,13 @@ dependencies:
 #dependency_overrides:
 #  decimal: 1.5.0
 
+#  cached_network_image: ^2.5.1
+#  cached_network_image: ^2.5.1
 
 
   #  location: ^4.3.0
   location: any
-  geocode: any
+  geocode: ^1.0.1
   flutter_map: any
 
 dev_dependencies:

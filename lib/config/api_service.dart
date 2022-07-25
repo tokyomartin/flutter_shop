@@ -81,6 +81,12 @@ class ApiService {
   ////**** TODO 商城首页热卖商品拉取 ****/
   static const shop_productlist_url = '${base_url}productList/getByShopId?';
 
+ //TODO 后台管理平台  订单列表  改成用户前端平台
+ static const String mgr_orders_search_url = '${base_url}mgr/ordersSearch?';
+ //yueapps.com/api/v1/mgr/ordersSearch?shopId=1001
+
+
+
 
   //获取播放列表video_list.json?mediaId=1&pageNum=1&pageSize=10
   static const feed_url = '${base_url}video_list.json?mediaId=1&pageNum=';

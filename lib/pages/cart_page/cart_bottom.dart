@@ -8,6 +8,7 @@ import '../../provide/cart.dart';
 import 'package:provider/provider.dart';
 
 import '../cart_to_confirm_page.dart';
+import '../confirmOrder.dart';
 
 
 class CartBottom extends StatelessWidget {
@@ -113,7 +114,7 @@ class CartBottom extends StatelessWidget {
       padding: EdgeInsets.only(left: 10),
       child:InkWell(
         onTap: (){
-           Navigator.push(context, MaterialPageRoute(builder: (context){ return CartToConfirmPage();}));
+           Navigator.push(context, MaterialPageRoute(builder: (context){ return ConfirmOrderPage();}));
         },
         child: Container(
           padding: EdgeInsets.all(10.0),
