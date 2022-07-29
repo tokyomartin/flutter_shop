@@ -67,6 +67,9 @@
               <meta-data
                   android:name="io.flutter.embedding.android.SplashScreenUntilFirstFrame"
                   android:value="true" />
+              <!--  google地图API KEY  -->
+              <meta-data android:name="com.google.android.geo.API_KEY"
+                  android:value="AIzaSyChkkF4LyVqpDUldBUQqHyN7L8ic7tQuEg"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

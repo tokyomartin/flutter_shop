@@ -4,6 +4,7 @@ import 'package:flutter_shop/pages/cart_to_confirm_page.dart';
 import 'package:flutter_shop/pages/confirmOrder.dart';
 // import 'package:flutter_shop/pages/cart_confirm_page.dart';
 import 'package:flutter_shop/pages/delivery_addr_page.dart';
+import 'package:flutter_shop/pages/map_sample.dart';
 import 'package:flutter_shop/util/share_pref.dart';
 import 'package:flutter_shop/pages/lbs_shop_list_page.dart';
 
@@ -389,6 +390,41 @@ class MemberPage extends StatelessWidget {
 
 
   // CategoryListPage
+  Widget _myGoogleMapPage(BuildContext context, String title){
+
+    return InkWell(
+      onTap: (){
+
+        debugPrint("--订单确认页");
+        // Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
+        // Navigator.pop(context);
+        // 打开的是购物车确认页
+        // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
+        // 打开的是地址管理页
+        //return LocationPage(category_id: 25);
+        Navigator.push(context, MaterialPageRoute(builder: (context){ return MapSample();}));
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom:BorderSide(width: 1,color:Colors.black12)
+            )
+        ),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.arrow_right),
+        ),
+      ),
+
+    );
+    //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
+  }
+
+
+  // CategoryListPage
   Widget _myOrderListPage(BuildContext context, String title){
 
     return InkWell(
@@ -499,13 +535,14 @@ class MemberPage extends StatelessWidget {
             _myListTile(context, '地址管理'),
            // TODO @deprecated
           // _myListConfirm(context, '订单确认页'),
-          _myOrderListPage(context, '店铺订单'),
-          _myListConfirmPage(context, '订单确认页2'),
+           _myOrderListPage(context, '店铺订单'),
+           _myListConfirmPage(context, '订单确认页2'),
            _myListCategory(context, '类目商品'),
-          _myListLocationPage(context, '附近店铺1'),
+           _myListLocationPage(context, '附近店铺1'),
            _myLbsShopsListPage(context, '附近店铺2'),
-          _myListLogin(context, '登录'),
-          _myListLogout(context, '退出'),
+           _myGoogleMapPage(context, 'Google Map'),
+           _myListLogin(context, '登录'),
+           _myListLogout(context, '退出'),
             // _myListTile(context, '客服电话'),
             // _myListTile(context, '关于我们'),
         ],

@@ -56,7 +56,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.dg006.fluttershop"
-        minSdkVersion 19
+        minSdkVersion 20  // 之前版本是19  改成20 google地图最低版本支持20
         targetSdkVersion 30
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()

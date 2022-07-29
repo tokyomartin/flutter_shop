@@ -103,7 +103,9 @@ dependencies:
   #  location: ^4.3.0
   location: any
   geocode: ^1.0.1
-  flutter_map: any
+ # flutter_map: any
+  google_maps_flutter: any
+
 
 dev_dependencies:
   flutter_test:
