@@ -1,10 +1,13 @@
+
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import 'dart:convert';
 // import 'dart:developer';
 import 'package:flutter/services.dart';
-import 'package:flutter_shop/pages/RegisterPage.dart';
+import 'package:flutter_shop/pages/register_page.dart';
 import 'package:flutter_shop/pages/index_page.dart';
 import 'package:flutter_shop/provide/user_detail.dart';
 import 'package:flutter_shop/util/share_pref.dart';
@@ -66,12 +69,15 @@ class _LoginState extends State<Login> {
             // show login page
             // return Center();
 
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => IndexPage()), (Route<dynamic> route) => false);
+             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => IndexPage()), (Route<dynamic> route) => false);
 
           }else{
          // show not login page
+             //return Text("not valid user account｜没有这个用户");
 
           }
+          throw 'not valid user account｜没有这个用户';
+
        },
      );
   }
@@ -107,7 +113,7 @@ class _LoginState extends State<Login> {
     padding: EdgeInsets.all(2.0),
     decoration: BoxDecoration(
       shape: BoxShape.circle,
-      border: Border.all(width:  2.0, color: Colors.grey[500]),
+      border: Border.all(width:  2.0, color: Colors.grey), //Colors.grey[500]
     ),
     child: isSelected ? Container(
       width: double.infinity,
@@ -124,7 +130,7 @@ class _LoginState extends State<Login> {
   Widget horizontalLine() => Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.0),
     child: Container(
-      width: ScreenUtil.getInstance().setWidth(120),
+      width: ScreenUtil().setWidth(120),
       height: 1.0,
       color: Colors.black26.withOpacity(.2),
     ),
@@ -199,8 +205,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance=ScreenUtil.getInstance()..init(context);
-    ScreenUtil.instance = ScreenUtil(width: 770, height: 1334, allowFontScaling: true);
+
+    // ScreenUtil.instance=ScreenUtil.getInstance()..init(context);
+    // ScreenUtil.instance = ScreenUtil(width: 770, height: 1334, allowFontScaling: true);
+
+    ScreenUtil.init(context);
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent));
 
     debugPrint("--------1.0 build----------");
@@ -230,13 +240,13 @@ class _LoginState extends State<Login> {
                       children: <Widget>[
                         Image(image: AssetImage(
                           'images/subicjobs-login-logo.jpg'),
-                          width: ScreenUtil.getInstance().setWidth(110),
-                          height: ScreenUtil.getInstance().setHeight(110),
+                          width: ScreenUtil().setWidth(110),
+                          height: ScreenUtil().setHeight(110),
                           ),
                         Text("家宜精选スーパー",
                           style: TextStyle(
                             fontFamily: "Poppins-Bold",
-                            fontSize:  ScreenUtil.getInstance().setSp(46),
+                            fontSize:  ScreenUtil().setSp(46),
                             letterSpacing: .6,
                             fontWeight: FontWeight.bold
                           ),
@@ -248,7 +258,7 @@ class _LoginState extends State<Login> {
                         Text("[日本配送]",
                           style: TextStyle(
                               fontFamily: "Poppins-Bold",
-                              fontSize:  ScreenUtil.getInstance().setSp(46),
+                              fontSize:  ScreenUtil().setSp(46),
                               letterSpacing: .6,
                               fontWeight: FontWeight.bold
                           ),
@@ -256,12 +266,12 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                     SizedBox(
-                          height: ScreenUtil.getInstance().setHeight(220),
+                          height: ScreenUtil().setHeight(220),
                     ),
                     //form
                     Container(
                       width: double.infinity,
-                      height: ScreenUtil.getInstance().setHeight(450),
+                      height: ScreenUtil().setHeight(450),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
@@ -284,12 +294,12 @@ class _LoginState extends State<Login> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text("LOGIN 登录", style:TextStyle(
-                                fontSize: ScreenUtil.getInstance().setSp(45),
+                                fontSize: ScreenUtil().setSp(45),
                                 fontFamily: "Poppins-Bold",
                                 letterSpacing: .6,
                               )),
                               SizedBox(
-                                height: ScreenUtil.getInstance().setHeight(25),
+                                height: ScreenUtil().setHeight(25),
                               ),
                               TextField(
                                 controller: emailController,
@@ -302,7 +312,7 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               SizedBox(
-                                height: ScreenUtil.getInstance().setHeight(30),
+                                height: ScreenUtil().setHeight(30),
                               ),
                               TextField(
                                 controller: passwordController,
@@ -315,7 +325,7 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: ScreenUtil.getInstance().setHeight(35),),
+                              SizedBox(height: ScreenUtil().setHeight(35),),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
@@ -323,7 +333,7 @@ class _LoginState extends State<Login> {
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontFamily: "Poppins-Medium",
-                                  fontSize: ScreenUtil.getInstance().setSp(28)
+                                  fontSize: ScreenUtil().setSp(28)
                                 ),)
                               ],),
                               Row(
@@ -333,7 +343,7 @@ class _LoginState extends State<Login> {
                                     style: TextStyle(
                                         color: Colors.blue,
                                         fontFamily: "Poppins-Medium",
-                                        fontSize: ScreenUtil.getInstance().setSp(28)
+                                        fontSize: ScreenUtil().setSp(28)
                                     ),)
                                 ],),
                           
@@ -342,7 +352,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil.getInstance().setHeight(50),
+                      height: ScreenUtil().setHeight(50),
                     ),
 
                     Row(
@@ -366,8 +376,8 @@ class _LoginState extends State<Login> {
                         ),
                         InkWell(
                           child: Container(
-                            width: ScreenUtil.getInstance().setWidth(330.0),
-                            height: ScreenUtil.getInstance().setHeight(100),
+                            width: ScreenUtil().setWidth(330.0),
+                            height: ScreenUtil().setHeight(100),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -412,7 +422,7 @@ class _LoginState extends State<Login> {
                         ),
                       ],
                     ),
-                    SizedBox(height: ScreenUtil.getInstance().setHeight(20),),
+                    SizedBox(height: ScreenUtil().setHeight(20),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -428,7 +438,7 @@ class _LoginState extends State<Login> {
                       ],
                     ),
 
-                    SizedBox(height: ScreenUtil.getInstance().setHeight(20),),
+                    SizedBox(height: ScreenUtil().setHeight(20),),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.center,
                     //   children: <Widget>[
@@ -460,7 +470,7 @@ class _LoginState extends State<Login> {
                     ),
                       label: Text("Sign Up with Google"),
                     ),
-                    SizedBox(height: ScreenUtil.getInstance().setHeight(40),),
+                    SizedBox(height: ScreenUtil().setHeight(40),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[

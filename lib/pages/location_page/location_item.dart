@@ -40,7 +40,7 @@ class LocationItem extends StatelessWidget {
       child: Checkbox(
         value: item.checked,
         activeColor:Colors.pink,
-        onChanged: (bool val){
+        onChanged: (val){
           item.checked=val;
           debugPrint("---------_cartCheckBt---------");
           //TODO Provider.of<LocationProvide>(context, listen: false).changeCheckState(  context, item);
@@ -62,8 +62,11 @@ class LocationItem extends StatelessWidget {
            item.small_pic,
           // item.images,
           //item.img,
-          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-            return Text('Your error widget...');
+          errorBuilder: (c, o, s) {
+            return const Icon(
+              Icons.error,
+              color: Colors.red,
+            );
           }
           ),
     );

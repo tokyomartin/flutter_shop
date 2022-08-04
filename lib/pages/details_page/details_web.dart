@@ -13,7 +13,7 @@ class DetailsWeb extends StatelessWidget {
 
 
     // var goodsDetail = Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo.data.goodInfo.goodsDetail;
-    var discription = Provider.of<DetailsInfoProvide>(context, listen: false).detailResult.data.product.discription;
+    var discription = Provider.of<DetailsInfoProvide>(context, listen: false).detailResult?.data?.product?.discription;
 
     //Provider.of<DetailsInfoProvide>(context, listen: false)
 

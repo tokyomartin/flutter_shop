@@ -2,38 +2,44 @@
 import 'package:flutter/widgets.dart';
 
 import 'order.dart';
-import 'sales_results_model.dart';
+// import 'sales_results_model.dart';
 
 class OrderListModel {
 
 
-  int code;
-  String message;
-  String result;
-  List<OrderModel> data;
-  int data_count;
+  final int    code;
+  final String message;
+  final String result;
+  final List<OrderModel> data;
+  final int    data_count;
 
-  OrderListModel (this.code, this.message, this.data_count, this.data,t );
+  OrderListModel ({
+    required  this.code,
+    required  this.message,
+    required  this.result,
+    required  this.data_count,
+    required  this.data
+     });
 
-  OrderListModel.fromJson(Map<String, dynamic> json) {
-    debugPrint("------from json1----");
-    code = json['code'];
-    message = json['message'];
-    result = json['result'];
-    data_count = json['data_count'];
+  factory OrderListModel.fromJson(Map<String, dynamic> json) {
 
-    debugPrint("------from json2----");
-
+    var data = <OrderModel>[];
     if(null != json['data']){
-      data = new List<OrderModel>();
       // sales_results
       json['data'].forEach((v) {
         debugPrint("------v.toString()----");
-        debugPrint(v.toString());
+        debugPrint(v?.toString());
         data.add(new OrderModel.fromJson(v));
       });
     }
 
+    return OrderListModel(
+        code : json['code'],
+        message : json['message'],
+        result : json['result'],
+        data_count : json['data_count'],
+        data: data,
+    );
   }
 
 }

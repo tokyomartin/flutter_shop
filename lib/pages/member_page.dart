@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/pages/cart_to_confirm_page.dart';
+
 import 'package:flutter_shop/pages/confirmOrder.dart';
 // import 'package:flutter_shop/pages/cart_confirm_page.dart';
 import 'package:flutter_shop/pages/delivery_addr_page.dart';
 import 'package:flutter_shop/pages/map_sample.dart';
+import 'package:flutter_shop/screens/search_places_screen.dart';
 import 'package:flutter_shop/util/share_pref.dart';
 import 'package:flutter_shop/pages/lbs_shop_list_page.dart';
 
@@ -50,9 +51,12 @@ class MemberPage extends StatelessWidget {
               child:
               // NetworkImage('http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg')
                Image.network('http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg',
-                 errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                 return Text('Your error widget...');
-               })
+                   errorBuilder: (c, o, s) {
+                     return const Icon(
+                       Icons.error,
+                       color: Colors.red,
+                     );
+                   })
             ),
           ),
           Container(
@@ -230,7 +234,7 @@ class MemberPage extends StatelessWidget {
         // 打开的是购物车确认页
         // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
         // 打开的是地址管理页
-        Navigator.push(context, MaterialPageRoute(builder: (context){ return CartToConfirmPage();}));
+        //Navigator.push(context, MaterialPageRoute(builder: (context){ return CartToConfirmPage();})); //TODO 已经不使用该页面
 
       },
       child: Container(
@@ -423,6 +427,39 @@ class MemberPage extends StatelessWidget {
     //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
   }
 
+  Widget _mySearchPlacesPage(BuildContext context, String title){
+
+    return InkWell(
+      onTap: (){
+
+        debugPrint("--订单确认页");
+        // Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
+        // Navigator.pop(context);
+        // 打开的是购物车确认页
+        // Navigator.push(context, MaterialPageRoute(builder: (context){ return CartConfirmPage();}));
+        // 打开的是地址管理页
+        //return LocationPage(category_id: 25);
+        Navigator.push(context, MaterialPageRoute(builder: (context){ return const SearchPlacesScreen();}));
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom:BorderSide(width: 1,color:Colors.black12)
+            )
+        ),
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text(title),
+          trailing: Icon(Icons.arrow_right),
+        ),
+      ),
+
+    );
+    //Navigator.push(context, MaterialPageRoute(builder: (context){ return Register();}))
+  }
+
 
   // CategoryListPage
   Widget _myOrderListPage(BuildContext context, String title){
@@ -430,7 +467,7 @@ class MemberPage extends StatelessWidget {
     return InkWell(
       onTap: (){
 
-        debugPrint("--订单确认页");
+        debugPrint("--客户订单页");
         // Provider.of<CurrentIndexProvide>(context, listen: false).changeIndex(2);
         // Navigator.pop(context);
         // 打开的是购物车确认页
@@ -541,6 +578,7 @@ class MemberPage extends StatelessWidget {
            _myListLocationPage(context, '附近店铺1'),
            _myLbsShopsListPage(context, '附近店铺2'),
            _myGoogleMapPage(context, 'Google Map'),
+          _mySearchPlacesPage(context, 'search place'),
            _myListLogin(context, '登录'),
            _myListLogout(context, '退出'),
             // _myListTile(context, '客服电话'),

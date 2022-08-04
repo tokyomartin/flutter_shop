@@ -2,39 +2,57 @@
 import 'package:flutter/material.dart';
 
 class DeliveryAddrModel {
-  int id;
-  int member_id;
-  String post_code_front;
-  String post_code_back;
-  String prefecture;
-  String city;
-  String address1;
-  String last_name;
-  String first_name;
-  String last_name_kana;
-  String first_name_kana;
-  String company_name;
-  String phone_number;
-  int is_default;
+   int   ? id;
+   int   ? member_id;
+   String? post_code_front;
+   String? post_code_back;
+   String? prefecture;
+   String? city;
+   String? address1;
+   String? last_name;
+   String? first_name;
+   String? last_name_kana;
+   String? first_name_kana;
+   String? company_name;
+   String? phone_number;
+   int   ? is_default;
+
+
 
   DeliveryAddrModel(
-      {this.id,
-        this.member_id,
-        this.post_code_front,
-        this.post_code_back,
-        this.prefecture,
-        this.city,
-        this.address1,
-        this.last_name,
-        this.first_name,
-        this.last_name_kana,
-        this.first_name_kana,
-        this.company_name,
-        this.phone_number,
-        this.is_default,
+      {
+       this.id,
+       this.member_id,
+       this.post_code_front,
+       this.post_code_back,
+       this.prefecture,
+       this.city,
+       this.address1,
+       this.last_name,
+       this.first_name,
+       this.last_name_kana,
+       this.first_name_kana,
+       this.company_name,
+       this.phone_number,
+       this.is_default,
       });
 
-  DeliveryAddrModel.fromJson(Map<String, dynamic> json) {
+  factory DeliveryAddrModel.fromJson(Map<String, dynamic> json) {
+
+    dynamic id;
+    dynamic member_id;
+    dynamic post_code_front;
+    dynamic post_code_back;
+    dynamic prefecture;
+    dynamic city;
+    dynamic address1;
+    dynamic last_name;
+    dynamic first_name;
+    dynamic phone_number;
+    dynamic last_name_kana;
+    dynamic first_name_kana;
+    dynamic company_name;
+    dynamic is_default;
 
     debugPrint("------DeliveryAddrModel.toString()----");
     if(json != null) {
@@ -61,6 +79,23 @@ class DeliveryAddrModel {
 
       debugPrint("------ERROR end DeliveryAddrModel.toString()----");
     }
+
+    return DeliveryAddrModel(
+      id : id,
+      member_id : member_id,
+      post_code_front : post_code_front,
+      post_code_back : post_code_back,
+      prefecture : prefecture,
+      city : city,
+      address1 : address1,
+      last_name : last_name,
+      first_name : first_name,
+      phone_number : phone_number,
+      last_name_kana : last_name_kana,
+      first_name_kana : first_name_kana,
+      company_name : company_name,
+      is_default : is_default,
+    );
 
     debugPrint("------end DeliveryAddrModel.toString()----");
   }

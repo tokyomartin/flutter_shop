@@ -7,9 +7,9 @@ import '../../provide/delivery_addr.dart';
 
 import 'package:provider/provider.dart';
 
-import '../PopViewPage.dart';
-import '../form_address_page.dart';
-import '../form_test_route.dart';
+import '../pop_view_page.dart';
+// import '../form_address_page.dart';
+// import '../form_test_route.dart';
 
 
 class DeliveryAddrBottom extends StatelessWidget {
@@ -42,7 +42,7 @@ class DeliveryAddrBottom extends StatelessWidget {
           Checkbox(
             value: isAllCheck,
             activeColor: Colors.pink,
-            onChanged: (bool val){
+            onChanged: (val){
               // Provider.of<DeliveryAddrProvide>(context, listen: false).changeAllCheckBtnState(val);
 
             },

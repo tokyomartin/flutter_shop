@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:dio/dio.dart';
 import '../config/api_service.dart';
+import '../model/sales_results_model.dart';
 import '../util/m_net.dart';
 
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
 // 获取订单列表
-Future getOrderList(int page, int limit, int type) async {
+Future getOrderList(int page, int limit, int? type) async {
   print('当前页码：' +
       page.toString() +
       'limit：' +
@@ -93,6 +94,8 @@ String orderStatus(int status) {
     return '注文取消';
   }else if (status == 10) {
     return '決済error';
+  }else{
+    return 'ERROR';
   }
 }
 
@@ -154,12 +157,13 @@ Widget orderListUI(OrderModel order, BuildContext context) {
 
   List<Widget> child = [];
 
-  if(order.salesResultsList == null || order.salesResultsList.isEmpty ){
+  if(order.salesResultsList == null || order.salesResultsList.isEmpty == true ){
     return Text("没有商品信息");
   }
-  for (var i = 0; i < order.salesResultsList.length; i++) {
+  int len = order.salesResultsList.length;
+  for (var i = 0; i < len; i++) {
 
-    var salesResults = order.salesResultsList[i];
+    SalesResultsModel salesResults = order.salesResultsList[i];
     child.add(Container(
       margin: EdgeInsets.all(10.0),
       child: Column(
@@ -175,8 +179,11 @@ Widget orderListUI(OrderModel order, BuildContext context) {
                 children: <Widget>[
 
                   Image.network('http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg',
-                      errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                        return Text('Your error widget...');
+                      errorBuilder: (c, o, s) {
+                        return const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        );
                       })
 
                   // 图片缓存
@@ -211,7 +218,7 @@ Widget orderListUI(OrderModel order, BuildContext context) {
                             style: TextStyle(fontSize: 16.0),
                           ),
                           Text(
-                            order.salesResultsList[i].cn_product_name,
+                            order.salesResultsList[i].cn_product_name?? '',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -255,7 +262,7 @@ Widget orderListUI(OrderModel order, BuildContext context) {
                         margin: EdgeInsets.only(left: 10.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          border: Border.all(color: Colors.grey[400]),
+                          border: Border.all(color: Colors.grey), //Colors.grey[400]
                         ),
                         child: Center(
                           child: Text('取消订单'),
@@ -317,7 +324,7 @@ Widget orderListUI(OrderModel order, BuildContext context) {
                         margin: EdgeInsets.only(left: 10.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          border: Border.all(color: Colors.grey[400]),
+                          border: Border.all(color: Colors.grey), //Colors.grey[400]
                         ),
                         child: Center(
                           child: Text('去评价'),
@@ -338,33 +345,9 @@ Widget orderListUI(OrderModel order, BuildContext context) {
 
 /// 质感设计样式   订单列表页 入口
 class OrderPage extends StatefulWidget {
-  final int orderType;
 
-  const OrderPage(this.orderType);
+  int orderType;
 
-  @override
-  OrderPageState createState() => OrderPageState(orderType);
-}
-
-class OrderPageState extends State<OrderPage> {
-  OrderPageState(this.orderType);
-
-  TabController _controller;
-  // 是否正在加载
-  bool loading = false;
-  // 条数
-  int total = 0;
-  // 当前页数
-  int pageNo = 1;
-  // 订单类型
-  final int orderType;
-  // 每次获取条数
-  int limit = 10;
-  // 当前tab
-  int currentTab = 0;
-  // 订单列表
-  List<OrderModel> orderList = <OrderModel>[];
-// TODO 修改Tab内容  TAB页
   final List<Map<String, dynamic>> _tabValues = [
     {'title': '全部','route': '0'},
     {'title': '待付款|決済待ち','route': '1'},  //待付款|決済待ち
@@ -379,39 +362,122 @@ class OrderPageState extends State<OrderPage> {
     {'title': '決済error','route': '10'},    // 完成 決済error
   ];
 
+
+
+  OrderPage(
+        this.orderType
+      );
+
+  @override
+  OrderPageState createState() => OrderPageState(this.orderType);
+
+  // @override
+  // OrderPageState createState(){
+  //
+  //   //debugPrint('▼ Widget的CreatState！');
+  //   return OrderPageState(orderType);
+  //
+  // }
+}
+
+class OrderPageState extends State<OrderPage> {
+
+  OrderPageState(
+      this.orderType
+  );
+
+  // OrderPageState(int orderType) {
+  //   // TODO: implement
+  //   print('orderList OrderPageState State的构造方法');
+  //   this.orderType = orderType;
+  //   throw UnimplementedError();
+  // }
+
+  // TODO 修改Tab内容  TAB页
+  static List<Map<String, dynamic>> _tabValues = [
+    {'title': '全部','route': '0'},
+    {'title': '待付款|決済待ち','route': '1'},  //待付款|決済待ち
+    {'title': '決済完了|配送待ち','route': '2'},   //決済完了|配送待ち
+    {'title': '出库中|配送準備','route': '3'},   //出库中|配送準備
+    {'title': '待收货|確認待ち','route': '4'},    //待收货|確認待ち
+    {'title': '荷物届く|完了','route': '5'},    //荷物届く|完了  待评价
+    {'title': '評価完了','route': '6'},    //
+    {'title': '退款｜払い戻すに申請','route': '7'},    //
+    {'title': '关闭｜閉める','route': '8'},    // 完成　閉める
+    {'title': '注文取消','route': '9'},    // 完成 決済error
+    {'title': '決済error','route': '10'},    // 完成 決済error
+  ];
+
+
+
+  //TAB 控件
+ // TabController _controller;
+  // 是否正在加载
+  bool loading = false;
+  // 条数
+  int total = 0;
+  // 当前页数
+  int pageNo = 1;
+  // 订单类型
+  int orderType = 0;
+  // 每次获取条数
+  int limit = 10;
+  // 当前tab
+  int currentTab = 0;
+  // 订单列表
+  List<OrderModel> orderList = <OrderModel>[];
+
+
+
+  TabController controller  = new TabController(
+    length: _tabValues.length,
+    initialIndex: 0, //orderType // index 就是订单类型 order status的订单类型
+    vsync: ScrollableState(),
+  );
+
+
   @override
   void initState() {
+
     super.initState();
+    debugPrint('▼ State的initState方法！');
+
+
+
     // 设置当前tab
-    this.setState(
-            (){
-      currentTab = orderType;
-    });
-    _controller = TabController(
-      length: _tabValues.length,
-      initialIndex: this.orderType,  //index 就是订单类型 order status的订单类型
-      vsync: ScrollableState(),
-    );
+    // this.setState(
+    //         (){
+    //   currentTab = orderType;
+    // });
+
+      // controller = new TabController(
+      //   length: _tabValues.length,
+      //   initialIndex: orderType, //index 就是订单类型 order status的订单类型
+      //   vsync: ScrollableState(),
+      // );
+
     // tab切换回调
-    _controller.addListener(
+    controller.addListener(
             () {
-      print('Tab当前索引' + _controller.index.toString());
-      OrderListModel resultData;
-      this.setState(() {
+      print('Tab当前索引 ${controller.index}' );
+      OrderListModel? resultData;
+      if(mounted) {
+        this.setState(() {
           orderList = [];
           total = 0;
         });
+      }
 
       //index 就是订单类型 order status 请求订单数据
-      getOrderList(1, this.limit, _controller.index).then((data) {
+      getOrderList(1, this.limit, controller.index).then((data) {
         try {
 
-          print("加载解析");
+          print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ getOrderList　订单数据--加载解析");
 
           resultData = OrderListModel.fromJson(data);
         } catch (err) {
 
-          print("加载解析错误");
+          print("订单数据--加载解析错误");
           // Common addCart = Common.fromJson(data);
           // 弹出消息窗口
           // showDialog(
@@ -435,10 +501,13 @@ class OrderPageState extends State<OrderPage> {
           return;
         }
         this.setState(() {
-          currentTab = _controller.index;
+
+          print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ setState　订单数据--加载解析");
+
+          currentTab = controller.index;
           //TODO 这里是订单详细表中的数据  可能需要改
-          orderList = resultData.data;
-          total = resultData.data.length;
+          orderList = resultData?.data ?? <OrderModel>[];
+          total = resultData?.data?.length ?? 0;
           // total = resultData.data_count;
 
           pageNo = 1;
@@ -446,9 +515,9 @@ class OrderPageState extends State<OrderPage> {
       });
     });
 
-    OrderListModel resultData;
+    OrderListModel? resultData;
     // 获取列表
-    getOrderList(this.pageNo, this.limit, this.orderType).then((data) {
+    getOrderList(this.pageNo, this.limit, orderType).then((data) {
       try {
         print("准备解析订单列表");
         resultData = OrderListModel.fromJson(data);
@@ -478,13 +547,30 @@ class OrderPageState extends State<OrderPage> {
         return;
       }
       this.setState(() {
-        orderList = resultData.data;
+        orderList = resultData?.data ?? <OrderModel>[];
         loading = loading;
-        total = resultData.data.length;
+        total = resultData?.data?.length ?? 0;
       });
     });
 
   } //END initstate
+
+  @override
+  void dispose() {
+// TODO: implement dispose
+    super.dispose();
+    print('State的dispose方法');
+  }
+
+  @override
+  void didChangeDependencies() {
+// TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('didChangeDependencies方法');
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +588,7 @@ class OrderPageState extends State<OrderPage> {
                 style: TextStyle(fontSize: 18.0),
               );
             }).toList(),
-            controller: _controller,
+            controller: controller,
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.tab,
             isScrollable: true,
@@ -516,7 +602,7 @@ class OrderPageState extends State<OrderPage> {
           ),
         ),
         body: TabBarView(
-          controller: _controller,
+          controller: controller,
           children: _tabValues.map((tabItem) {
             return currentTab == int.parse(tabItem['route']) ? EasyRefresh.custom(
               header: MaterialHeader(),
@@ -536,7 +622,7 @@ class OrderPageState extends State<OrderPage> {
                 print("this.pageNo : " + this.pageNo.toString());
                 print("当前加载页码: " + currentPage.toString());
 
-                getOrderList(currentPage, this.limit, this.orderType)
+                getOrderList(currentPage, this.limit, orderType)
                     .then((data) {
                   try {
                     print("加载解析Success!");
@@ -571,12 +657,14 @@ class OrderPageState extends State<OrderPage> {
 
                   //TODO 加载订单数据
                  this.orderList.addAll(resultData.data);
-
-                  this.setState(() {
-                    orderList = this.orderList;
-                    total = total + resultData.data.length;
-                    pageNo = currentPage;
-                  });
+                 if(mounted) {
+                   this.setState(() {
+                     orderList = this.orderList;
+                     int dataLen = resultData.data.length;
+                     total = total + dataLen;
+                     pageNo = currentPage;
+                   });
+                 }
                 }
                 );
 
@@ -604,7 +692,7 @@ class OrderPageState extends State<OrderPage> {
 
                                     Text(
                                       orderStatus(
-                                          orderList[index].order_status),
+                                          orderList[index].order_status ?? 0),
                                       style: TextStyle(
                                           color: Colors.orange[600],
                                           fontSize: 16.0),
@@ -650,11 +738,11 @@ class OrderPageState extends State<OrderPage> {
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      '会員：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.last_name: ""}',
+                                      '会員：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.last_name: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      '电话：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.last_name_kana: ""}',
+                                      '电话：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.last_name_kana: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
 
@@ -671,15 +759,15 @@ class OrderPageState extends State<OrderPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      '${orderList[index].member_delivery_address.prefecture}',
+                                      '${orderList[index].member_delivery_address?.prefecture}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      '${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.city: ""}',
+                                      '${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.city: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      'ADDR：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.address1: ""}',
+                                      'ADDR：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.address1: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
 
@@ -697,15 +785,15 @@ class OrderPageState extends State<OrderPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      '电话：${orderList[index].member_delivery_address.phone_number}',
+                                      '电话：${orderList[index].member_delivery_address?.phone_number}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      'POST：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.post_code_front: ""}',
+                                      'POST：${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.post_code_front: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      '-${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address.post_code_back: ""}',
+                                      '-${orderList[index].member_delivery_address!= null?orderList[index].member_delivery_address?.post_code_back: ""}',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
 

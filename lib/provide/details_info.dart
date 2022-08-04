@@ -7,7 +7,7 @@ import 'dart:convert';
 
 class DetailsInfoProvide with ChangeNotifier{
   
-   DetailsModel detailResult =null;
+   DetailsModel? detailResult;
    bool isLeft = true;
    bool isRight = false;
 
@@ -20,17 +20,18 @@ class DetailsInfoProvide with ChangeNotifier{
     await  MNet.getData(ApiService.mall_good_detail_url + id)
    .then((val){
       // var responseData= json.decode(val.toString());
-      var responseData= val;
+      var responseData = val;
 
       debugPrint("--------商品详细内容");
       debugPrint(val.toString());
       // var jsonData = jsonDecode(val.toString());
       var jsonData = val;
       // goodsInfo=DetailsModel.fromJson(responseData);
-      // 没转化好
+      debugPrint("----FROM DETAILS INFO PAGE----商品详细内容");
+      // TODO 没转化好
        detailResult = DetailsModel.fromJson(jsonData);
 
-
+      debugPrint("END TEST");
       // detailResult = responseData;
 
       notifyListeners();

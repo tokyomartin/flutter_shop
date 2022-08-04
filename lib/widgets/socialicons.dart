@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SocialIcon extends StatelessWidget {
-  final List<Color> colors;
-  final IconData iconData;
-  final Function onPressed;
+   List<Color>? colors;
+   IconData? iconData;
+   Function()? onPressed;
 
   SocialIcon(this.colors, this.iconData, this.onPressed);
 
@@ -17,12 +17,13 @@ class SocialIcon extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
-            colors: colors,
+            colors: this.colors ?? <Color>[],
             tileMode: TileMode.clamp
           ),
         ),
         child: RawMaterialButton(
           shape: CircleBorder(),
+
           onPressed: onPressed,
           child: Icon(iconData,color: Colors.white,),
         ),

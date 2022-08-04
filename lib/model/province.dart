@@ -1,6 +1,6 @@
 class ProvinceMode {
-  int id;
-  String pref_name;
+  int   ? id;
+  String? pref_name;
   // int member_id;
   // String pay_id;
 

@@ -45,7 +45,7 @@ class ProvinceProvide with ChangeNotifier{
        debugPrint("结束 提交购物车1");
 
        var data = val;
-       List<Map> myList = (data['data'] as List).cast();
+       List myList = (data['data'] as List).cast();
        myList.forEach((item) {
          // debugPrint(item.toString());
          myDataList.add(new ProvinceMode.fromJson(item));

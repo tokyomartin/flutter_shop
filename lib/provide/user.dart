@@ -19,7 +19,7 @@ import 'dart:convert';
 
 class UserProvider with ChangeNotifier{
 
- UserModel userModel;
+ UserModel? userModel;
 
   //得到购物车中的商品
  signup( String email, String password, String password_confirmation) async {

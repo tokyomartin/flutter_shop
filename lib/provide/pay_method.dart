@@ -129,7 +129,7 @@ class PayMethodProvide with ChangeNotifier{
   //删除单个购物车商品
   deleteOneGoods(BuildContext context, int product_id) async{
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     cartString=prefs.getString('cartInfo'); 
+     var cartString= prefs.getString('cartInfo');
      List<Map> tempList= (json.decode(cartString.toString()) as List).cast();
    
      int tempIndex =0;
@@ -192,7 +192,7 @@ class PayMethodProvide with ChangeNotifier{
 
   addOrReduceAction(BuildContext context, var cartItem, String todo )async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cartString=prefs.getString('cartInfo'); 
+    var cartString=prefs.getString('cartInfo');
     List<Map> tempList= (json.decode(cartString.toString()) as List).cast();
     int tempIndex =0;
     int changeIndex=0;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 // import 'package:provide/provide.dart';
+import '../../model/product.dart';
 import '../../provide/details_info.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 import 'package:provider/provider.dart';
 
@@ -15,17 +17,25 @@ class DetailsTopArea extends StatelessWidget {
       builder:(context, DetailsInfoProvide val, child){
 
 
-        var product=Provider.of<DetailsInfoProvide>(context, listen: false).detailResult.data.product;
+        Product? product=Provider.of<DetailsInfoProvide>(context, listen: false).detailResult?.data?.product;
+
+        if(product == null){
+          debugPrint("▲▲▲▲▲NOT EXIST DETAIL PAGE!!!");
+        }else{
+          debugPrint("▲▲▲▲▲PRODUCT!!!");
+        }
 
         debugPrint(product.toString());
 
         var image_base_url = "https://skm-php.s3.us-west-1.amazonaws.com/product_images/1001/";
 
 
+
+
         if(product != null){
 
           var tempImage = image_base_url + product.small_img_url;
-          debugPrint("商品详情页图片");
+          debugPrint("商品详情页: 图片");
           debugPrint(tempImage);
 
            return Container(
@@ -63,9 +73,12 @@ class DetailsTopArea extends StatelessWidget {
     return  Image.network(
         url,
         width:ScreenUtil().setWidth(740) ,
-        errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-      return Text('Your error widget...');
-    }
+        errorBuilder: (c, o, s) {
+          return const Icon(
+            Icons.error,
+            color: Colors.red,
+          );
+        }
     );
 
   }

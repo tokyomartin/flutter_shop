@@ -4,19 +4,23 @@ import '../pages/details_page.dart';
 
 
 Handler detailsHandler =Handler(
-  handlerFunc: (BuildContext context,Map<String,List<String>> params){
-    String goodsId = params['id'].first;
-    print('index>details goodsID is ${goodsId}');
-    return DetailsPage(goodsId);
-
+  handlerFunc: (context,Map<String, dynamic> params){
+    if(params != null) {
+      String goods_id = params['id']?.first;
+      print('index>details goodsID is ${goods_id}');
+      return DetailsPage(goods_id);
+    }
   }
 );
 
-Handler productListHandler =Handler(
-    handlerFunc: (BuildContext context,Map<String,List<String>> params){
-      String shopId = params['shop_id'].first;
-      print('index>productList SHOP ID is ${shopId}');
-      return DetailsPage(shopId);
+// handlerFunc: (context,Map<String, List<String>> params)
 
-    }
-);
+//TODO
+// Handler productListHandler =Handler(
+//     handlerFunc: (context,Map<String, dynamic> params){
+//       String shop_id = params['shop_id']?.first;
+//       print('index>productList SHOP ID is ${shop_id}');
+//       return ProductPage(shop_id);
+//
+//     }
+// );

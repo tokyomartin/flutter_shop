@@ -10,7 +10,8 @@ description: A new Flutter project.
 version: 1.0.0+7
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  #sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,7 +24,8 @@ dependencies:
   #  firebase_core: ^0.7.0
   #  firebase_core: ^1.10.0
 
-  firebase_auth: ^3.2.0
+  #firebase_auth: ^3.2.0  #OK  SDK2.0
+  firebase_auth: ^3.6.1
   flutter_update_dialog: ^0.0.1
 
  #cupertino_icons: ^0.1.2
@@ -31,8 +33,10 @@ dependencies:
  # dio: 2.0.7
  # dio: ^3.0.10
   dio: ^4.0.0
-  flutter_swiper: ^1.1.4
-  flutter_screenutil: ^0.5.1
+  #flutter_swiper: ^1.1.4  #OK  SDK2.0
+  flutter_swiper_null_safety:  ^1.0.2
+  #flutter_screenutil: ^0.5.1    #OK  SDK2.0
+  flutter_screenutil: ^5.5.2
 #  url_launcher: ^5.0.1
   url_launcher: ^6.0.12
 
@@ -43,10 +47,15 @@ dependencies:
 
   #fluttertoast: ^3.0.1
   fluttertoast: ^8.0.8
-#    fluro: ^1.4.0
-  fluro: ^1.7.8
 
-  sqflite: ^1.1.0
+  #router
+ # fluro: ^1.4.0
+ # fluro: ^1.7.8  #OK
+  fluro: ^2.0.3
+ # go_router: ^4.2.2
+
+ # sqflite: ^1.1.0
+  sqflite: any
 #  shared_preferences: ^0.5.1
   shared_preferences: ^2.0.8
 
@@ -59,7 +68,8 @@ dependencies:
 
   # 状态管理
   #provider: ^4.1.2
-  provider: ^5.0.0
+ # provider: ^5.0.0 #OK  SDK2.0
+  provider: ^6.0.0
 
 #  flutter_xupdate: ^1.0.0
 
@@ -79,13 +89,19 @@ dependencies:
 
   ##flutter_html: ^1.0.0
   #  flutter_html: ^1.1.0
-
-  flutter_html: ^2.1.5
+  flutter_math_fork: ^0.5.0
+  #flutter_html: ^2.1.5 #OK  SDK2.0
+  flutter_html: ^2.2.1
+ # webview_flutter: ^2.3.1
   webview_flutter: ^2.3.1
 
-  http: any
-  font_awesome_flutter: ^8.2.0
-  google_sign_in: ^5.2.1
+ # http: any
+  #http: ^0.12.2
+  http: ^0.13.4
+ # font_awesome_flutter: ^8.2.0  #OK  SDK2.0
+  font_awesome_flutter: ^10.1.0
+  #google_sign_in: ^5.2.1
+  google_sign_in: ^5.4.0
 #  google_sign_in: ^5.1.0
 #  google_sign_in: ^5.0.7
 #  sign_in_with_apple: ^3.2.0
@@ -98,14 +114,20 @@ dependencies:
 
 #  cached_network_image: ^2.5.1
 #  cached_network_image: ^2.5.1
+  cached_network_image: ^3.2.1
 
-
+  uuid: ^3.0.6
   #  location: ^4.3.0
   location: any
-  geocode: ^1.0.1
+#  geocode: ^0.1.2
+  geocode: ^1.0.2
  # flutter_map: any
   google_maps_flutter: any
-
+ # google_maps_flutter: ^0.5.30
+ # google_map_location_picker_flutter: ^0.0.116
+  #flutter_google_places: ^0.3.0
+  flutter_google_places_hoc081098: ^1.1.0
+ # flutter_places_autocomplete: ^0.2.0
 
 dev_dependencies:
   flutter_test:

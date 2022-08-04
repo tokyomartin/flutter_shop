@@ -18,7 +18,7 @@ class DetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-     var product= Provider.of<DetailsInfoProvide>(context, listen: false).detailResult.data.product;
+     var product= Provider.of<DetailsInfoProvide>(context, listen: false).detailResult?.data?.product;
      // var goodsInfo= Provider.of<DetailsInfoProvide>(context, listen: false).goodsInfo;
 
      debugPrint("goodsInfo内容");
@@ -26,8 +26,8 @@ class DetailsBottom extends StatelessWidget {
 
     // var goodsID= goodsInfo.goodsId;
     // var goodsName =goodsInfo.goodsName;
-     var id= product.id;
-     var product_name =product.product_name;
+     var id= product?.id;
+     String product_name =product?.product_name ?? "";
 
      // var goodsID= goodsInfo["id"];
      // var goodsName =goodsInfo["product_name"];
@@ -36,14 +36,15 @@ class DetailsBottom extends StatelessWidget {
     // var images= goodsInfo.image1;
      // var price =goodsInfo.presentPrice;
      // var images= goodsInfo['small_img_url'];
-     var general_price =product.general_price;
-     var current_price =product.current_price;
+     var general_price = product?.general_price;
+     var current_price = product?.current_price;
 
      //TODO small_img_url
      // var images= goodsInfo.small_img_url;
      // var price =goodsInfo["general_price"];
-     var image_base_url = "https://skm-php.s3.us-west-1.amazonaws.com/product_images/1001/";
-     var images= image_base_url + product.small_img_url;
+     String image_base_url = "https://skm-php.s3.us-west-1.amazonaws.com/product_images/1001/";
+     String product_img =  product?.small_img_url ?? "";
+     String images= image_base_url + product_img;
      // var images= "http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg";
 
      return Container(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/model/SubCategory.dart';
 import '../model/category.dart';
 
 
 //ChangeNotifier的混入是不用管理听众
 class ChildCategory with ChangeNotifier{
 
-    List<BxMallSubDto> childCategoryList = []; //商品列表
+    List<SubCategory> childCategoryList = []; //商品列表
     int childIndex = 0; //子类索引值
     int categoryIndex=0; //大类索引
     String categoryId = '4'; //大类ID
@@ -26,18 +27,20 @@ class ChildCategory with ChangeNotifier{
 
 
     //点击大类时更换
-    getChildCategory(List<BxMallSubDto> list,String id){
-      isNewCategory=true;
-      categoryId=id;
-      childIndex=0;
-      page=1;
+    getChildCategory(List<SubCategory> list,String id){
+      isNewCategory = true;
+      categoryId = id;
+      childIndex = 0;
+      page = 1;
       subId=''; //点击大类时，把子类ID清空
       noMoreText='';
-      BxMallSubDto all=  BxMallSubDto();
-      all.mallSubId='';
-      all.mallCategoryId='00';
-      all.mallSubName = '全部';
-      all.comments = 'null';
+      SubCategory all = new SubCategory(
+          sub_category_id : '',
+          category_id : '00',
+          sub_category_name : '全部',
+          comments : 'null',
+      );
+
       childCategoryList=[all];
       // childCategoryList.addAll(list);
       notifyListeners();

@@ -7,7 +7,7 @@ class LoginForm extends StatelessWidget {
     return 
     Container(
       width: double.infinity,
-      height: ScreenUtil.getInstance().setHeight(450),
+      height: ScreenUtil().setHeight(450),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -30,12 +30,12 @@ class LoginForm extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text("LOGIN", style:TextStyle(
-                fontSize: ScreenUtil.getInstance().setSp(45),
+                fontSize: ScreenUtil().setSp(45),
                 fontFamily: "Poppins-Bold",
                 letterSpacing: .6,
               )),
               SizedBox(
-                height: ScreenUtil.getInstance().setHeight(25),
+                height: ScreenUtil().setHeight(25),
               ),
               TextField(
                 decoration: InputDecoration(
@@ -47,7 +47,7 @@ class LoginForm extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: ScreenUtil.getInstance().setHeight(30),
+                height: ScreenUtil().setHeight(30),
               ),
               TextField(
                 obscureText: true,
@@ -59,7 +59,7 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil.getInstance().setHeight(35),),
+              SizedBox(height: ScreenUtil().setHeight(35),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -67,7 +67,7 @@ class LoginForm extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.blue,
                   fontFamily: "Poppins-Medium",
-                  fontSize: ScreenUtil.getInstance().setSp(28)
+                  fontSize: ScreenUtil().setSp(28)
                 ),)
               ],),
           

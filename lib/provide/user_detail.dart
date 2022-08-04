@@ -20,8 +20,8 @@ class UserDetailProvide with ChangeNotifier{
 
 
  var googleSignInNow = GoogleSignIn();
- GoogleSignInAccount googleSignInAccount;
- UserDetailMode userDetailMode;
+ GoogleSignInAccount? googleSignInAccount;
+ UserDetailMode? userDetailMode;
 
   //得到购物车中的商品
   allowUserToLogin(BuildContext context) async {
@@ -33,21 +33,21 @@ class UserDetailProvide with ChangeNotifier{
     debugPrint("--------1.1 UserDetailProvide  ---------");
 
     this.userDetailMode = new UserDetailMode(
-        id: this.googleSignInAccount.id,
-        displayName: this.googleSignInAccount.displayName,
-        email: this.googleSignInAccount.email,
-        photoUrl: this.googleSignInAccount.photoUrl,
-        serverAuthCode: this.googleSignInAccount.serverAuthCode
+        id: this.googleSignInAccount?.id,
+        displayName: this.googleSignInAccount?.displayName,
+        email: this.googleSignInAccount?.email,
+        photoUrl: this.googleSignInAccount?.photoUrl,
+        serverAuthCode: this.googleSignInAccount?.serverAuthCode
     );
 
     debugPrint("--------1.2 UserDetailProvide ---------");
 
     Map data = {
-      'id': this.googleSignInAccount.id,
-      'email': this.googleSignInAccount.email,
-      'displayName': this.googleSignInAccount.displayName,
-      'photoUrl': this.googleSignInAccount.photoUrl,
-      'serverAuthCode': this.googleSignInAccount.serverAuthCode,
+      'id': this.googleSignInAccount?.id,
+      'email': this.googleSignInAccount?.email,
+      'displayName': this.googleSignInAccount?.displayName,
+      'photoUrl': this.googleSignInAccount?.photoUrl,
+      'serverAuthCode': this.googleSignInAccount?.serverAuthCode,
     };
 
     debugPrint("--------1.3   google_login_url----------");
@@ -73,7 +73,7 @@ class UserDetailProvide with ChangeNotifier{
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
         sharedPreferences.setString("oauth_type", 'google');
-        sharedPreferences.setString("serverAuthCode", userDetailMode.serverAuthCode);
+        sharedPreferences.setString("serverAuthCode", userDetailMode?.serverAuthCode?? "");
         // sharedPreferences.setString("access_token", jsonResponse['access_token']);
         sharedPreferences.setString("member_id", jsonResponse['userId'].toString());
 

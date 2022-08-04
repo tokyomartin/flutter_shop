@@ -1,19 +1,27 @@
 class UserDetailMode {
-  String id;
-  String displayName;
-  String email;
-  String photoUrl;
-  String serverAuthCode;
+  String? id;
+  String? displayName;
+  String? email;
+  String? photoUrl;
+  String? serverAuthCode;
 
   UserDetailMode(
-      {this.id, this.displayName, this.email, this.photoUrl, this.serverAuthCode});
+      {
+        this.id,
+        this.displayName,
+        this.email,
+        this.photoUrl,
+        this.serverAuthCode
+      });
 
-  UserDetailMode.fromJson(Map<String, dynamic> json) {
-    id = json['id'] ;
-    displayName = json['displayName'] ;
-    email = json['email'];
-    photoUrl = json['photoURL'];
-    serverAuthCode = json['serverAuthCode'] ;
+  factory UserDetailMode.fromJson(Map<String, dynamic> json) {
+    return  UserDetailMode(
+      id : json['id'],
+    displayName : json['displayName'] ,
+    email : json['email'],
+    photoUrl : json['photoURL'],
+    serverAuthCode : json['serverAuthCode'],
+    );
   }
 
   Map<String, dynamic> toJson() {

@@ -1,6 +1,6 @@
 class PayMethodMode {
-  int pay_id;
-  String pay_name;
+  int   ? pay_id;
+  String? pay_name;
   // int member_id;
   // String pay_id;
 

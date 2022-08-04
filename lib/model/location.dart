@@ -1,11 +1,11 @@
 class LocationMode {
-  int id;
-  String company_name;
-  String company_phone_number;
-  String post_code_front;
-  String post_code_back;
-  String city;
-  String address1;
+    int   ? id;
+    String? company_name;
+    String? company_phone_number;
+    String? post_code_front;
+    String? post_code_back;
+    String? city;
+    String? address1;
 
 
 
@@ -14,25 +14,25 @@ class LocationMode {
 
   LocationMode(
       {
-        this.id,
-        this.company_name,
-        this.company_phone_number,
-        this.post_code_front,
-        this.post_code_back,
-        this.city,
-        this.address1,
+         this.id,
+         this.company_name,
+         this.company_phone_number,
+         this.post_code_front,
+         this.post_code_back,
+         this.city,
+         this.address1,
       });
 
-  LocationMode.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    company_name = json['company_name'];
-    company_phone_number = json['company_phone_number'];
-    post_code_front = json['post_code_front'];
-    post_code_back = json['post_code_back'];
-    city = json['city'];
-    address1 = json['address1'];
-
-
+  factory LocationMode.fromJson(Map<String, dynamic> json) {
+    return LocationMode(
+      id : json['id'],
+      company_name : json['company_name'],
+      company_phone_number : json['company_phone_number'],
+      post_code_front : json['post_code_front'],
+      post_code_back : json['post_code_back'],
+      city : json['city'],
+      address1 : json['address1'],
+    );
   }
 
   Map<String, dynamic> toJson() {

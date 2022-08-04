@@ -7,7 +7,7 @@ import 'package:flutter_shop/util/share_pref.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../model/delivery_addr.dart';
+import '../model/delivery_addr_model.dart';
 import '../provide/delivery_addr.dart';
 
 
@@ -21,7 +21,7 @@ import 'ExpandPopupMenuDivider.dart';
  */
 
 class PopViewPage extends StatefulWidget {
-  PopViewPage({Key key}) : super(key: key);
+  PopViewPage({Key? key}) : super(key: key);
 
   _PopViewPageState createState() => _PopViewPageState();
 }
@@ -47,10 +47,10 @@ class _PopViewPageState extends State<PopViewPage> {
   var is_default = 0;
 
   void _forSubmitted() async{
-    var _form = _formKey.currentState;
+    FormState? _form = _formKey.currentState;
 
-    if (_form.validate()) {
-      _form.save();
+    if (_form?.validate() == null) {
+      _form?.save();
       // print(first_name);
       // print(last_name);
       var member_id = await SharePref.getSharePrefMemberId(context);
@@ -78,14 +78,14 @@ class _PopViewPageState extends State<PopViewPage> {
               decoration: InputDecoration(
                 hintText: '姓',
               ),
-              validator: (value) {
-                if (value.isEmpty) {
+              validator: ( value) {
+                if (value == null ||value.isEmpty) {
                   return '请输入姓';
                 }
                 return null;
               },
               onSaved: (val) {
-                last_name = val;
+                last_name = val!;
                 debugPrint("_first_name is " + last_name);
               },
             )
@@ -98,13 +98,13 @@ class _PopViewPageState extends State<PopViewPage> {
                 hintText: '名',
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value == null ||value.isEmpty) {
                   return '请输入名';
                 }
                 return null;
               },
               onSaved: (val) {
-                first_name = val;
+                first_name = val!;
                 debugPrint("_last_name is " + first_name);
               },
             )
@@ -125,13 +125,13 @@ class _PopViewPageState extends State<PopViewPage> {
               hintText: '姓（カタカナ）',
             ),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null ||value.isEmpty) {
                 return '请输入姓（カタカナ）';
               }
               return null;
             },
             onSaved: (val) {
-              last_name_kana = val;
+              last_name_kana = val!;
               debugPrint("_katakana_first_name is " + last_name_kana);
             },
           ),
@@ -144,13 +144,13 @@ class _PopViewPageState extends State<PopViewPage> {
                 hintText: '名（カタカナ）',
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value == null ||value.isEmpty) {
                   return '请输入名（カタカナ）';
                 }
                 return null;
               },
               onSaved: (val) {
-                first_name_kana = val;
+                first_name_kana = val!;
                 debugPrint("_katakana_last_name is " + first_name_kana);
               },
             )
@@ -171,6 +171,8 @@ class _PopViewPageState extends State<PopViewPage> {
               hintText: '邮政编码（上3桁）',
             ),
             validator: (value) {
+              if(value == null || value.isEmpty)
+                return null;
               RegExp reg = new RegExp(r'^\d{3}$');
               if (!reg.hasMatch(value)) {
                 return '请输入邮编上3桁';
@@ -178,7 +180,7 @@ class _PopViewPageState extends State<PopViewPage> {
               return null;
             },
             onSaved: (val) {
-              post_code_front = val;
+              post_code_front = val!;
               debugPrint(" front_post is " + post_code_front);
             },
           ),
@@ -189,6 +191,8 @@ class _PopViewPageState extends State<PopViewPage> {
               hintText: '下4桁',
             ),
             validator: (value) {
+              if(value == null || value.isEmpty)
+                return null;
               RegExp reg = new RegExp(r'^\d{4}$');
               if (!reg.hasMatch(value)) {
                 return '请输入邮编下4桁';
@@ -196,7 +200,7 @@ class _PopViewPageState extends State<PopViewPage> {
               return null;
             },
             onSaved: (val) {
-              post_code_back = val;
+              post_code_back = val!;
               debugPrint("_last_post is " + post_code_back);
             },
           ),
@@ -231,7 +235,7 @@ class _PopViewPageState extends State<PopViewPage> {
         ),
         body: FutureBuilder(
           future:_getDataList(context),
-          builder: (context, snapshot) {
+          builder: ( context, AsyncSnapshot  snapshot) {
 
             // debugPrint(snapshot.toString());
 
@@ -252,14 +256,14 @@ class _PopViewPageState extends State<PopViewPage> {
                       value: prefecture,
                       onChanged: (newValue) {
                         setState(() {
-                          prefecture = newValue;
+                          prefecture = newValue!;
                         });
                       },
-                      items: snapshot.data.map<DropdownMenuItem<String>>((ProvinceMode fc) {
+                      items: snapshot.data?.map<DropdownMenuItem<String>>((ProvinceMode fc) {
                         // debugPrint(fc.toString());
 
                         return DropdownMenuItem<String>(
-                          child: Text(fc.pref_name),
+                          child: Text(fc.pref_name.toString()),
                           value: fc.pref_name, //fc.id.toString(),
                         );
                       })?.toList() ?? [],
@@ -270,13 +274,13 @@ class _PopViewPageState extends State<PopViewPage> {
                         hintText: '市区町村',
                       ),
                       // validator: (value) {
-                      //   if (value.isEmpty) {
+                      //   if (value == null ||value.isEmpty) {
                       //     return '请输入市区町村';
                       //   }
                       //   return null;
                       // },
                       onSaved: (val) {
-                        city = val;
+                        city = val!;
                         debugPrint("city is " + city);
                       },
                     ),
@@ -285,13 +289,13 @@ class _PopViewPageState extends State<PopViewPage> {
                         hintText: '番地、ビル名',
                       ),
                       // validator: (value) {
-                      //   if (value.isEmpty) {
+                      //   if (value == null ||value.isEmpty) {
                       //     return '请输入番地、ビル名';
                       //   }
                       //   return null;
                       // },
                       onSaved: (val) {
-                        address1 = val;
+                        address1 = val!;
                         debugPrint("address1 is " + address1);
                       },
                     ),
@@ -300,13 +304,13 @@ class _PopViewPageState extends State<PopViewPage> {
                         hintText: '連絡先（電話番号）',
                       ),
                       // validator: (value) {
-                      //   if (value.isEmpty) {
+                      //   if (value == null ||value.isEmpty) {
                       //     return '请输入連絡先';
                       //   }
                       //   return null;
                       // },
                       onSaved: (val) {
-                        phone_number = val;
+                        phone_number = val!;
                         debugPrint("phone_number is " + phone_number);
                       },
                     ),

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/config/api_service.dart';
 import 'package:flutter_shop/util/m_net.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../../model/delivery_addr.dart';
+import '../../model/delivery_addr_model.dart';
 import './cart_count.dart';
 // import 'package:provide/provide.dart';
 import '../../provide/delivery_addr.dart';
@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 
 class DeliveryAddrItem extends StatelessWidget {
-  final DeliveryAddrMode item;
+  final DeliveryAddrModel item;
   DeliveryAddrItem(this.item);
 
 
@@ -44,8 +44,8 @@ class DeliveryAddrItem extends StatelessWidget {
       child: Checkbox(
         value: false,
         activeColor:Colors.pink,
-        onChanged: (bool val){
-
+        onChanged: (val){
+          //TODO
           // item.isCheck=val;
           // Provider.of<DeliveryAddrProvide>(context, listen: false).changeCheckState(item);
 

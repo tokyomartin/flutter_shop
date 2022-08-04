@@ -11,7 +11,7 @@ class MNet {
 
    static Future <T>  getData<T>(String url, {
      String method="get",
-     Map<String, dynamic> params
+     Map<String, dynamic>? params
 } )  async{
 
      if(debug) debugPrint("load api  $url");
@@ -30,7 +30,7 @@ class MNet {
 
   static dynamic getResponse(String url, {
     String method="get",
-    Map<String, dynamic> params
+    Map<String, dynamic>? params
   } ) async{
 
     if(debug) debugPrint("load api  $url");
@@ -40,7 +40,7 @@ class MNet {
   }
 
 
-   static Future <T>  getPostData<T>(String url, [Map<String, dynamic> params] )  async{
+   static Future <T>  getPostData<T>(String url, [Map<String, dynamic>? params] )  async{
 
      if(debug) debugPrint("load api  $url");
 
@@ -56,7 +56,7 @@ class MNet {
      }
    }
 
-   static Future <T>  oauthPost<T>(String url, [Map<String, dynamic> params] )  async{
+   static Future <T>  oauthPost<T>(String url, [Map<String, dynamic>? params] )  async{
 
      if(debug) debugPrint("load api  $url");
 
@@ -67,7 +67,7 @@ class MNet {
      var access_token = "";
      if(prefs.getString("access_token") != null) {
        // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-       access_token =  prefs.getString("access_token");
+       access_token =  prefs.getString("access_token") ?? '';
      }else{
        // 没有获取token
      }
@@ -89,7 +89,7 @@ class MNet {
      }
    }
 
-   static Future <T>  oauthGet<T>(String url, [Map<String, dynamic> params] )  async{
+   static Future <T>  oauthGet<T>(String url, [Map<String, dynamic>? params] )  async{
 
      if(debug) debugPrint("load api  $url");
 
@@ -100,7 +100,7 @@ class MNet {
      var access_token = "";
      if(prefs.getString("access_token") != null) {
        // data['member_id'] = int.parse(sharedPreferences.getString("member_id"));
-       access_token =  prefs.getString("access_token");
+       access_token =  prefs.getString("access_token") ?? '';
      }else{
        // 没有获取token
      }

@@ -38,7 +38,7 @@ class PayMethodBottom extends StatelessWidget {
           Checkbox(
             value: isAllCheck,
             activeColor: Colors.pink,
-            onChanged: (bool val){
+            onChanged: (val){
               // Provider.of<DeliveryAddrProvide>(context, listen: false).changeAllCheckBtnState(val);
 
             },

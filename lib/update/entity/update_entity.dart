@@ -38,13 +38,13 @@ class UpdateEntity {
   final String apkMd5;
 
   UpdateEntity({
-    @required this.hasUpdate,
+    required this.hasUpdate,
     this.isForce = false,
     this.isIgnorable = false,
-    @required this.versionCode,
-    @required this.versionName,
-    @required this.updateContent,
-    @required this.downloadUrl,
+    required this.versionCode,
+    required this.versionName,
+    required this.updateContent,
+    required this.downloadUrl,
     this.apkSize = 0,
     this.apkMd5 = '',
   });
@@ -63,19 +63,18 @@ class UpdateEntity {
     };
   }
 
-  static UpdateEntity fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  static UpdateEntity fromMap(Map<String, dynamic>? map) {
 
     return UpdateEntity(
-      hasUpdate: map['hasUpdate'],
-      isForce: map['isForce'],
-      isIgnorable: map['isIgnorable'],
-      versionCode: map['versionCode']?.toInt(),
-      versionName: map['versionName'],
-      updateContent: map['updateContent'],
-      downloadUrl: map['downloadUrl'],
-      apkSize: map['apkSize']?.toInt(),
-      apkMd5: map['apkMd5'],
+      hasUpdate: map?['hasUpdate'],
+      isForce: map?['isForce'],
+      isIgnorable: map?['isIgnorable'],
+      versionCode: map?['versionCode']?.toInt(),
+      versionName: map?['versionName'],
+      updateContent: map?['updateContent'],
+      downloadUrl: map?['downloadUrl'],
+      apkSize: map?['apkSize']?.toInt(),
+      apkMd5: map?['apkMd5'],
     );
   }
 

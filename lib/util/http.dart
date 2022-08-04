@@ -7,13 +7,14 @@ class HttpUtils {
 
   HttpUtils._internal();
 
-  static Dio sDio;
+  //static
+  static Dio? sDio;
 
   ///全局初始化
   static init(
-      {String baseUrl, int timeout = 5000, Map<String, dynamic> headers}) {
-    sDio = Dio(BaseOptions(
-        baseUrl: baseUrl,
+      {String? baseUrl, int timeout = 5000, Map<String, dynamic>? headers}) {
+     sDio = new Dio(BaseOptions(
+        baseUrl: baseUrl?? '',
         connectTimeout: timeout,
         sendTimeout: timeout,
         receiveTimeout: timeout,
@@ -70,44 +71,46 @@ class HttpUtils {
   }
 
   ///get请求
-  static Future get(String url, [Map<String, dynamic> params]) async {
-    Response response;
+  static Future get(String url, [Map<String, dynamic>? params]) async {
+    Response? response;
     if (params != null) {
-      response = await sDio.get(url, queryParameters: params);
+      response = await sDio?.get(url, queryParameters: params);
     } else {
-      response = await sDio.get(url);
+      response = await sDio?.get(url);
     }
     debugPrint("========================");
     debugPrint(response.toString());
 
 
-    return response.data;
+    return response?.data;
   }
 
   ///post 表单请求
-  static Future post(String url, [Map<String, dynamic> params]) async {
-    Response response = await sDio.post(url, queryParameters: params);
+  static Future post(String url, [Map<String, dynamic>? params]) async {
+    Response? response;
+    response = await sDio?.post(url, queryParameters: params);
 
     debugPrint("========================");
     debugPrint(response.toString());
 
-    return response.data;
+    return response?.data;
   }
 
   ///post body请求
-  static Future postJson(String url, [Map<String, dynamic> data]) async {
-    Response response = await sDio.post(url, data: data);
+  static Future postJson(String url, [Map<String, dynamic>? data]) async {
+    Response? response;
+    response = await sDio?.post(url, data: data);
 
     debugPrint("========================");
     debugPrint(response.toString());
 
-    return response.data;
+    return response?.data;
   }
 
   ///下载文件
   static Future downloadFile(String urlPath, String savePath,
-      {ProgressCallback onReceiveProgress}) async {
-    Response response = await sDio.download(urlPath, savePath,
+      {ProgressCallback? onReceiveProgress}) async {
+    Response? response = await sDio?.download(urlPath, savePath,
         onReceiveProgress: onReceiveProgress,
         options: Options(sendTimeout: 25000, receiveTimeout: 25000));
     return response;

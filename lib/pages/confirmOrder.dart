@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/cartInfo.dart';
-import 'package:flutter_shop/model/delivery_addr.dart';
+import 'package:flutter_shop/model/delivery_addr_model.dart';
 import 'package:flutter_shop/provide/cart.dart';
 import 'package:flutter_shop/util/share_pref.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -65,7 +65,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   ConfirmOrderPageState();
 
   //TODO 个人收货地址列表
-  List<DeliveryAddrMode> addressList = [];
+  List<DeliveryAddrModel> addressList = [];
 
 
   ValueNotifier<String> delivery_address = ValueNotifier<String>("");
@@ -73,7 +73,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   //DeliveryAddrMode currentAddress;
 
   // 商品清单
-  List<CartInfoMode> cartList = [];
+  List<CartInfoMode>? cartList = [];
   //List<CartInfoMode> cartList = Provider.of<CartProvide>(context, listen: false).cartList;
 
   // 商品总价
@@ -150,11 +150,11 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
     cartList = Provider.of<CartProvide>(context, listen: false).cartList;
 
-    cartList.map((item) {
+    cartList?.map((item) {
       itemList.add(
         Container(
           decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.grey[100]))),
+              border: Border(bottom: BorderSide(color: Colors.grey))), //grey[100]
           margin: EdgeInsets.only(bottom: 20.0, right: 8.0,left: 8.0),
           padding: EdgeInsets.only(
             bottom: 8.0
@@ -167,10 +167,15 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   children: <Widget>[
                     SizedBox(
                       child:
-                Image.network(item.small_pic,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                      return Text('Your error widget...');
-                    }),  //item.small_pic
+                Image.network(item.small_pic!,
+
+                    errorBuilder: (c, o, s) {
+                      return const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      );
+                    }
+                    ),  //item.small_pic
 
                       // CachedNetworkImage(
                       //   width: 100.0,
@@ -294,7 +299,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   children: <Widget>[
 
                     ValueListenableBuilder<String>(
-                      builder: (BuildContext context, String value, Widget child) {
+                      builder: (BuildContext context, String? value, Widget ? child) {
                         // 只有在更新计数器时才会调用此生成器。
                         return Row(
                             children: <Widget>[
@@ -513,7 +518,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                 margin: EdgeInsets.only(bottom: 8.0),
                 decoration: BoxDecoration(
                     border:
-                        Border(bottom: BorderSide(color: Colors.grey[300]))),
+                        Border(bottom: BorderSide(color: const Color(0xFF000000)))), //.grey[300]
               ),
               Column(
                 children: listUI(context),

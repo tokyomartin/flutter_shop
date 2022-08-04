@@ -45,7 +45,7 @@ class LocationProvide with ChangeNotifier{
        debugPrint("END 提交到商家店铺GEOHASH接口");
 
        var data = val;
-       List<Map> myList = (data['data'] as List).cast();
+       List myList = (data['data'] as List).cast();
        myList.forEach((item) {
          // debugPrint(item.toString());
          myDataList.add(new LocationMode.fromJson(item));

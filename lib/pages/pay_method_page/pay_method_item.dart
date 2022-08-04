@@ -39,7 +39,7 @@ class PayMethodItem extends StatelessWidget {
       child: Checkbox(
         value: false,
         activeColor:Colors.pink,
-        onChanged: (bool val){
+        onChanged: (val){
 
           // item.isCheck=val;
           // Provider.of<DeliveryAddrProvide>(context, listen: false).changeCheckState(item);

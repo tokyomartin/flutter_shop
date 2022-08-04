@@ -11,7 +11,7 @@ class ExpandPopupMenuDivider<T> extends PopupMenuEntry<T> {
   ///
   /// By default, the divider has a height of 16 logical pixels.
   const ExpandPopupMenuDivider({
-    Key key,
+    Key? key,
     this.height = _kMenuDividerHeight,
     this.color,
   })
@@ -22,7 +22,7 @@ class ExpandPopupMenuDivider<T> extends PopupMenuEntry<T> {
   /// Defaults to 16 pixels.
   final double height;
 
-  final Color color;
+  final Color? color;
 
   @override
   bool represents(void value) => false;
@@ -35,7 +35,7 @@ class _ExpandPopupMenuDividerState extends State<ExpandPopupMenuDivider> {
 
   double height;
 
-  Color color;
+  Color? color;
 
   _ExpandPopupMenuDividerState(this.height,this.color);
 

@@ -9,11 +9,11 @@ class Routes{
 
 
   static void configureRoutes(FluroRouter  router){
-    router.notFoundHandler= new Handler(
-      handlerFunc: (BuildContext context,Map<String,List<String>> params){
-        print('ERROR====>ROUTE WAS NOT FONUND!!!');
-      }
-    );
+    // router.notFoundHandler= new Handler(
+    //   handlerFunc: (BuildContext context,Map<String,List<String>> params){
+    //     print('ERROR====>ROUTE WAS NOT FONUND!!!');
+    //   }
+    // );
 
     router.define(detailsPage,handler:detailsHandler);
     router.define(productListPage,handler:detailsHandler);

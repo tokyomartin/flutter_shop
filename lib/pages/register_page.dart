@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
  */
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+  RegisterPage({Key? key}) : super(key: key);
 
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -29,10 +29,10 @@ class _RegisterPageState extends State<RegisterPage> {
   var password_confirmation = '';
 
   void _forSubmitted() async{
-    var _form = _formKey.currentState;
+    FormState? _form = _formKey.currentState;
 
-    if (_form.validate()) {
-      _form.save();
+    if (_form?.validate() == true) {
+      _form?.save();
 
       print(email);
       print(password);
@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         //   return null;
                         // },
                         onSaved: (val) {
-                          email = val;
+                          email = val!;
                           debugPrint("邮箱 is " + email);
                         },
                       ),
@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         //   return null;
                         // },
                         onSaved: (val) {
-                          password = val;
+                          password = val!;
                           debugPrint("password is " + password);
                         },
                       ),
@@ -117,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         //   return null;
                         // },
                         onSaved: (val) {
-                          password_confirmation = val;
+                          password_confirmation = val!;
                           debugPrint("密码 is " + password_confirmation);
                         },
                       ),
@@ -160,6 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<List<ProvinceMode>> _getDataList(BuildContext context) async{
 
     debugPrint("-----------进入注册页面----------");
+    return <ProvinceMode>[];
     // await Provider.of<ProvinceProvide>(context, listen: false).getList(context);
     // List<ProvinceMode> myList  =  Provider.of<ProvinceProvide>(context, listen: false).myDataList;
     //

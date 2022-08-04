@@ -3,17 +3,22 @@ class CategoryGoodsListModel {
   String message;
   List<CategoryListData> data;
 
-  CategoryGoodsListModel({this.code, this.message, this.data});
+  CategoryGoodsListModel({
+    required this.code,
+    required this.message,
+    required List<CategoryListData> data,
+  }): data = data;
 
-  CategoryGoodsListModel.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    message = json['message'];
+  factory CategoryGoodsListModel.fromJson(Map<String, dynamic> json) {
+   dynamic  code = json['code'];
+   dynamic  message = json['message'];
+   dynamic  data = <CategoryListData>[];
     if (json['data'] != null) {
-      data = new List<CategoryListData>();
       json['data'].forEach((v) {
         data.add(new CategoryListData.fromJson(v));
       });
     }
+    return CategoryGoodsListModel(code: code, message: message, data: data);
   }
 
   Map<String, dynamic> toJson() {
@@ -28,25 +33,29 @@ class CategoryGoodsListModel {
 }
 
 class CategoryListData {
-  String image;
-  double oriPrice;
-  double presentPrice;
-  String goodsName;
-  String goodsId;
+     String? image;
+     double? oriPrice;
+     double? presentPrice;
+     String? goodsName;
+     String? goodsId;
 
   CategoryListData(
-      {this.image,
-      this.oriPrice,
-      this.presentPrice,
-      this.goodsName,
-      this.goodsId});
+      {
+     this.image,
+     this.oriPrice,
+     this.presentPrice,
+     this.goodsName,
+     this.goodsId
+      });
 
-  CategoryListData.fromJson(Map<String, dynamic> json) {
-    image = json['image'];
-    oriPrice = json['oriPrice'];
-    presentPrice = json['presentPrice'];
-    goodsName = json['goodsName'];
-    goodsId = json['goodsId'];
+  factory CategoryListData.fromJson(Map<String, dynamic> json) {
+     return CategoryListData(
+       image : json['image'],
+       oriPrice : json['oriPrice'],
+       presentPrice : json['presentPrice'],
+       goodsName : json['goodsName'],
+       goodsId : json['goodsId'],
+     );
   }
 
   Map<String, dynamic> toJson() {

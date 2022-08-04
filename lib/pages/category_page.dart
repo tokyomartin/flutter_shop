@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/api_service.dart';
+import 'package:flutter_shop/model/SubCategory.dart';
 import 'package:flutter_shop/util/m_net.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../model/category.dart';
+import '../model/category_model.dart';
 import '../model/categoryGoodsList.dart';
 
 // import 'package:provide/provide.dart';
@@ -58,7 +60,7 @@ class LeftCategoryNav extends StatefulWidget {
 
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
   List list = [];
-  var listIndex = 0; //索引
+  int listIndex = 0; //索引
 
   @override
   void initState() {
@@ -79,9 +81,10 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       builder: (context, ChildCategory val, child ){
 
 
-         _getGoodList(context);
+
          listIndex=val.categoryIndex;
-          
+         _getGoodList(context, val.categoryId);
+
         return Container(
             width: ScreenUtil().setWidth(180),
             decoration: BoxDecoration(
@@ -89,8 +92,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
             child: ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) {
-                //subcategory
-                //return _leftInkWel(index);
+                //TODO subcategory
+                return _leftInkWel(index);
               },
             ),
           );
@@ -115,7 +118,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
          // Provide.value<ChildCategory>(context).changeCategory(categoryId,index);
          // Provide.value<ChildCategory>(context).getChildCategory(childList,categoryId);
 
-          _getGoodList(context,categoryId:categoryId );
+          _getGoodList(context, categoryId);
       },
       child: Container(
         height: ScreenUtil().setHeight(100),
@@ -184,7 +187,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     });
   }
   //得到商品列表数据
-   void _getGoodList(context,{String categoryId }) {
+   void _getGoodList(context, String categoryId) {
 
 
   
@@ -256,21 +259,21 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     );
   }
 
-  Widget _rightInkWell(int index,BxMallSubDto item){
+  Widget _rightInkWell(int index, SubCategory item){
     bool isCheck = false;
     isCheck =(index== Provider.of<ChildCategory>(context, listen: false).childIndex)?true:false;
     
     return InkWell(
       onTap: (){
         print (2222222222);
-        Provider.of<ChildCategory>(context, listen: false).changeChildIndex(index,item.mallSubId);
-         _getGoodList(context,item.mallSubId);
+        Provider.of<ChildCategory>(context, listen: false).changeChildIndex(index,item.sub_category_id);
+         _getGoodList(context,item.sub_category_id);
       },
       child: Container(
         padding:EdgeInsets.fromLTRB(5.0,10.0,5.0,10.0),
         
         child: Text(
-          item.mallSubName,
+          item.sub_category_name,
           
           style: TextStyle(
             fontSize:ScreenUtil().setSp(28),
@@ -472,8 +475,11 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       width: ScreenUtil().setWidth(200),
       child: Image.network(newList[index].small_pic
           ,
-          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-            return Text('Your error widget...');
+          errorBuilder: (c, o, s) {
+            return const Icon(
+              Icons.error,
+              color: Colors.red,
+            );
           }
       ),
     );

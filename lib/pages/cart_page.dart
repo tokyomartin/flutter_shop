@@ -28,7 +28,7 @@ class CartPage extends StatelessWidget {
       body: FutureBuilder(
         future:_getCartInfo(context),
         builder: (context,snapshot){
-          List cartList= Provider.of<CartProvide>(context, listen: false) .cartList;
+          List? cartList= Provider.of<CartProvide>(context, listen: false).cartList;
           if(snapshot.hasData && cartList!=null){
               return Stack(
                 children: <Widget>[
@@ -40,9 +40,9 @@ class CartPage extends StatelessWidget {
                       debugPrint("---------初始化购物车---------");
                       print(cartList);
                       return ListView.builder(
-                        itemCount: cartList.length,
+                        itemCount: cartList?.length,
                         itemBuilder: (context,index){
-                          return CartItem(cartList[index]);
+                          return CartItem(cartList?[index]);
                         },
                       );
                     }

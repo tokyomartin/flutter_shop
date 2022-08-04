@@ -1,11 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/api_service.dart';
 import 'package:flutter_shop/util/m_net.dart';
 // import '../service/service_method.dart';
 
-import 'package:flutter_swiper/flutter_swiper.dart';
+//import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -28,7 +30,7 @@ class ShopProductListPage extends StatefulWidget {
   int shopId;
 
 
-  ShopProductListPage({Key key, @required this.shopId}) : super(key: key);
+  ShopProductListPage({Key? key, required this.shopId}) : super(key: key);
 
   _ShopProductListPageState createState() => _ShopProductListPageState();
 
@@ -43,7 +45,7 @@ class _ShopProductListPageState extends State<ShopProductListPage> with Automati
   // List<Map> hotGoodsList =[];
   Map goodsList ={};
 
-  Future _goodsListFuture;
+  Future? _goodsListFuture;
 
   int myPage = 1;
 
@@ -92,7 +94,7 @@ class _ShopProductListPageState extends State<ShopProductListPage> with Automati
     super.build(context);
 
     //获取路由参数
-    var args = ModalRoute.of(context).settings.arguments;
+    var args = ModalRoute.of(context)?.settings.arguments;
 
     debugPrint("------arguments:" + args.toString());
 
@@ -382,12 +384,20 @@ class _ShopProductListPageState extends State<ShopProductListPage> with Automati
               child: Column(
                 children: <Widget>[
                   // Image.network(val['image'],width: ScreenUtil().setWidth(375),),
-                  Image.network(val['small_pic'],
-                  width: ScreenUtil().setWidth(375),
-                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                    return Text('Your error widget...');
-                    }
+                  CachedNetworkImage(
+                    imageUrl: val['small_pic'],
+                    width: ScreenUtil().setWidth(375),
+                    placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
+
+                  // Image.network(val['small_pic'],
+                  // width: ScreenUtil().setWidth(375),
+                  // errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                  //   return Text('Your error widget...');
+                  // }
+                  // ),
                   // Image.network("http://29e5534ea20a8.cdn.sohucs.com/c_cut,x_178,y_20,w_1021,h_680,c_zoom,h_103/os/news/4b39a1b8656ef59d99a3a5d827fe5fd1.jpg" ,width: ScreenUtil().setWidth(375),),
                   Text(
                    // val['name'],
@@ -445,10 +455,9 @@ class _ShopProductListPageState extends State<ShopProductListPage> with Automati
 // 首页轮播组件编写
 class SwiperDiy extends StatelessWidget{
 
-   
+  final List? swiperDataList;
 
-  final List swiperDataList;
-  SwiperDiy({Key key,this.swiperDataList}):super(key:key);
+  SwiperDiy({Key? key,this.swiperDataList}):super(key:key);
 
   @override
   Widget build(BuildContext context) {
@@ -459,24 +468,40 @@ class SwiperDiy extends StatelessWidget{
       color:Colors.white,
       height: ScreenUtil().setHeight(333),
       width: ScreenUtil().setWidth(750),
-      child: Swiper(
+      child:
+      Swiper(
         itemBuilder: (BuildContext context,int index){
           return InkWell(
             onTap: (){
-              
-             
-               Application.router.navigateTo(context,"/detail?id=${swiperDataList[index]['goodsId']}");
-
+               Application.router.navigateTo(context,"/detail?id=${swiperDataList?[index]['goodsId']}");
             },
-            child:  Image.network("${swiperDataList[index]['image']}",
-                errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                  return Text('Your error widget...');
+            child:
+            // CachedNetworkImage(
+            //   imageUrl: "${swiperDataList?[index]['image']}",
+            //   placeholder: (context, url) =>
+            //   const CircularProgressIndicator(),
+            //   errorWidget: (context, url, error) => const Icon(Icons.error),
+            // ),
+
+            // Image.network("${swiperDataList[index]['image']}",
+            //     errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+            //       return Text('Your error widget...');
+            //     },fit:BoxFit.fill
+            // ),
+            Image.network("${swiperDataList?[index]['image']}",
+                errorBuilder: (c, o, s) {
+                  return const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  );
                 },
-                fit:BoxFit.fill),
+                fit:BoxFit.fill
+            ),
+
           );
          
         },
-        itemCount: swiperDataList.length,
+        itemCount: swiperDataList?.length ?? 0,
         pagination: new SwiperPagination(),
         autoplay: true,
       ),
@@ -487,8 +512,8 @@ class SwiperDiy extends StatelessWidget{
 
 //首页导航组件
 class TopNavigator extends StatelessWidget {
-  final List navigatorList;
-  TopNavigator({Key key, this.navigatorList}) : super(key: key);
+  final List? navigatorList;
+  TopNavigator({Key? key, this.navigatorList}) : super(key: key);
   Widget _gridViewItemUI(BuildContext context,item,index){
 
     debugPrint("1.6");
@@ -501,8 +526,11 @@ class TopNavigator extends StatelessWidget {
         children: <Widget>[
           Image.network(item['image'],width:ScreenUtil().setWidth(95)
               ,
-              errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                return Text('Your error widget...');
+              errorBuilder: (c, o, s) {
+                return const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                );
               }
           ),
           Text(item['mallCategoryName'])
@@ -535,8 +563,9 @@ class TopNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    if(navigatorList.length>10){
-      navigatorList.removeRange(10, navigatorList.length);
+    int len = navigatorList?.length ?? 0;
+    if(navigatorList != null && len > 10){
+      navigatorList?.removeRange(10, len);
     }
     var tempIndex=-1;
     return Container(
@@ -548,11 +577,11 @@ class TopNavigator extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 5,
         padding: EdgeInsets.all(4.0),
-        children: navigatorList.map((item){
+        children: navigatorList?.map((item){
           tempIndex++;
           return _gridViewItemUI(context, item,tempIndex);
           
-        }).toList(),
+        }).toList() ?? <Widget>[],
       ),
     );
   }
@@ -562,9 +591,9 @@ class TopNavigator extends StatelessWidget {
 
 //广告图片
 class AdBanner extends StatelessWidget {
-  final String advertesPicture;
+  final String? advertesPicture;
 
-  AdBanner({Key key, this.advertesPicture}) : super(key: key);
+  AdBanner({Key? key, this.advertesPicture}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -574,21 +603,24 @@ class AdBanner extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top:5.0),
       color:Colors.white,
-      child: Image.network(advertesPicture,
+      child: Image.network( advertesPicture?? '',
 
-          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-    return Text('Your error widget...');
-    }
+          errorBuilder: (c, o, s) {
+            return const Icon(
+              Icons.error,
+              color: Colors.red,
+            );
+          }
     ),
     );
   }
 }
 
 class LeaderPhone extends StatelessWidget {
-  final String leaderImage; //店长图片
-  final String leaderPhone; //店长电话
+  String? leaderImage; //店长图片
+  String? leaderPhone; //店长电话
 
-  LeaderPhone({Key key, this.leaderImage,this.leaderPhone}) : super(key: key);
+  LeaderPhone({Key? key, this.leaderImage,this.leaderPhone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -598,10 +630,12 @@ class LeaderPhone extends StatelessWidget {
     return Container(
       child: InkWell(
         onTap:_launchURL,
-        child: Image.network(leaderImage
-            ,
-            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-              return Text('Your error widget...');
+        child: Image.network( leaderImage??'',
+            errorBuilder: (c, o, s) {
+              return const Icon(
+                Icons.error,
+                color: Colors.red,
+              );
             }
         ),
       ),
@@ -609,7 +643,7 @@ class LeaderPhone extends StatelessWidget {
   }
 
   void _launchURL() async {
-    String url = 'tel:'+leaderPhone;
+    String url = 'tel:'+leaderPhone!;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -620,9 +654,9 @@ class LeaderPhone extends StatelessWidget {
 
 //商品推荐
 class Recommend extends StatelessWidget {
-  final List  recommendList;
+  final List?  recommendList;
 
-  Recommend({Key key, this.recommendList}) : super(key: key);
+  Recommend({Key? key, this.recommendList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -661,12 +695,13 @@ class Recommend extends StatelessWidget {
 
   Widget _recommedList(BuildContext context){
 
+
       return  Container(
         height: ScreenUtil().setHeight(380),
        
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: recommendList.length,
+          itemCount: recommendList?.length,
           itemBuilder: (context,index){
             return _item(index,context);
           },
@@ -677,7 +712,7 @@ class Recommend extends StatelessWidget {
   Widget _item(index,context){
     return InkWell(
       onTap: (){
-         Application.router.navigateTo(context,"/detail?id=${recommendList[index]['goodsId']}");
+         Application.router.navigateTo(context,"/detail?id=${recommendList?[index]['goodsId']}");
       },
       child: Container(
        
@@ -691,15 +726,18 @@ class Recommend extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            Image.network(recommendList[index]['image']
+            Image.network(recommendList?[index]['image']
                 ,
-                errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                  return Text('Your error widget...');
+                errorBuilder: (c, o, s) {
+                  return const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  );
                 }
             ),
-            Text('￥${recommendList[index]['mallPrice']}'),
+            Text('￥${recommendList?[index]['mallPrice']}'),
             Text(
-              '￥${recommendList[index]['price']}',
+              '￥${recommendList?[index]['price']}',
               style: TextStyle(
                 decoration: TextDecoration.lineThrough,
                 color:Colors.grey
@@ -716,8 +754,9 @@ class Recommend extends StatelessWidget {
 
 //楼层标题
 class FloorTitle extends StatelessWidget {
-  final String picture_address; // 图片地址
-  FloorTitle({Key key, this.picture_address}) : super(key: key);
+
+  String? picture_address; // 图片地址
+  FloorTitle({Key? key, this.picture_address}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -726,10 +765,13 @@ class FloorTitle extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(8.0),
-      child: Image.network(picture_address
+      child: Image.network( picture_address?? ''
           ,
-          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-            return Text('Your error widget...');
+          errorBuilder: (c, o, s) {
+            return const Icon(
+              Icons.error,
+              color: Colors.red,
+            );
           }
       ),
     );
@@ -738,9 +780,9 @@ class FloorTitle extends StatelessWidget {
 
 //楼层商品组件
 class FloorContent extends StatelessWidget {
-  final List floorGoodsList;
+  final List? floorGoodsList;
 
-  FloorContent({Key key, this.floorGoodsList}) : super(key: key);
+  FloorContent({Key? key, this.floorGoodsList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -760,11 +802,11 @@ class FloorContent extends StatelessWidget {
   Widget _firstRow(context){
     return Row(
       children: <Widget>[
-        _goodsItem(context,floorGoodsList[0]),
+        _goodsItem(context,floorGoodsList?[0]),
         Column(
           children: <Widget>[
-           _goodsItem(context,floorGoodsList[1]),
-           _goodsItem(context,floorGoodsList[2]),
+           _goodsItem(context,floorGoodsList?[1]),
+           _goodsItem(context,floorGoodsList?[2]),
           ],
         )
       ],
@@ -774,8 +816,8 @@ class FloorContent extends StatelessWidget {
   Widget _otherGoods(context){
     return Row(
       children: <Widget>[
-       _goodsItem(context,floorGoodsList[3]),
-       _goodsItem(context,floorGoodsList[4]),
+       _goodsItem(context,floorGoodsList?[3]),
+       _goodsItem(context,floorGoodsList?[4]),
       ],
     );
   }
@@ -789,8 +831,11 @@ class FloorContent extends StatelessWidget {
           Application.router.navigateTo(context, "/detail?id=${goods['goodsId']}");
         },
         child: Image.network(goods['small_pic'],
-            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-            return Text('Your error widget...');
+            errorBuilder: (c, o, s) {
+              return const Icon(
+                Icons.error,
+                color: Colors.red,
+              );
             }
         ),
       ),

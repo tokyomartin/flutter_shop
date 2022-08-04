@@ -7,7 +7,7 @@ import '../../provide/cart.dart';
 
 import 'package:provider/provider.dart';
 
-import '../cart_to_confirm_page.dart';
+//import '../cart_to_confirm_page.dart';
 import '../confirmOrder.dart';
 
 
@@ -41,8 +41,8 @@ class CartBottom extends StatelessWidget {
           Checkbox(
             value: isAllCheck,
             activeColor: Colors.pink,
-            onChanged: (bool val){
-              Provider.of<CartProvide>(context, listen: false).changeAllCheckBtnState(  context, val);
+            onChanged: (val){
+              Provider.of<CartProvide>(context, listen: false).changeAllCheckBtnState(  context, val as bool);
             },
           ),
           Text('全选')

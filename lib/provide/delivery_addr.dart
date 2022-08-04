@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/api_service.dart';
-import 'package:flutter_shop/model/delivery_addr.dart';
 import 'package:flutter_shop/util/m_net.dart';
 import 'package:flutter_shop/util/share_pref.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,13 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login.dart';
 import '../model/cartInfo.dart';
 
-import '../model/delivery_addr.dart';
+import '../model/delivery_addr_model.dart';
 
 import 'dart:convert';
 
 class DeliveryAddrProvide with ChangeNotifier{
 
-  List<DeliveryAddrMode> DeliveryAddrList=[]; //商品列表对象
+  List<DeliveryAddrModel> DeliveryAddrList = <DeliveryAddrModel>[]; //商品列表对象
 
   double allPrice =0 ;   //总价格
   int allGoodsCount =0;  //商品总数量
@@ -107,9 +106,7 @@ class DeliveryAddrProvide with ChangeNotifier{
   getListInfo(BuildContext context) async {
 
     final Map<String, dynamic> data = new Map<String, dynamic>();
-
     data['member_id']  = await SharePref.getSharePrefMemberId(context);
-
      await MNet.oauthGet(ApiService.user_delivery_addr_url, data).then((val) {
 
        DeliveryAddrList = [];
@@ -117,10 +114,10 @@ class DeliveryAddrProvide with ChangeNotifier{
        debugPrint(val.toString());
 
        var data = val;
-       List<Map> myList = (data['data'] as List).cast();
+       List myList = (data['data'] as List).cast();
        myList.forEach((item) {
          debugPrint(item.toString());
-         DeliveryAddrList.add(new DeliveryAddrMode.fromJson(item));
+         DeliveryAddrList.add(new DeliveryAddrModel.fromJson(item));
        });
      });
 

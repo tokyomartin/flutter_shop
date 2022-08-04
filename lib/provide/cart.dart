@@ -10,8 +10,8 @@ import 'dart:convert';
 
 class CartProvide with ChangeNotifier{
 
-  String cartString="[]";
-  List<CartInfoMode> cartList=[]; //商品列表对象
+  String cartString = "[]";
+  List<CartInfoMode>? cartList=[]; //商品列表对象
 
   double allPrice =0 ;   //总价格
   int allGoodsCount =0;  //商品总数量
@@ -122,7 +122,7 @@ class CartProvide with ChangeNotifier{
     params['member_id'] = member_id.toString();
 
 
-    cartList = [];
+    cartList = <CartInfoMode>[];
     //oauthPost
     await MNet.getPostData(ApiService.mall_get_cart_info_url, params).then((val) {
 
@@ -131,18 +131,19 @@ class CartProvide with ChangeNotifier{
       debugPrint(val.toString());
       debugPrint("1.3 getCartInfo结束");
       var data = val;
-      List<Map> myList = (data['data'] as List).cast();
+      List myList = (data['data'] as List).cast();
       debugPrint("1.3 getCartInfo List");
 
       this.allGoodsCount =  0;
       this.allPrice = 0;
-      myList.forEach((item) {
-        debugPrint(item.toString());
+
+      myList.forEach((item){
+
         // 购物车图片ID转换一下
         // item['small_pic'] = item['small_pic'];
-        var cartItem = new CartInfoMode.fromJson(item);
+        CartInfoMode cartItem = CartInfoMode.fromJson(item);
         debugPrint("1.4 getCartInfo cartItem");
-        cartList.add(cartItem);
+        cartList?.add(cartItem);
 
          this.allGoodsCount +=  cartItem.quantity;
          this.allPrice += cartItem.price * cartItem.quantity;
@@ -198,7 +199,7 @@ class CartProvide with ChangeNotifier{
 
          int tempIndex = 0;
          int delIndex = 0;
-         cartList.forEach((item) {
+         cartList?.forEach((item) {
            if (item.product_id == product_id) {
              delIndex = tempIndex;
            }else{
@@ -207,7 +208,7 @@ class CartProvide with ChangeNotifier{
            }
            tempIndex++;
          });
-         cartList.removeAt(delIndex);
+         cartList?.removeAt(delIndex);
        }
        debugPrint("1.4 购物车删除 ");
        debugPrint(cartList.toString());
@@ -221,7 +222,7 @@ class CartProvide with ChangeNotifier{
   //修改选中状态
   changeCheckState( BuildContext context, CartInfoMode cartItem) async{
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     cartString=prefs.getString('cartInfo'); 
+     var cartString= prefs.getString('cartInfo');
      List<Map> tempList= (json.decode(cartString.toString()) as List).cast();
      int tempIndex =0;
      int changeIndex=0;
@@ -241,7 +242,7 @@ class CartProvide with ChangeNotifier{
   //点击全选按钮操作
   changeAllCheckBtnState(BuildContext context, bool isCheck) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cartString=prefs.getString('cartInfo'); 
+    String? cartString= prefs.getString('cartInfo');
     List<Map> tempList= (json.decode(cartString.toString()) as List).cast();
     List<Map> newList=[];
     for(var item in tempList ){

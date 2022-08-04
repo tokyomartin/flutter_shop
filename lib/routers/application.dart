@@ -5,5 +5,5 @@ import 'package:fluro/fluro.dart';
 // import './routes.dart';
 
 class Application{
-  static FluroRouter  router;
+  static FluroRouter  router = FluroRouter();
 }

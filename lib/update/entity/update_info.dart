@@ -44,16 +44,18 @@ class UpdateInfo {
   final int apkSize;
 
   UpdateInfo(
-      {this.code,
-      this.msg,
-      this.updateStatus,
-      this.versionCode,
-      this.versionName,
-      this.uploadTime,
-      this.modifyContent,
-      this.downloadUrl,
-      this.apkMd5,
-      this.apkSize});
+      {
+      required this.code,
+      required this.msg,
+      required this.updateStatus,
+      required this.versionCode,
+      required this.versionName,
+      required this.uploadTime,
+      required this.modifyContent,
+      required this.downloadUrl,
+      required this.apkMd5,
+      required this.apkSize
+      });
 
   Map<String, dynamic> toMap() {
     return {
@@ -71,7 +73,7 @@ class UpdateInfo {
   }
 
   static UpdateInfo fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+
 
     return UpdateInfo(
         code: map['Code']?.toInt(),
