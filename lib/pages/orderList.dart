@@ -346,27 +346,12 @@ Widget orderListUI(OrderModel order, BuildContext context) {
 /// 质感设计样式   订单列表页 入口
 class OrderPage extends StatefulWidget {
 
-  int orderType;
+  OrderPage({
+  Key? key,
+  required this.orderType
+  }): super(key:key);
 
-  final List<Map<String, dynamic>> _tabValues = [
-    {'title': '全部','route': '0'},
-    {'title': '待付款|決済待ち','route': '1'},  //待付款|決済待ち
-    {'title': '決済完了|配送待ち','route': '2'},   //決済完了|配送待ち
-    {'title': '出库中|配送準備','route': '3'},   //出库中|配送準備
-    {'title': '待收货|確認待ち','route': '4'},    //待收货|確認待ち
-    {'title': '荷物届く|完了','route': '5'},    //荷物届く|完了  待评价
-    {'title': '評価完了','route': '6'},    //
-    {'title': '退款｜払い戻すに申請','route': '7'},    //
-    {'title': '关闭｜閉める','route': '8'},    // 完成　閉める
-    {'title': '注文取消','route': '9'},    // 完成 決済error
-    {'title': '決済error','route': '10'},    // 完成 決済error
-  ];
-
-
-
-  OrderPage(
-        this.orderType
-      );
+  final int orderType;
 
   @override
   OrderPageState createState() => OrderPageState(this.orderType);
@@ -380,11 +365,17 @@ class OrderPage extends StatefulWidget {
   // }
 }
 
-class OrderPageState extends State<OrderPage> {
+class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
 
   OrderPageState(
       this.orderType
   );
+
+  @override
+  bool get wantKeepAlive => true;
+
+  // 订单类型
+  late int orderType;
 
   // OrderPageState(int orderType) {
   //   // TODO: implement
@@ -394,7 +385,8 @@ class OrderPageState extends State<OrderPage> {
   // }
 
   // TODO 修改Tab内容  TAB页
-  static List<Map<String, dynamic>> _tabValues = [
+
+  late List<Map<String, dynamic>> _tabValues = [
     {'title': '全部','route': '0'},
     {'title': '待付款|決済待ち','route': '1'},  //待付款|決済待ち
     {'title': '決済完了|配送待ち','route': '2'},   //決済完了|配送待ち
@@ -411,15 +403,15 @@ class OrderPageState extends State<OrderPage> {
 
 
   //TAB 控件
- // TabController _controller;
+
   // 是否正在加载
   bool loading = false;
   // 条数
   int total = 0;
   // 当前页数
   int pageNo = 1;
-  // 订单类型
-  int orderType = 0;
+
+
   // 每次获取条数
   int limit = 10;
   // 当前tab
@@ -429,11 +421,7 @@ class OrderPageState extends State<OrderPage> {
 
 
 
-  TabController controller  = new TabController(
-    length: _tabValues.length,
-    initialIndex: 0, //orderType // index 就是订单类型 order status的订单类型
-    vsync: ScrollableState(),
-  );
+  late TabController tabController;
 
 
   @override
@@ -450,16 +438,17 @@ class OrderPageState extends State<OrderPage> {
     //   currentTab = orderType;
     // });
 
-      // controller = new TabController(
-      //   length: _tabValues.length,
-      //   initialIndex: orderType, //index 就是订单类型 order status的订单类型
-      //   vsync: ScrollableState(),
-      // );
+    tabController = TabController(
+        length: _tabValues.length,
+        initialIndex: orderType, //index 就是订单类型 order status的订单类型
+        //vsync: this,
+        vsync: ScrollableState(),
+      );
 
     // tab切换回调
-    controller.addListener(
+    tabController.addListener(
             () {
-      print('Tab当前索引 ${controller.index}' );
+      print('Tab当前索引 ${tabController.index}' );
       OrderListModel? resultData;
       if(mounted) {
         this.setState(() {
@@ -469,7 +458,7 @@ class OrderPageState extends State<OrderPage> {
       }
 
       //index 就是订单类型 order status 请求订单数据
-      getOrderList(1, this.limit, controller.index).then((data) {
+      getOrderList(1, this.limit, tabController.index).then((data) {
         try {
 
           print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ getOrderList　订单数据--加载解析");
@@ -504,7 +493,7 @@ class OrderPageState extends State<OrderPage> {
 
           print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ setState　订单数据--加载解析");
 
-          currentTab = controller.index;
+          currentTab = tabController.index;
           //TODO 这里是订单详细表中的数据  可能需要改
           orderList = resultData?.data ?? <OrderModel>[];
           total = resultData?.data?.length ?? 0;
@@ -588,7 +577,7 @@ class OrderPageState extends State<OrderPage> {
                 style: TextStyle(fontSize: 18.0),
               );
             }).toList(),
-            controller: controller,
+            controller: tabController,
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.tab,
             isScrollable: true,
@@ -602,7 +591,7 @@ class OrderPageState extends State<OrderPage> {
           ),
         ),
         body: TabBarView(
-          controller: controller,
+          controller: tabController,
           children: _tabValues.map((tabItem) {
             return currentTab == int.parse(tabItem['route']) ? EasyRefresh.custom(
               header: MaterialHeader(),

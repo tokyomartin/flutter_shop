@@ -108,7 +108,7 @@ class MemberPage extends StatelessWidget {
         //return LocationPage(category_id: 25);
         // orderType =1 订单类型
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return OrderPage(orderType);
+          return OrderPage(orderType: orderType);
         }));
       },
       child:
@@ -475,7 +475,7 @@ class MemberPage extends StatelessWidget {
         // 打开的是地址管理页
         //return LocationPage(category_id: 25);
         // orderType =1 订单类型
-        Navigator.push(context, MaterialPageRoute(builder: (context){ return OrderPage(1);}));
+        Navigator.push(context, MaterialPageRoute(builder: (context){ return OrderPage( orderType: 1);}));
 
       },
       child: Container(
