@@ -18,11 +18,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 
+import '../util/share_pref.dart';
+import 'index_page.dart';
+
 // import 'package:native_app/model/add_cart.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
 // 获取订单列表
-Future getOrderList(int page, int limit, int? type) async {
+Future getOrderList( int page, int limit, int? type) async {
   print('当前页码：' +
       page.toString() +
       'limit：' +
@@ -31,15 +34,20 @@ Future getOrderList(int page, int limit, int? type) async {
       type.toString());// orderType orderStatus
 
 
-      int shopId = 1001;
+      var member_id =  await SharePref.getMemberId();
+      if(member_id != null){
 
-      String strUrl = ApiService.mgr_orders_search_url + 'shopId=${shopId}&num=${num}&page=${page}&order_status=${type}';
+        // TODO 跳转到提醒画面
+        //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => IndexPage()), (Route<dynamic> route) => false);
+      }
+
+      String strUrl = ApiService.mgr_orders_search_url + 'member_id=${member_id}&num=${num}&page=${page}&order_status=${type}';
       var data = await MNet.getData(strUrl);
   debugPrint("------订单列表-----");
   //debugPrint(data.toString());
-  debugPrint(data['code'].toString());
-  debugPrint(data['message'].toString());
-  debugPrint(data['data_count'].toString());
+  //debugPrint(data['code'].toString());
+  //debugPrint(data['message'].toString());
+  //debugPrint(data['data_count'].toString());
 
   return data;
 
@@ -371,6 +379,9 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
       this.orderType
   );
 
+
+  bool _checkConfiguration() => true;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -422,7 +433,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
 
 
   late TabController tabController;
-
+  OrderListModel? resultData;
 
   @override
   void initState() {
@@ -441,8 +452,8 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
     tabController = TabController(
         length: _tabValues.length,
         initialIndex: orderType, //index 就是订单类型 order status的订单类型
-        //vsync: this,
-        vsync: ScrollableState(),
+        vsync: this,
+        //vsync: ScrollableState(),  // 新版本不可以使用
       );
 
     // tab切换回调
@@ -458,89 +469,101 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
       }
 
       //index 就是订单类型 order status 请求订单数据
-      getOrderList(1, this.limit, tabController.index).then((data) {
-        try {
 
-          print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ getOrderList　订单数据--加载解析");
+      // if(_checkConfiguration()){
+      //    Future.delayed(Duration.zero, (){
+      //
+      //    });
+      //      }
 
-          resultData = OrderListModel.fromJson(data);
-        } catch (err) {
+           getOrderList(1, this.limit, tabController.index).then((data) {
+             try {
 
-          print("订单数据--加载解析错误");
-          // Common addCart = Common.fromJson(data);
-          // 弹出消息窗口
-          // showDialog(
-          //     context: context,
-          //     child: AlertDialog(
-          //       title: Text('提示'),
-          //       content: Text("提示消息内容"),
-          //       actions: <Widget>[
-          //         new FlatButton(
-          //           child: new Text('确定'),
-          //           onPressed: () {
-          //             // 跳转登录画面
-          //             // Navigator.of(context).pop();
-          //             // Application.router.navigateTo(context, "/login");
-          //           },
-          //         ),
-          //       ],
-          //     ));
+               print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ getOrderList　订单数据--加载解析");
 
-          print(err);
-          return;
-        }
-        this.setState(() {
+               resultData = OrderListModel.fromJson(data);
+             } catch (err) {
 
-          print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ setState　订单数据--加载解析");
+               print("订单数据--加载解析错误");
+               // Common addCart = Common.fromJson(data);
+               // 弹出消息窗口
+               // showDialog(
+               //     context: context,
+               //     child: AlertDialog(
+               //       title: Text('提示'),
+               //       content: Text("提示消息内容"),
+               //       actions: <Widget>[
+               //         new FlatButton(
+               //           child: new Text('确定'),
+               //           onPressed: () {
+               //             // 跳转登录画面
+               //             // Navigator.of(context).pop();
+               //             // Application.router.navigateTo(context, "/login");
+               //           },
+               //         ),
+               //       ],
+               //     ));
 
-          currentTab = tabController.index;
-          //TODO 这里是订单详细表中的数据  可能需要改
-          orderList = resultData?.data ?? <OrderModel>[];
-          total = resultData?.data?.length ?? 0;
-          // total = resultData.data_count;
+               print(err);
+               return;
+             }
+             this.setState(() {
 
-          pageNo = 1;
-        });
-      });
+               print("OrderPageState ▶︎▶︎▶︎initState ▶︎▶︎▶︎ setState　订单数据--加载解析");
+
+               currentTab = tabController.index;
+               //TODO 这里是订单详细表中的数据  可能需要改
+               orderList = resultData?.data ?? <OrderModel>[];
+               total = resultData?.data?.length ?? 0;
+               // total = resultData.data_count;
+
+               pageNo = 1;
+             });
+           });
+
+
+
+           // 获取列表
+           getOrderList(this.pageNo, this.limit, orderType).then((data) {
+             try {
+               print("准备解析订单列表");
+               resultData = OrderListModel.fromJson(data);
+               loading = true;
+             } catch (err) {
+               print("解析错误");
+               loading = false;
+               // Common addCart = Common.fromJson(data);
+               // showDialog(
+               //     context: context,
+               //     child: AlertDialog(
+               //       title: Text('提示'),
+               //       content: Text(addCart.msg == null ? '' : addCart.msg),
+               //       actions: <Widget>[
+               //         new FlatButton(
+               //           child: new Text('确定'),
+               //           onPressed: () {
+               //             Navigator.of(context).pop();
+               //             Application.router.navigateTo(context, "/login");
+               //           },
+               //         ),
+               //       ],
+               //     ));
+
+
+               print(err);
+               return;
+             }
+             this.setState(() {
+               orderList = resultData?.data ?? <OrderModel>[];
+               loading = loading;
+               total = resultData?.data?.length ?? 0;
+             });
+           });
+
+
+
     });
 
-    OrderListModel? resultData;
-    // 获取列表
-    getOrderList(this.pageNo, this.limit, orderType).then((data) {
-      try {
-        print("准备解析订单列表");
-        resultData = OrderListModel.fromJson(data);
-        loading = true;
-      } catch (err) {
-        print("解析错误");
-        loading = false;
-        // Common addCart = Common.fromJson(data);
-        // showDialog(
-        //     context: context,
-        //     child: AlertDialog(
-        //       title: Text('提示'),
-        //       content: Text(addCart.msg == null ? '' : addCart.msg),
-        //       actions: <Widget>[
-        //         new FlatButton(
-        //           child: new Text('确定'),
-        //           onPressed: () {
-        //             Navigator.of(context).pop();
-        //             Application.router.navigateTo(context, "/login");
-        //           },
-        //         ),
-        //       ],
-        //     ));
-
-
-        print(err);
-        return;
-      }
-      this.setState(() {
-        orderList = resultData?.data ?? <OrderModel>[];
-        loading = loading;
-        total = resultData?.data?.length ?? 0;
-      });
-    });
 
   } //END initstate
 

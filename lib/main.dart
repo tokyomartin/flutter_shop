@@ -138,6 +138,7 @@ class MyApp extends StatelessWidget {
           title: '华人超市+',
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Application.router.generator,
+          //navigatorKey: navigatorKey,
           theme: ThemeData(
             primaryColor: Colors.pink,
           ),
