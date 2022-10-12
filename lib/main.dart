@@ -1,26 +1,28 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/model/user_detail.dart';
-import 'package:flutter_shop/pages/pop_view_page.dart';
-import 'package:flutter_shop/provide/province.dart';
-import 'package:flutter_shop/provide/location.dart'; // 定位服务
-import 'package:flutter_shop/provide/user.dart';
-import 'package:flutter_shop/provide/user_detail.dart';
+import 'package:flutter_shop/my_common/model/user_detail.dart';
+import 'package:flutter_shop/my_common/pages/pop_view_page.dart';
+import '../my_common/provide/province.dart';
+import '../my_common/provide/location.dart'; // 定位服务
+import '../my_common/provide/user.dart';
+import '../my_common/provide/user_detail.dart';
 import 'package:geocode/geocode.dart';
 import 'package:location/location.dart';
-import './pages/index_page.dart';
+import 'my_common/pages/index_page.dart';
 
-import './provide/child_category.dart';
-import './provide/category_goods_list.dart';
-import './provide/details_info.dart';
-import './provide/cart.dart';
-import './provide/delivery_addr.dart';
-import './provide/pay_method.dart';
-import './provide/currentIndex.dart';
+import '../my_common/provide/child_category.dart';
+import '../my_common/provide/category_goods_list.dart';
+import '../my_common/provide/details_info.dart';
+import '../my_common/provide/cart.dart';
+import '../my_common/provide/delivery_addr.dart';
+import '../my_common/provide/pay_method.dart';
+import '../my_common/provide/currentIndex.dart';
 
 import 'package:fluro/fluro.dart';
-import './routers/routes.dart';
-import './routers/application.dart';
+import '../my_common/routers/routes.dart';
+import '../my_common/routers/application.dart';
 
 import 'package:provider/provider.dart';
 
@@ -28,9 +30,22 @@ import 'package:provider/provider.dart';
 // import 'package:provide/provide.dart';
 
 
-import './provide/counter.dart';
+import '../my_common/provide/counter.dart';
+import '../my_common/util/exception_report_util.dart';
+import '../my_common/util/sy_exception_report_channel.dart';
+
+// import 'package:logger/logger.dart';
+
+// var logger = Logger(
+//   printer: PrettyPrinter();
+// );
+
 
 void main() {
+
+  // 初始化Exception 捕获配置
+  ExceptionReportUtil.initExceptionCatchConfig();
+
   var childCategory = ChildCategory();
   var categoryGoodsListProvide = CategoryGoodsListProvide();
   var detailsInfoProvide = DetailsInfoProvide();
@@ -61,37 +76,50 @@ void main() {
   //
   // runApp(ProviderNode(child:MyApp(),providers:providers));
 
+  runZonedGuarded( () {
+    // 主要函数执行过程
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ChildCategory>(
+              create: (context) => childCategory),
+          ChangeNotifierProvider<CategoryGoodsListProvide>(
+              create: (context) => categoryGoodsListProvide),
+          ChangeNotifierProvider<DetailsInfoProvide>(
+              create: (context) => detailsInfoProvide),
+          ChangeNotifierProvider<CartProvide>(create: (context) => cartProvide),
+          ChangeNotifierProvider<DeliveryAddrProvide>(
+              create: (context) => deliveryAddrProvide),
+          ChangeNotifierProvider<PayMethodProvide>(
+              create: (context) => payMethodProvide),
+          ChangeNotifierProvider<ProvinceProvide>(
+              create: (context) => provinceProvide),
+          ChangeNotifierProvider<UserDetailProvide>(
+              create: (context) => userDetailProvide),
+          ChangeNotifierProvider<LocationProvide>(
+              create: (context) => locationProvide),
+          ChangeNotifierProvider<UserProvider>(create: (context) => userProvide),
+          ChangeNotifierProvider<CurrentIndexProvide>(
+              create: (context) => CurrentIndexProvide()),
+          ChangeNotifierProvider<Counter>(create: (context) => Counter()),
+          // ChangeNotifierProvider.value(value: Counter()),
+          // //ChangeNotifierProvider(builder: (_) => Counter()),
+        ],
+        child: MyApp(),
+      ),
+    ); //END
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ChildCategory>(
-            create: (context) => childCategory),
-        ChangeNotifierProvider<CategoryGoodsListProvide>(
-            create: (context) => categoryGoodsListProvide),
-        ChangeNotifierProvider<DetailsInfoProvide>(
-            create: (context) => detailsInfoProvide),
-        ChangeNotifierProvider<CartProvide>(create: (context) => cartProvide),
-        ChangeNotifierProvider<DeliveryAddrProvide>(
-            create: (context) => deliveryAddrProvide),
-        ChangeNotifierProvider<PayMethodProvide>(
-            create: (context) => payMethodProvide),
-        ChangeNotifierProvider<ProvinceProvide>(
-            create: (context) => provinceProvide),
-        ChangeNotifierProvider<UserDetailProvide>(
-            create: (context) => userDetailProvide),
-        ChangeNotifierProvider<LocationProvide>(
-            create: (context) => locationProvide),
-        ChangeNotifierProvider<UserProvider>(create: (context) => userProvide),
-        ChangeNotifierProvider<CurrentIndexProvide>(
-            create: (context) => CurrentIndexProvide()),
-        ChangeNotifierProvider<Counter>(create: (context) => Counter()),
-        // ChangeNotifierProvider.value(value: Counter()),
-        // //ChangeNotifierProvider(builder: (_) => Counter()),
-      ],
-      child: MyApp(),
-    ),
-  );
+  //zone
+  }, (error, stackTrace) {
+    // 这个闭包中发生的Exception是捕获不到的 @山竹
+    SYExceptionReportChannel.reportException(error, stackTrace);
+  }, zoneSpecification: ZoneSpecification(
+    print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      // 记录所有的打印日志
+      parent.print(zone, "line是：$line");
+    },
+  ));
+
 }
 
 class MyApp extends StatelessWidget {

@@ -1,0 +1,3 @@
+[submodule "lib/my_common"]
+	path = lib/my_common
+	url = https://github.com/ecshop-flutter/my_common
