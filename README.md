@@ -49,7 +49,7 @@
 
 ## 知识架构图
 
-
+### 在SharePref类中
 测试的时候  可以设置DEBUG = true
 
 class SharePref {
@@ -57,7 +57,7 @@ class SharePref {
   static bool DEBUG = true;
 
 
-开发时需要注意main。dart中
+### 开发时需要注意main.dart中
       //ios
       _permissionGranted = await location.hasPermission();
       if (_permissionGranted == PermissionStatus.denied) {
@@ -77,5 +77,23 @@ class SharePref {
 
 
 
+### 添加子模块功能
+并把大部分功能模块迁移到子模块中
+cd lib
+下面两个命令有一个是对的
+git submodule https://github.com/ecshop-flutter/my_common my_common
+或者是
+git submodule add  https://github.com/ecshop-flutter/my_common my_common
+git status
 
+cd lib/my_common
+git remote -v
+git branch
+git add .
+git commit -m "add base common classes, provider and models  to submodule"
+git push
 
+cd 根目录
+git add .
+git commit -m "submodule"
+git push
