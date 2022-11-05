@@ -9,6 +9,8 @@ import 'package:flutter_shop/pages/lbs_shop_list_page.dart';
 import '../login.dart';
 import 'category_list_page.dart';
 
+import 'location_page.dart';  // 暂时没使用
+
 
 class MemberPage extends StatelessWidget {
   @override

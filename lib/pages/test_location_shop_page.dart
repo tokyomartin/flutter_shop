@@ -6,45 +6,38 @@ import 'package:flutter_shop/util/m_net.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../routers/application.dart';
 
 //--------
+// 不用
 // import 'package:provide/provide.dart';
 
 import '../provide/child_category.dart';
 import '../provide/currentIndex.dart';
 import '../model/category.dart';
+
 import 'package:provider/provider.dart';
+
+
 import 'package:common_utils/common_utils.dart';
 
-// 类目商品列表   显示该类别下面的商品的列表
-class LbsShopListPage extends StatefulWidget {
+import 'category_list_page.dart';
 
-  int page_size = 4;
-  int shopId = 1;
-
-
-  LbsShopListPage({Key key}) : super(key: key);
-
-  _LbsShopListPageState createState() => _LbsShopListPageState();
+class TestLocationShopPage extends StatefulWidget {
+  _TestLocationShopPageState createState() => _TestLocationShopPageState();
 
 }
 
-class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAliveClientMixin {
+class _TestLocationShopPageState extends State<TestLocationShopPage> with AutomaticKeepAliveClientMixin {
 
-  // _CategoryListPageState({Key key, @required this.category_id});
-
-  // int category_id = 25;
-
+  int page_size = 4;
+  int page = 1;
   // List<Map> hotGoodsList =[];
-  Map goodsList ={};
+  Map hotList ={};
 
-  Future _goodsListFuture;
-
-  int myPage = 1;
+  Future _shopsListFuture;
 
 
 
@@ -54,14 +47,12 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
 
   @override
   void initState() {
-
-    debugPrint("-------LbsShopListPage state");
-    debugPrint(widget.shopId.toString());
+    debugPrint("LocationShops init");
     super.initState();
 
     //TODO for test
     // _goodsListFuture = _getHotGoods(25, 8, 1);
-     _goodsListFuture = _getShopList(widget.shopId, widget.page_size);
+     _shopsListFuture = _getLocationShopsList();
 
   }
 
@@ -73,7 +64,6 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
   //Todo change FormState
    // GlobalKey _footerKey = GlobalKey();
   GlobalKey<FormState> _footerKey = GlobalKey<FormState>();
-
 
 //   //初始化设置 LogUtil
 //   LogUtil.init(true);
@@ -89,32 +79,20 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
   Widget build(BuildContext context) {
 
     super.build(context);
+    var formData = {'lon':'115.02932','lat':'35.76189'};
 
-    //获取路由参数
-    var args = ModalRoute.of(context).settings.arguments;
-
-    debugPrint("------arguments:" + args.toString());
-
-
-    // var formData = {'lon':'115.02932','lat':'35.76189'};
     // Future<dynamic> futureEntry =  MNet.getData(ApiService.homepage_url);
-    //
     // futureEntry.then((dynamic result) {}
-    //
     // );
-
 
     Future _gerData() async {
       var response = MNet.getResponse(ApiService.homepage_url);
       return response;
     }
 
-
-
-
     return  Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      appBar: AppBar(title: Text('附近商店'),),
+      appBar: AppBar(title: Text('华人超市+'),),
       body:
        FutureBuilder(
 
@@ -123,10 +101,10 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
        //  future: _gerData(),
        //  future: _getHotGoodsList(),
        //    future:   _getHotGoods(25, 8, 1),
-           future :   _goodsListFuture,
+           future :   _shopsListFuture,
         builder: (context,snapshot){
 
-          debugPrint("------------CategoryListPage");
+          debugPrint("------------homePageCategory");
           debugPrint(snapshot.toString());
           debugPrint(snapshot.connectionState.toString());
           debugPrint(snapshot.data.toString());
@@ -146,11 +124,28 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
 
                     var myData= snapshot.data.toString();
 
-                    debugPrint("Data:" + myData.toString());
+                    debugPrint("HomePageData:" + myData.toString());
 
                    // _getHotGoods(25, 8, 1);
                    //  _getHotGoods(26, 8, 1);
-
+                   //     var strData = '''
+                   //  ''';
+                   //
+                   //     var data =json.decode(strData);
+                    // debugPrint("1.3 加载首页数据");
+                    //
+                    // List<Map> swiperDataList = (data['data']['slides'] as List).cast(); // 顶部轮播组件数
+                    // List<Map> navigatorList =(data['data']['category'] as List).cast(); //类别列表
+                    // String advertesPicture = data['data']['advertesPicture']['PICTURE_ADDRESS']; //广告图片
+                    // String  leaderImage= data['data']['shopInfo']['leaderImage'];  //店长图片
+                    // String  leaderPhone = data['data']['shopInfo']['leaderPhone']; //店长电话
+                    // List<Map> recommendList = (data['data']['recommend'] as List).cast(); // 商品推荐
+                    // String floor1Title =data['data']['floor1Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
+                    // String floor2Title =data['data']['floor2Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
+                    // String floor3Title =data['data']['floor3Pic']['PICTURE_ADDRESS'];//楼层1的标题图片
+                    // List<Map> floor1 = (data['data']['floor1'] as List).cast(); //楼层1商品和图片
+                    // List<Map> floor2 = (data['data']['floor2'] as List).cast(); //楼层1商品和图片
+                    // List<Map> floor3 = (data['data']['floor3'] as List).cast(); //楼层1商品和图片
 
                     debugPrint("1.4 加载首页数据END");
 
@@ -158,8 +153,6 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
                         key:_footerKey,
                         controller: _controller,
                         firstRefresh: true,
-
-
 
                         // refreshFooter: ClassicsFooter(
                         //   key:_footerKey,
@@ -178,7 +171,7 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
                             // SwiperDiy(swiperDataList:swiperDataList ),   //页面顶部轮播组件
                             // TopNavigator(navigatorList:navigatorList),   //导航组件
 
-                            // AdBanner(advertesPicture:advertesPicture), //广 b    告图片
+                            // AdBanner(advertesPicture:advertesPicture), //广告图片
                             // LeaderPhone(leaderImage:leaderImage,leaderPhone: leaderPhone),  //广告组件
                             // Recommend(recommendList:recommendList),
                             // FloorTitle(picture_address:floor1Title),
@@ -189,49 +182,12 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
                             // FloorTitle(picture_address:floor3Title),
                             // FloorContent(floorGoodsList:floor3),
                             //_getHotGoodsList(),
-                            // _hotGoodsWidget("火爆专区",25),
-                            _hotGoodsWidget("火爆专区", widget.shopId),
-                           // _hotGoodsWidget("精品专区",26),
+                            _hotGoodsWidget("零食（更多...）",35),
+                            _hotGoodsWidget("熟食（更多...）",23),
+
 
                           ],
                         ) ,
-
-                      //loadMore
-                      // onRefresh: ()async{
-                      //   if(Provider.of<ChildCategory>(context, listen: false).noMoreText=='没有更多了'){
-                      //     Fluttertoast.showToast(
-                      //         msg: "已经到底了",
-                      //         toastLength: Toast.LENGTH_SHORT,
-                      //         gravity: ToastGravity.CENTER,
-                      //         //timeInSecForIos: 1,
-                      //         backgroundColor: Colors.pink,
-                      //         textColor: Colors.white,
-                      //         fontSize: 16.0
-                      //     );
-                      //   }else{
-                      //
-                      //     _getMoreList();
-                      //   }
-                      // },
-                        onLoad: () async {
-                          await Future.delayed(Duration(seconds: 1), () {
-                            if(Provider.of<ChildCategory>(context, listen: false).noMoreText=='没有更多了'){
-                              Fluttertoast.showToast(
-                                  msg: "已经到底了",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  //timeInSecForIos: 1,
-                                  backgroundColor: Colors.pink,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
-                            }else{
-
-                              _getMoreList();
-                            }
-                          });
-                        },
-
 
                         // loadMore
                         // onRefresh: _getHotGoodsList
@@ -279,92 +235,113 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
 //   });
 // },
 
-    _getShopList(shopId, page_size) async{
+  _getLocationShopsList() async{
 
-     await _getHotGoods(shopId, page_size, 1);
-     myPage++;
+     await _getShopsList(20, 1);
+     // await _getHotGoods(24, this.page_size, 1); //肉类
+    // await _getHotGoods(25, this.page_size, 1);  //新品
+    //  await _getHotGoods(26, this.page_size, 1);    //爆品
+
+
      return true;
 
   }
-     _getMoreList() async{
-
-       debugPrint("_getMoreGoods call");
-      await _getMoreGoods(widget.shopId, widget.page_size, myPage);
-
-      return true;
-
-    }
 
   //火爆商品接口
-   _getHotGoods(shopId, num, page) async{
+  _getShopsList( num, page) async{
 
-    //var formPage={'categoryId': category_id, 'num': num, 'page': page};
+    var formPage={'num': num, 'page': page};
 
      // request('homePageBelowConten',formData:formPage)
-     String strUrl = ApiService.shop_list_by_geohash_url + 'shopId=${shopId}&num=${num}&page=${page}';
+    // category_id=${category_id}&
+     String strUrl = ApiService.shop_list_by_geohash_url + 'num=${num}&page=${page}';
 
 
      var data = await MNet.getData(strUrl);
 
        //var data=json.decode(val.toString());
-       debugPrint("店铺列表");
+       debugPrint("首页HOT 店铺列表");
        debugPrint(data.toString());
 
-       List<Map> newGoodsList = (data['data'] as List ).cast();
-       goodsList[shopId] = newGoodsList;
-       myPage = 1;
-         // goodsList[category_id].addAll(newGoodsList);
-  }
+       List<Map> itemList = (data['data'] as List ).cast();
+       //hotList[category_id] = newGoodsList;
+       hotList[1] = itemList;
 
-  //火爆商品接口
-  _getMoreGoods(shopId, num, page) async{
+    // setState(() {
+    //      //hotGoodsList[1] = newGoodsList;
+    //      hotGoodsList[category_id] = newGoodsList;
+    //      // hotGoodsList.addAll(newGoodsList);
+    //      // page++;
+    //    });
 
-    //var formPage={'categoryId': category_id, 'num': num, 'page': page};
-    String strUrl = ApiService.shop_list_by_geohash_url + 'shopId=${shopId}&num=${num}&page=${page}';
-    var data = await MNet.getData(strUrl);
-    //var data=json.decode(val.toString());
-    debugPrint("店铺列表");
-    debugPrint(data.toString());
-    List<Map> newGoodsList = (data['data'] as List ).cast();
-    // goodsList[category_id] = newGoodsList;
-    setState(() {
-          goodsList[shopId].addAll(newGoodsList);
-          myPage++;
-       });
   }
 
   //火爆专区标题
-  Widget hotTitle(title){
+  Widget hotTitle(title, category_id){
 
-    return Container(
-      margin: EdgeInsets.only(top: 10.0),
+    return InkWell(
+        onTap:(){
+          debugPrint("首页 hotTitle----CategoryListPage");
+          // Application.router.navigateTo(context,"/detail?id=${val['goodsId']}");
+          // Application.router.navigateTo(context,"/detail?id=${val['id']}");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context){
+                return CategoryListPage(category_id: category_id);
 
-      padding:EdgeInsets.all(5.0),
-      alignment:Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border:Border(
-              bottom: BorderSide(width:0.5 ,color:Colors.black12)
+                // settings: RouteSettings(
+                //   arguments: todos[index],
+                // ),
+          }
           )
-      ),
-      //'火爆专区'
-      child: Text(title),
+          );
+
+        },
+        child:
+        Container(
+          margin: EdgeInsets.only(top: 10.0),
+
+          padding:EdgeInsets.all(5.0),
+          alignment:Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border:Border(
+                  bottom: BorderSide(width:0.5 ,color:Colors.black12)
+              )
+          ),
+          //'火爆专区'
+          child: Text(title),
+        )
+
     );
+
+    // return Container(
+    //   margin: EdgeInsets.only(top: 10.0),
+    //   padding:EdgeInsets.all(5.0),
+    //   alignment:Alignment.center,
+    //   decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       border:Border(
+    //           bottom: BorderSide(width:0.5 ,color:Colors.black12)
+    //       )
+    //   ),
+    //   //'火爆专区'
+    //   child: Text(title),
+    // );
 
   }
 
-  getHotGoodsList(shopId){
-    return goodsList[shopId];
+  getHotGoodsList(category_id){
+    return hotList[category_id];
   }
 
   //火爆专区子项
-  Widget _wrapList(shopId){
+  Widget _wrapList(category_id){
 
-    List<Map> hotGoodsListItem = goodsList[shopId];
+    List<Map> hotItem = hotList[category_id];
 
-    if(hotGoodsListItem!= null && hotGoodsListItem.length!=0){
+    if(hotItem!= null && hotItem.length!=0){
 
-      List<Widget> listWidget = hotGoodsListItem.map((val){
+      List<Widget> listWidget = hotItem.map((val){
           
           return InkWell(
             onTap:(){
@@ -421,19 +398,19 @@ class _LbsShopListPageState extends State<LbsShopListPage> with AutomaticKeepAli
         children: listWidget,
       );
     }else{
-      return Text('数据为空');
+      return Text(' ');
     }
   }
 
   //火爆专区组合
-  Widget _hotGoodsWidget(title, shopId){
+  Widget _hotGoodsWidget(title, category_id){
 
     return Container(
           
           child:Column(
             children: <Widget>[
-              hotTitle(title),
-               _wrapList(shopId),
+              hotTitle(title, category_id),
+               _wrapList(category_id),
             ],
           )   
     );
