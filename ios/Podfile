@@ -43,5 +43,10 @@ post_install do |installer|
         #  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
         #end
         # ios 指定版本号
-  end
+        target.build_configurations.each do |config|
+          if config.build_settings['WRAPPER_EXTENSION'] == 'bundle'
+             config.build_settings['DEVELOPMENT_TEAM'] = 'Q3SZX5PYD8'
+          end
+        end
+    end
 end

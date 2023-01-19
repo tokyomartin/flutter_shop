@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/my_common/model/user_detail.dart';
@@ -31,7 +32,6 @@ import 'package:provider/provider.dart';
 // @Deperated
 // import 'package:provide/provide.dart';
 
-
 import '../my_common/provide/counter.dart';
 import '../my_common/util/exception_report_util.dart';
 import '../my_common/util/sy_exception_report_channel.dart';
@@ -45,17 +45,17 @@ import '../my_common/util/sy_exception_report_channel.dart';
 //How to solve Flutter CERTIFICATE_VERIFY_FAILED error while performing a POST request?
 //https://stackoverflow.com/questions/54285172/how-to-solve-flutter-certificate-verify-failed-error-while-performing-a-post-req
 // 1.1 BEGIN
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
-
-
-void main() {
+void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   // 1.2 END
   HttpOverrides.global = MyHttpOverrides();
@@ -77,7 +77,6 @@ void main() {
 
   var userProvide = UserProvider();
 
-
   // var providers = Providers();
   // var scope1 = ProviderScope("1");
   // var scope2 = ProviderScope("2");
@@ -93,7 +92,11 @@ void main() {
   //
   // runApp(ProviderNode(child:MyApp(),providers:providers));
 
-  runZonedGuarded( () {
+  await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+  runZonedGuarded(() {
     // 主要函数执行过程
     runApp(
       MultiProvider(
@@ -115,7 +118,8 @@ void main() {
               create: (context) => userDetailProvide),
           ChangeNotifierProvider<LocationProvide>(
               create: (context) => locationProvide),
-          ChangeNotifierProvider<UserProvider>(create: (context) => userProvide),
+          ChangeNotifierProvider<UserProvider>(
+              create: (context) => userProvide),
           ChangeNotifierProvider<CurrentIndexProvide>(
               create: (context) => CurrentIndexProvide()),
           ChangeNotifierProvider<Counter>(create: (context) => Counter()),
@@ -126,7 +130,7 @@ void main() {
       ),
     ); //END
 
-  //zone
+    //zone
   }, (error, stackTrace) {
     // 这个闭包中发生的Exception是捕获不到的 @山竹
     SYExceptionReportChannel.reportException(error, stackTrace);
@@ -136,15 +140,12 @@ void main() {
       parent.print(zone, "是：$line");
     },
   ));
-
 }
 
 class MyApp extends StatelessWidget {
-
   // 地理定位信息
   LocationData? currentLocation;
   String address = "";
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,12 +153,10 @@ class MyApp extends StatelessWidget {
     Routes.configureRoutes(router);
     Application.router = router;
 
-
     getGpsLocation().then((value) {
       LocationData location = value;
       if (location != null) {
-        _getAddress(location.latitude, location.longitude)
-            .then((value) async {
+        _getAddress(location.latitude, location.longitude).then((value) async {
           currentLocation = location;
           address = value;
           debugPrint("GPS信息 latitude:" + location.latitude.toString());
@@ -166,13 +165,12 @@ class MyApp extends StatelessWidget {
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setDouble("latitude", location.latitude ?? 0);
-          prefs.setDouble("longtitude", location.longitude??0);
+          prefs.setDouble("longtitude", location.longitude ?? 0);
 
           // setState(() {
           //   currentLocation = location;
           //   address = value;
           // });
-
         });
       }
     });
@@ -184,78 +182,71 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return  Container(
-        child: MaterialApp(
-          title: '熊猫超市+',
-          debugShowCheckedModeBanner: false,
-          onGenerateRoute: Application.router.generator,
-          //navigatorKey: navigatorKey,
-          theme: ThemeData(
-            primaryColor: Colors.pink,
+        return Container(
+          child: MaterialApp(
+            title: '熊猫超市+',
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: Application.router.generator,
+            //navigatorKey: navigatorKey,
+            theme: ThemeData(
+              primaryColor: Colors.pink,
+            ),
+
+            //Normal Index
+            home: IndexPage(),
+            //home: child,
+            //TODO for TEST
+            // home: PopViewPage()
           ),
-
-          //Normal Index
-          home: IndexPage(),
-          //home: child,
-          //TODO for TEST
-          // home: PopViewPage()
-
-        ),
-
         );
       },
       //child: IndexPage(),
     );
   }
 
+  Future<LocationData> getGpsLocation() async {
+    Location location = new Location();
 
-Future<LocationData> getGpsLocation() async {
-  Location location = new Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
 
-  bool _serviceEnabled;
-  PermissionStatus _permissionGranted;
-
-  _serviceEnabled = await location.serviceEnabled();
-  if (!_serviceEnabled) {
-    _serviceEnabled = await location.requestService();
+    _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
-      throw '没有GPS服务｜GPS　Locationない';
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        throw '没有GPS服务｜GPS　Locationない';
+      }
     }
+
+    //ios
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        throw '没有GPS服务｜GPS　Locationない';
+        //return ;
+      }
+    }
+    // android
+    // _permissionGranted = await location.hasPermission();
+    // if (_permissionGranted == PermissionStatus.DENIED) {
+    //   _permissionGranted = await location.requestPermission();
+    //   if (_permissionGranted != PermissionStatus.GRANTED) {
+    //     return null;
+    //   }
+    // }
+
+    LocationData _locationData;
+    _locationData = await location.getLocation();
+    return _locationData;
   }
 
-  //ios
-  _permissionGranted = await location.hasPermission();
-  if (_permissionGranted == PermissionStatus.denied) {
-    _permissionGranted = await location.requestPermission();
-    if (_permissionGranted != PermissionStatus.granted) {
-      throw '没有GPS服务｜GPS　Locationない';
-      //return ;
-    }
+  Future<String> _getAddress(double? lat, double? lang) async {
+    if (lat == null || lang == null) return "";
+    GeoCode geoCode = GeoCode();
+    Address address =
+        await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+
+    return "${address.streetAddress}, ${address.city}, ${address.countryName}, ${address.postal}";
   }
-  // android
-  // _permissionGranted = await location.hasPermission();
-  // if (_permissionGranted == PermissionStatus.DENIED) {
-  //   _permissionGranted = await location.requestPermission();
-  //   if (_permissionGranted != PermissionStatus.GRANTED) {
-  //     return null;
-  //   }
-  // }
-
-  LocationData _locationData;
-  _locationData = await location.getLocation();
-  return _locationData;
-}
-
-
-Future<String> _getAddress(double? lat, double? lang) async {
-  if (lat == null || lang == null) return "";
-  GeoCode geoCode = GeoCode();
-  Address address =
-  await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
-
-  return "${address.streetAddress}, ${address.city}, ${address
-      .countryName}, ${address.postal}";
-}
-
-
 }
