@@ -45,6 +45,28 @@
 
 
 
+请求定位权限（Privacy - Photo Library Usage Description）- 需要获取个人位置进行天气预报是否允许此App获取你的定位？
+请求定位权限（Privacy - Photo Library Usage Description）- 需要获取个人位置进行附近店铺的展示，是否允许此App获取你的定位？
+请求定位权限（Privacy - Photo Library Usage Description）- 需要获取个人位置搜索附近店铺，是否允许此App获取你的定位？
+
+个人账号申请完毕后果断上传自己的App到AppStore，但鉴于审核方面是小白一枚，一审核就碰到一个十分不该被拒的原因，原因条款为“Guideline 5.1.1 - Legal - Privacy - Data Collection and Storage解决方法”。
+
+  因这个原因被拒的只需要将请求系统权限的原因写得更加明白一些，要将请求权限的目的表明，举个🌰：
+
+1.请求相机权限（Privacy - Location Always Usage Description）- 需要获取个人照片进行编辑是否允许此App获取相册权限？
+2.请求定位权限（Privacy - Photo Library Usage Description）- 需要获取个人位置进行天气预报是否允许此App获取你的定位？
+更改为以上阐述后隔天就通过审核了。
+
+总结：
+  通用格式：需要(干什么)是否允许此App获取你的(对应权限)**.
+
+作者：Jixes
+链接：https://www.jianshu.com/p/dd400d640cb3
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
 
 
 ## 知识架构图

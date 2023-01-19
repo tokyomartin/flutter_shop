@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/my_common/model/user_detail.dart';
 import 'package:flutter_shop/my_common/pages/pop_view_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../my_common/provide/province.dart';
 import '../my_common/provide/location.dart'; // 定位服务
 import '../my_common/provide/user.dart';
@@ -40,8 +42,23 @@ import '../my_common/util/sy_exception_report_channel.dart';
 //   printer: PrettyPrinter();
 // );
 
+//How to solve Flutter CERTIFICATE_VERIFY_FAILED error while performing a POST request?
+//https://stackoverflow.com/questions/54285172/how-to-solve-flutter-certificate-verify-failed-error-while-performing-a-post-req
+// 1.1 BEGIN
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
+
 
 void main() {
+
+  // 1.2 END
+  HttpOverrides.global = MyHttpOverrides();
 
   // 初始化Exception 捕获配置
   ExceptionReportUtil.initExceptionCatchConfig();
@@ -116,7 +133,7 @@ void main() {
   }, zoneSpecification: ZoneSpecification(
     print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
       // 记录所有的打印日志
-      parent.print(zone, "line是：$line");
+      parent.print(zone, "是：$line");
     },
   ));
 
@@ -140,12 +157,17 @@ class MyApp extends StatelessWidget {
       LocationData location = value;
       if (location != null) {
         _getAddress(location.latitude, location.longitude)
-            .then((value) {
+            .then((value) async {
           currentLocation = location;
           address = value;
           debugPrint("GPS信息 latitude:" + location.latitude.toString());
           debugPrint("GPS信息 longitude:" + location.longitude.toString());
           debugPrint("地址信息:" + value);
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setDouble("latitude", location.latitude ?? 0);
+          prefs.setDouble("longtitude", location.longitude??0);
+
           // setState(() {
           //   currentLocation = location;
           //   address = value;
@@ -154,7 +176,8 @@ class MyApp extends StatelessWidget {
         });
       }
     });
-  //ScreenUtil.instance = ScreenUtil(width: 770, height: 1334, allowFontScaling: true);
+
+    //ScreenUtil.instance = ScreenUtil(width: 770, height: 1334, allowFontScaling: true);
 
     return ScreenUtilInit(
       designSize: const Size(770, 1334),
@@ -163,7 +186,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return  Container(
         child: MaterialApp(
-          title: '华人超市+',
+          title: '熊猫超市+',
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Application.router.generator,
           //navigatorKey: navigatorKey,
